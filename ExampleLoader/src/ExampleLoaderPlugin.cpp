@@ -1,6 +1,6 @@
 #include "ExampleLoaderPlugin.h"
 
-#include "PointsPlugin.h"
+#include "PointData.h"
 #include "Set.h"
 
 #include <QtCore>
@@ -9,6 +9,8 @@
 #include <random>
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleLoaderPlugin")
+
+using namespace hdps;
 
 // =============================================================================
 // View
@@ -37,8 +39,8 @@ void ExampleLoaderPlugin::init()
 void ExampleLoaderPlugin::loadData()
 {
     QString name = _core->addData("Points", "ExampleData");
-    const IndexSet& set = dynamic_cast<const IndexSet&>(_core->requestSet(name));
-    PointsPlugin& points = set.getData();
+    const IndexSet& set = _core->requestSet<IndexSet>(name);
+    PointData& points = set.getData<PointData>();
 
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;

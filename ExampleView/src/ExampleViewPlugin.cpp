@@ -1,11 +1,13 @@
 #include "ExampleViewPlugin.h"
 
-#include "PointsPlugin.h"
+#include "PointData.h"
 
 #include <QtCore>
 #include <QtDebug>
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleViewPlugin")
+
+using namespace hdps;
 
 // =============================================================================
 // View
@@ -31,7 +33,7 @@ void ExampleViewPlugin::init()
  */
 void ExampleViewPlugin::dataAdded(const QString name)
 {
-    const IndexSet& addedSet = dynamic_cast<const IndexSet&>(_core->requestSet(name));
+    const IndexSet& addedSet = _core->requestSet<IndexSet>(name);
 }
 
 /**
@@ -42,7 +44,7 @@ void ExampleViewPlugin::dataAdded(const QString name)
  */
 void ExampleViewPlugin::dataChanged(const QString name)
 {
-    const IndexSet& changedSet = dynamic_cast<const IndexSet&>(_core->requestSet(name));
+    const IndexSet& changedSet = _core->requestSet<IndexSet>(name);
 }
 
 /**

@@ -1,11 +1,13 @@
 #include "ExampleAnalysisPlugin.h"
 
-#include "PointsPlugin.h"
+#include "PointData.h"
 
 #include <QtCore>
 #include <QtDebug>
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleAnalysisPlugin")
+
+using namespace hdps;
 
 // =============================================================================
 // Analysis
@@ -43,7 +45,7 @@ void ExampleAnalysisPlugin::dataAdded(const QString name)
  */
 void ExampleAnalysisPlugin::dataChanged(const QString name)
 {
-    const IndexSet& changedSet = dynamic_cast<const IndexSet&>(_core->requestSet(name));
+    const IndexSet& changedSet = _core->requestSet<IndexSet>(name);
 }
 
 /**
@@ -52,7 +54,7 @@ void ExampleAnalysisPlugin::dataChanged(const QString name)
  */
 void ExampleAnalysisPlugin::dataRemoved(const QString name)
 {
-    const IndexSet& removedSet = dynamic_cast<const IndexSet&>(_core->requestSet(name));
+    const IndexSet& removedSet = _core->requestSet<IndexSet>(name);
 }
 
 /**
@@ -86,7 +88,7 @@ void ExampleAnalysisPlugin::dataSetPicked(const QString& name)
     // Request the dataset from the core
     IndexSet& set = (IndexSet&)_core->requestSet(name);
     // Request the raw data that belongs to the dataset
-    PointsPlugin& rawData = set.getData();
+    PointData& rawData = set.getData<PointData>();
 }
 
 // =============================================================================

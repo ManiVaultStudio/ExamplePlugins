@@ -45,7 +45,7 @@ void ExampleAnalysisPlugin::dataAdded(const QString name)
  */
 void ExampleAnalysisPlugin::dataChanged(const QString name)
 {
-    const IndexSet& changedSet = _core->requestSet<IndexSet>(name);
+    const Points& changedSet = _core->requestData<Points>(name);
 }
 
 /**
@@ -54,7 +54,7 @@ void ExampleAnalysisPlugin::dataChanged(const QString name)
  */
 void ExampleAnalysisPlugin::dataRemoved(const QString name)
 {
-    const IndexSet& removedSet = _core->requestSet<IndexSet>(name);
+    const Points& removedSet = _core->requestData<Points>(name);
 }
 
 /**
@@ -64,14 +64,14 @@ void ExampleAnalysisPlugin::dataRemoved(const QString name)
  */
 void ExampleAnalysisPlugin::selectionChanged(const QString dataName)
 {
-    const hdps::Set& selectionSet = _core->requestSelection(dataName);
+    const hdps::DataSet& selectionSet = _core->requestSelection(dataName);
 }
 
-QStringList ExampleAnalysisPlugin::supportedDataKinds()
+DataTypes ExampleAnalysisPlugin::supportedDataTypes() const
 {
-    QStringList supportedKinds;
-    supportedKinds << "Points";
-    return supportedKinds;
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }
 
 // Mandatory function so the core can add the settings widget to the application
@@ -86,9 +86,8 @@ SettingsWidget* const ExampleAnalysisPlugin::getSettings()
 void ExampleAnalysisPlugin::dataSetPicked(const QString& name)
 {
     // Request the dataset from the core
-    IndexSet& set = (IndexSet&)_core->requestSet(name);
-    // Request the raw data that belongs to the dataset
-    PointData& rawData = set.getData<PointData>();
+    Points& set = _core->requestData<Points>(name);
+
 }
 
 // =============================================================================

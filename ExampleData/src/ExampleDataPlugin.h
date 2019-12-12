@@ -8,21 +8,25 @@
 #include <QString>
 #include <QColor>
 
-using namespace hdps::plugin;
+// =============================================================================
+// Data Type
+// =============================================================================
+
+const hdps::DataType ExampleType = hdps::DataType(QString("Example"));
 
 // =============================================================================
 // Raw Data
 // =============================================================================
 
-class ExampleDataPlugin : public RawData
+class ExampleDataPlugin : public hdps::RawData
 {
 public:
-    ExampleDataPlugin() : RawData("Example Data") { }
+    ExampleDataPlugin() : hdps::RawData("Example Data", ExampleType) { }
     ~ExampleDataPlugin(void) override;
     
     void init() override;
 
-    hdps::Set* createSet() const override;
+    hdps::DataSet* createDataSet() const override;
 
     void setData(QImage image);
 private:
@@ -34,18 +38,20 @@ private:
 // Data Set
 // =============================================================================
 
-class PixelSet : public hdps::Set
+class PixelSet : public hdps::DataSet
 {
 public:
-    PixelSet(hdps::CoreInterface* core, QString dataName) : Set(core, dataName) { }
+    PixelSet(hdps::CoreInterface* core, QString dataName) : DataSet(core, dataName) { }
     ~PixelSet() override { }
 
-    ExampleDataPlugin& getData() const
+    void createSubset() const override
     {
-        return dynamic_cast<ExampleDataPlugin&>(_core->requestData(getDataName()));
+        const hdps::DataSet& selection = _core->requestSelection(getDataName());
+
+        _core->createSubsetFromSelection(selection, getDataName(), "Subset");
     }
 
-    Set* copy() const override;
+    DataSet* copy() const override;
 
     std::vector<unsigned int> indices;
 };
@@ -55,7 +61,7 @@ public:
 // Factory
 // =============================================================================
 
-class ExampleDataPluginFactory : public RawDataFactory
+class ExampleDataPluginFactory : public hdps::plugin::RawDataFactory
 {
     Q_INTERFACES(hdps::plugin::RawDataFactory hdps::plugin::PluginFactory)
     Q_OBJECT
@@ -64,7 +70,7 @@ class ExampleDataPluginFactory : public RawDataFactory
     
 public:
     ExampleDataPluginFactory(void) {}
-	~ExampleDataPluginFactory(void) override {}
+    ~ExampleDataPluginFactory(void) override {}
     
-    RawData* produce() override;
+    hdps::RawData* produce() override;
 };

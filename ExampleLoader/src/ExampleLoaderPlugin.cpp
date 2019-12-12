@@ -39,8 +39,8 @@ void ExampleLoaderPlugin::init()
 void ExampleLoaderPlugin::loadData()
 {
     QString name = _core->addData("Points", "ExampleData");
-    const IndexSet& set = _core->requestSet<IndexSet>(name);
-    PointData& points = set.getData<PointData>();
+    qDebug() << name;
+    Points& points = _core->requestData<Points>(name);
 
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;

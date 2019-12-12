@@ -33,7 +33,7 @@ void ExampleViewPlugin::init()
  */
 void ExampleViewPlugin::dataAdded(const QString name)
 {
-    const IndexSet& addedSet = _core->requestSet<IndexSet>(name);
+    const Points& addedSet = _core->requestData<Points>(name);
 }
 
 /**
@@ -44,7 +44,7 @@ void ExampleViewPlugin::dataAdded(const QString name)
  */
 void ExampleViewPlugin::dataChanged(const QString name)
 {
-    const IndexSet& changedSet = _core->requestSet<IndexSet>(name);
+    const Points& changedSet = _core->requestData<Points>(name);
 }
 
 /**
@@ -53,7 +53,7 @@ void ExampleViewPlugin::dataChanged(const QString name)
  */
 void ExampleViewPlugin::dataRemoved(const QString name)
 {
-    const IndexSet& removedSet = dynamic_cast<const IndexSet&>(_core->requestSet(name));
+    const Points& removedSet = dynamic_cast<const Points&>(_core->requestData(name));
 }
 
 /**
@@ -63,14 +63,14 @@ void ExampleViewPlugin::dataRemoved(const QString name)
  */
 void ExampleViewPlugin::selectionChanged(const QString dataName)
 {
-    const hdps::Set& selectionSet = _core->requestSelection(dataName);
+    const hdps::DataSet& selectionSet = _core->requestSelection(dataName);
 }
 
-QStringList ExampleViewPlugin::supportedDataKinds()
+DataTypes ExampleViewPlugin::supportedDataTypes() const
 {
-    QStringList supportedKinds;
-    supportedKinds << "Points";
-    return supportedKinds;
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }
 
 // =============================================================================

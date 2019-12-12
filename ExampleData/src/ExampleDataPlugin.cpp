@@ -20,7 +20,7 @@ void ExampleDataPlugin::init()
 /**
  * Create a new dataset linking back to the original raw data
  */
-hdps::Set* ExampleDataPlugin::createSet() const
+hdps::DataSet* ExampleDataPlugin::createDataSet() const
 {
     return new PixelSet(_core, getName());
 }
@@ -41,7 +41,7 @@ void ExampleDataPlugin::setData(QImage image) {
 /**
  * Mandatory override for copying of data sets
  */
-hdps::Set* PixelSet::copy() const
+hdps::DataSet* PixelSet::copy() const
 {
     PixelSet* set = new PixelSet(_core, getDataName());
     set->setName(getName());
@@ -54,7 +54,7 @@ hdps::Set* PixelSet::copy() const
 // Merely responsible for generating new plugins when requested
 // =============================================================================
 
-RawData* ExampleDataPluginFactory::produce()
+hdps::RawData* ExampleDataPluginFactory::produce()
 {
     return new ExampleDataPlugin();
 }

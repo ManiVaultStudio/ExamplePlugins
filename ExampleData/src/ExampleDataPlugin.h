@@ -44,15 +44,17 @@ public:
     PixelSet(hdps::CoreInterface* core, QString dataName) : DataSet(core, dataName) { }
     ~PixelSet() override { }
 
-    void createSubset() const override
+    // Create a subset of the data from selected indices
+    QString createSubset() const override
     {
-        const hdps::DataSet& selection = _core->requestSelection(getDataName());
+        const hdps::DataSet& selection = getSelection();
 
-        _core->createSubsetFromSelection(selection, getDataName(), "Subset");
+        return _core->createSubsetFromSelection(selection, *this, "Subset");
     }
 
     DataSet* copy() const override;
 
+    // Indices into the raw data, if this dataset is just a subset
     std::vector<unsigned int> indices;
 };
 

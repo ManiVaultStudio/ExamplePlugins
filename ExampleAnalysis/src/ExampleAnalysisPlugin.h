@@ -12,7 +12,7 @@ using namespace hdps::plugin;
 // Analysis
 // =============================================================================
 
-class ExampleAnalysisPlugin : public QObject, public AnalysisPlugin
+class ExampleAnalysisPlugin : public QObject, public hdps::plugin::AnalysisPlugin
 {
     Q_OBJECT
     
@@ -22,11 +22,7 @@ public:
     
     void init() override;
     
-    void dataAdded(const QString name) Q_DECL_OVERRIDE;
-    void dataChanged(const QString name) Q_DECL_OVERRIDE;
-    void dataRemoved(const QString name) Q_DECL_OVERRIDE;
-    void selectionChanged(const QString dataName) Q_DECL_OVERRIDE;
-    hdps::DataTypes supportedDataTypes() const Q_DECL_OVERRIDE;
+    void onDataEvent(hdps::DataEvent* dataEvent);
 
     // Mandatory override so the core can add the settings widget to the application
     SettingsWidget* const getSettings() override;

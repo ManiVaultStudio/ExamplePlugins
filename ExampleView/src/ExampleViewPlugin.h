@@ -34,12 +34,6 @@ public:
     ~ExampleViewPlugin(void) override;
     
     void init() override;
-    
-    void dataAdded(const QString name) Q_DECL_OVERRIDE;
-    void dataChanged(const QString name) Q_DECL_OVERRIDE;
-    void dataRemoved(const QString name) Q_DECL_OVERRIDE;
-    void selectionChanged(const QString dataName) Q_DECL_OVERRIDE;
-    hdps::DataTypes supportedDataTypes() const Q_DECL_OVERRIDE;
 };
 
 

@@ -34,6 +34,8 @@ public:
     ~ExampleViewPlugin(void) override;
     
     void init() override;
+
+    void onDataEvent(hdps::DataEvent* dataEvent);
 };
 
 

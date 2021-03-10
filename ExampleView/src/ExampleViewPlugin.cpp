@@ -22,55 +22,51 @@ void ExampleViewPlugin::init()
 {
     // Widgets can be freely added to the view plugin via the addWidget() function.
     ExampleWidget* exampleWidget = new ExampleWidget();
-    addWidget(exampleWidget);
+
+    auto layout = new QVBoxLayout();
+
+    layout->setMargin(0);
+    layout->addWidget(exampleWidget, 0, Qt::AlignCenter);
+
+    setLayout(layout);
 }
 
-/**
- * Callback which gets triggered when a dataset is added.
- * The name of the dataset which was added is given.
- * The added dataset can be retrieved through _core->requestSet(name);
- * and casting it to the appropriate high-level set.
- */
-void ExampleViewPlugin::dataAdded(const QString name)
+void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
 {
-    const Points& addedSet = _core->requestData<Points>(name);
-}
+    // Event which gets triggered when a dataset is added to the system.
+    if (dataEvent->getType() == EventType::DataAdded)
+    {
+        // Request the point data that has been added for further processing
+        const Points& addedSet = _core->requestData<Points>(dataEvent->dataSetName);
 
-/**
- * Callback which gets triggered when a dataset changes.
- * The name of the dataset which was changed is given.
- * The changed dataset can be retrieved through _core->requestSet(name);
- * and casting it to the appropriate high-level set.
- */
-void ExampleViewPlugin::dataChanged(const QString name)
-{
-    const Points& changedSet = _core->requestData<Points>(name);
-}
+        // ...
+    }
+    // Event which gets triggered when the data contained in a dataset changes.
+    if (dataEvent->getType() == EventType::DataChanged)
+    {
+        // Request the point data that has changed for further processing
+        // Datasets can be retrieved through _core->requestData<Type>(name);
+        const Points& changedSet = _core->requestData<Points>(dataEvent->dataSetName);
 
-/**
- * Callback which gets triggered when a dataset gets removed.
- * The name of the dataset which was removed is given.
- */
-void ExampleViewPlugin::dataRemoved(const QString name)
-{
-    const Points& removedSet = dynamic_cast<const Points&>(_core->requestData(name));
-}
+        // ...
+    }
+    // Event which gets triggered when a dataset is removed from the system.
+    if (dataEvent->getType() == EventType::DataRemoved)
+    {
+        // Request the point data that has been removed for further processing
+        const Points& removedSet = _core->requestData<Points>(dataEvent->dataSetName);
 
-/**
- * Callback which gets triggered when any plugin calls notifySelectionChanged().
- * The name of the data whose selection was changed is given and the new selection
- * can be retrieved through _core->requestSelection(dataName);
- */
-void ExampleViewPlugin::selectionChanged(const QString dataName)
-{
-    const hdps::DataSet& selectionSet = _core->requestSelection(dataName);
-}
+        // ...
+    }
+    // Event which gets triggered when the selection associated with a dataset changes.
+    if (dataEvent->getType() == EventType::SelectionChanged)
+    {
+        // Request the point data associated with the changed selection, and retrieve the selection from it
+        const Points& changedDataSet = _core->requestData<Points>(dataEvent->dataSetName);
+        const hdps::DataSet& selectionSet = changedDataSet.getSelection();
 
-DataTypes ExampleViewPlugin::supportedDataTypes() const
-{
-    DataTypes supportedTypes;
-    supportedTypes.append(PointType);
-    return supportedTypes;
+        // ...
+    }
 }
 
 // =============================================================================

@@ -8,6 +8,8 @@
 #include <QString>
 #include <QColor>
 
+using namespace hdps::plugin;
+
 // =============================================================================
 // Data Type
 // =============================================================================
@@ -18,10 +20,10 @@ const hdps::DataType ExampleType = hdps::DataType(QString("Example"));
 // Raw Data
 // =============================================================================
 
-class ExampleDataPlugin : public hdps::RawData
+class ExampleDataPlugin : public RawData
 {
 public:
-    ExampleDataPlugin() : hdps::RawData("Example Data", ExampleType) { }
+    ExampleDataPlugin(const PluginFactory* factory) : RawData(factory, ExampleType) { }
     ~ExampleDataPlugin(void) override;
     
     void init() override;
@@ -45,7 +47,7 @@ public:
     ~PixelSet() override { }
 
     // Create a subset of the data from selected indices
-    QString createSubset() const override
+    QString createSubset(const QString parentSetName, const bool& visible) const override
     {
         const hdps::DataSet& selection = getSelection();
 
@@ -53,6 +55,9 @@ public:
     }
 
     DataSet* copy() const override;
+
+    /** Get icon for the dataset */
+    QIcon getIcon() const override;
 
     // Indices into the raw data, if this dataset is just a subset
     std::vector<unsigned int> indices;
@@ -63,7 +68,7 @@ public:
 // Factory
 // =============================================================================
 
-class ExampleDataPluginFactory : public hdps::plugin::RawDataFactory
+class ExampleDataPluginFactory : public RawDataFactory
 {
     Q_INTERFACES(hdps::plugin::RawDataFactory hdps::plugin::PluginFactory)
     Q_OBJECT
@@ -74,5 +79,5 @@ public:
     ExampleDataPluginFactory(void) {}
     ~ExampleDataPluginFactory(void) override {}
     
-    hdps::RawData* produce() override;
+    hdps::plugin::RawData* produce() override;
 };

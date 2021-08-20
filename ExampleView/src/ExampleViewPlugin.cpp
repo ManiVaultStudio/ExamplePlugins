@@ -76,5 +76,12 @@ void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
 
 ViewPlugin* ExampleViewPluginFactory::produce()
 {
-    return new ExampleViewPlugin();
+    return new ExampleViewPlugin(this);
+}
+
+hdps::DataTypes ExampleViewPluginFactory::supportedDataTypes() const
+{
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }

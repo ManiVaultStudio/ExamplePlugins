@@ -1,6 +1,6 @@
 #pragma once
 
-#include <widgets/SettingsWidget.h>
+#include "actions/Actions.h"
 
 #include <QComboBox>
 
@@ -11,7 +11,7 @@ using namespace hdps::gui;
 /**
  * Main settings widget, inherits from base SettingsWidget class
  */
-class ExampleSettingsWidget : public SettingsWidget
+class ExampleSettingsWidget : public hdps::gui::WidgetAction
 {
     Q_OBJECT
 

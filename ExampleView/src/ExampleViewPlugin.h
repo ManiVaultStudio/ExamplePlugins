@@ -30,7 +30,7 @@ class ExampleViewPlugin : public ViewPlugin
     Q_OBJECT
     
 public:
-    ExampleViewPlugin() : ViewPlugin("Example View") { }
+    ExampleViewPlugin(const PluginFactory* factory) : ViewPlugin(factory) { }
     ~ExampleViewPlugin(void) override;
     
     void init() override;
@@ -55,4 +55,6 @@ public:
     ~ExampleViewPluginFactory(void) override {}
     
     ViewPlugin* produce() override;
+
+    hdps::DataTypes supportedDataTypes() const override;
 };

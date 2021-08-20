@@ -49,12 +49,17 @@ hdps::DataSet* PixelSet::copy() const
     return set;
 }
 
+QIcon PixelSet::getIcon() const
+{
+    return QIcon();
+}
+
 // =============================================================================
 // Factory DOES NOT NEED TO BE ALTERED
 // Merely responsible for generating new plugins when requested
 // =============================================================================
 
-hdps::RawData* ExampleDataPluginFactory::produce()
+hdps::plugin::RawData* ExampleDataPluginFactory::produce()
 {
-    return new ExampleDataPlugin();
+    return new ExampleDataPlugin(this);
 }

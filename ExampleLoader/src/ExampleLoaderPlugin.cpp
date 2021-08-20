@@ -73,5 +73,12 @@ void ExampleLoaderPlugin::loadData()
 
 ExampleLoaderPlugin* ExampleLoaderPluginFactory::produce()
 {
-    return new ExampleLoaderPlugin();
+    return new ExampleLoaderPlugin(this);
+}
+
+hdps::DataTypes ExampleLoaderPluginFactory::supportedDataTypes() const
+{
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }

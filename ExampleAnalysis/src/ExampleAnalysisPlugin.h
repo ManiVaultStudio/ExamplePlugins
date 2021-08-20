@@ -17,15 +17,12 @@ class ExampleAnalysisPlugin : public QObject, public hdps::plugin::AnalysisPlugi
     Q_OBJECT
     
 public:
-    ExampleAnalysisPlugin() : AnalysisPlugin("Example Analysis") { }
+    ExampleAnalysisPlugin(const PluginFactory* factory) : AnalysisPlugin(factory) { }
     ~ExampleAnalysisPlugin(void) override;
     
     void init() override;
     
     void onDataEvent(hdps::DataEvent* dataEvent);
-
-    // Mandatory override so the core can add the settings widget to the application
-    SettingsWidget* const getSettings() override;
 
 public slots:
     void dataSetPicked(const QString& name);
@@ -51,4 +48,6 @@ public:
     ~ExampleAnalysisPluginFactory(void) override {}
     
     AnalysisPlugin* produce() override;
+
+    hdps::DataTypes supportedDataTypes() const override;
 };

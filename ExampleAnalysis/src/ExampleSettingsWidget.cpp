@@ -1,8 +1,10 @@
 #include "ExampleSettingsWidget.h"
 
-ExampleSettingsWidget::ExampleSettingsWidget() {
+ExampleSettingsWidget::ExampleSettingsWidget() :
+    hdps::gui::WidgetAction(reinterpret_cast<QObject*>(this))
+{
     // Set the width of the settings widget
-    setFixedWidth(200);
+    //setFixedWidth(200);
 
     // Set the width of the data selection combobox
     dataOptions.setFixedWidth(100);
@@ -11,7 +13,7 @@ ExampleSettingsWidget::ExampleSettingsWidget() {
     connect(&dataOptions, SIGNAL(currentIndexChanged(QString)), this, SIGNAL(dataSetPicked(QString)));
 
     // Add all the parts of the settings widget together
-    addWidget(&dataOptions);
+    //addWidget(&dataOptions);
 }
 
 QString ExampleSettingsWidget::currentData()

@@ -12,7 +12,7 @@ class ExampleLoaderPlugin : public QObject, public LoaderPlugin
 {
     Q_OBJECT
 public:
-    ExampleLoaderPlugin() : LoaderPlugin("Example Loader") { }
+    ExampleLoaderPlugin(const PluginFactory* factory) : LoaderPlugin(factory) { }
     ~ExampleLoaderPlugin(void) override;
     
     void init() override;
@@ -42,4 +42,6 @@ public:
     ~ExampleLoaderPluginFactory(void) override {}
     
     ExampleLoaderPlugin* produce() override;
+
+    hdps::DataTypes supportedDataTypes() const override;
 };

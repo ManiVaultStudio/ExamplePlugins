@@ -65,12 +65,6 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
     }
 }
 
-// Mandatory function so the core can add the settings widget to the application
-SettingsWidget* const ExampleAnalysisPlugin::getSettings()
-{
-    return _settings.get();
-}
-
 /**
  * Gets triggered when you pick a dataset in the settings widget
  */
@@ -88,5 +82,12 @@ void ExampleAnalysisPlugin::dataSetPicked(const QString& name)
 
 AnalysisPlugin* ExampleAnalysisPluginFactory::produce()
 {
-    return new ExampleAnalysisPlugin();
+    return new ExampleAnalysisPlugin(this);
+}
+
+hdps::DataTypes ExampleAnalysisPluginFactory::supportedDataTypes() const
+{
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }

@@ -10,15 +10,7 @@
 
 using namespace hdps::plugin;
 
-// =============================================================================
-// Data Type
-// =============================================================================
-
 const hdps::DataType ExampleType = hdps::DataType(QString("Example"));
-
-// =============================================================================
-// Raw Data
-// =============================================================================
 
 class ExampleDataPlugin : public RawData
 {
@@ -31,9 +23,9 @@ public:
     hdps::DataSet* createDataSet() const override;
 
     void setData(QImage image);
+
 private:
-    // Data store of the plugin, this is the core of your plugin
-    std::vector<QColor> data;
+    std::vector<QColor> data;       /** Data store of the plugin, this is the core of your plugin */
 };
 
 // =============================================================================
@@ -43,41 +35,45 @@ private:
 class PixelSet : public hdps::DataSet
 {
 public:
-    PixelSet(hdps::CoreInterface* core, QString dataName) : DataSet(core, dataName) { }
-    ~PixelSet() override { }
+    PixelSet(hdps::CoreInterface* core, QString dataName);
+    ~PixelSet() override;
 
-    // Create a subset of the data from selected indices
-    QString createSubset(const QString parentSetName, const bool& visible) const override
+    /**
+     * Create subset
+     * @param subsetName Name of the subset
+     * @param parentSetName Name of the parent dataset
+     * @param visible Whether the subset will be visible in the UI
+     */
+    QString createSubset(const QString subsetName = "subset", const QString parentSetName = "", const bool& visible = true) const override
     {
         const hdps::DataSet& selection = getSelection();
 
-        return _core->createSubsetFromSelection(selection, *this, "Subset");
+        return _core->createSubsetFromSelection(selection, *this, subsetName);
     }
 
+    /** Mandatory override for copying of data sets */
     DataSet* copy() const override;
 
     /** Get icon for the dataset */
     QIcon getIcon() const override;
 
-    // Indices into the raw data, if this dataset is just a subset
-    std::vector<unsigned int> indices;
+protected:
+    std::vector<unsigned int>   _indices;      /** Indices into the raw data, if this dataset is just a subset */
 };
-
-
-// =============================================================================
-// Factory
-// =============================================================================
 
 class ExampleDataPluginFactory : public RawDataFactory
 {
     Q_INTERFACES(hdps::plugin::RawDataFactory hdps::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleDataPlugin"
+    Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleDataPlugin"
                       FILE  "ExampleDataPlugin.json")
     
 public:
-    ExampleDataPluginFactory(void) {}
-    ~ExampleDataPluginFactory(void) override {}
-    
+    ExampleDataPluginFactory() {}
+    ~ExampleDataPluginFactory() override {}
+
+    /** Returns the plugin icon */
+    QIcon getIcon() const override;
+
     hdps::plugin::RawData* produce() override;
 };

@@ -40,7 +40,7 @@ class ExampleLoaderPluginFactory : public LoaderPluginFactory
 public:
     ExampleLoaderPluginFactory(void) {}
     ~ExampleLoaderPluginFactory(void) override {}
-    
+
     ExampleLoaderPlugin* produce() override;
 
     hdps::DataTypes supportedDataTypes() const override;

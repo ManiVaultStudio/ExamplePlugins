@@ -1,5 +1,5 @@
 {
     "name" : "Example Analysis",
     "version" : "1",
-    "dependencies" : []
+    "dependencies" : ["Points"]
 }

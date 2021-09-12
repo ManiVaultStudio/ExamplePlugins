@@ -1,8 +1,9 @@
 #include "ExampleDataPlugin.h"
+#include "Application.h"
 
 #include <QtCore>
 
-Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleDataPlugin")
+Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleDataPlugin")
 
 // =============================================================================
 // Data
@@ -38,14 +39,20 @@ void ExampleDataPlugin::setData(QImage image) {
     }
 }
 
-/**
- * Mandatory override for copying of data sets
- */
+PixelSet::PixelSet(hdps::CoreInterface* core, QString dataName) :
+    DataSet(core, dataName)
+{
+}
+
+PixelSet::~PixelSet()
+{
+}
+
 hdps::DataSet* PixelSet::copy() const
 {
     PixelSet* set = new PixelSet(_core, getDataName());
     set->setName(getName());
-    set->indices = indices;
+    set->_indices = _indices;
     return set;
 }
 
@@ -54,10 +61,10 @@ QIcon PixelSet::getIcon() const
     return QIcon();
 }
 
-// =============================================================================
-// Factory DOES NOT NEED TO BE ALTERED
-// Merely responsible for generating new plugins when requested
-// =============================================================================
+QIcon ExampleDataPluginFactory::getIcon() const
+{
+    return hdps::Application::getIconFont("FontAwesome").getIcon("database");
+}
 
 hdps::plugin::RawData* ExampleDataPluginFactory::produce()
 {

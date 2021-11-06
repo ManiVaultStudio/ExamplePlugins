@@ -2,61 +2,92 @@
 
 #include <ViewPlugin.h>
 
-#include <QPushButton>
+#include <util/DatasetRef.h>
+#include <widgets/DropWidget.h>
 
+#include <PointData.h>
+
+#include <QWidget>
+
+/** All plugin related classes are in the HDPS plugin namespace */
 using namespace hdps::plugin;
 
-// =============================================================================
-// Example Widget
-// =============================================================================
+/** Drop widget used in this plugin is located in the HDPS gui namespace */
+using namespace hdps::gui;
 
-class ExampleWidget : public QPushButton
-{
-public:
-    ExampleWidget()
-    {
-        setFixedSize(300, 200);
-        setText("You successfully built the application!");
-    }
-};
+/** Dataset reference used in this plugin is located in the HDPS util namespace */
+using namespace hdps::util;
 
+class QLabel;
 
-// =============================================================================
-// View
-// =============================================================================
-
+/**
+ * Example view plugin class
+ *
+ * This view plugin class provides skeleton code that shows how to develop
+ * a view plugin in HDPS. It shows how to use the built-in drag and drop
+ * behavior.
+ *
+ * To see the plugin in action, please follow the steps below:
+ *
+ * 1. Go to the visualization menu in HDPS
+ * 2. Choose the Example view menu item, the view will be added to the layout
+ *
+ * @authors J. Thijssen & T. Kroes
+ */
 class ExampleViewPlugin : public ViewPlugin
 {
     Q_OBJECT
-    
+
 public:
-    ExampleViewPlugin() : ViewPlugin("Example View") { }
-    ~ExampleViewPlugin(void) override;
+
+    /**
+     * Constructor
+     * @param factory Pointer to the plugin factory
+     */
+    ExampleViewPlugin(const PluginFactory* factory);
+
+    /** Destructor */
+    ~ExampleViewPlugin() override = default;
     
+    /** This function is called by the core after the view plugin has been created */
     void init() override;
-    
-    void dataAdded(const QString name) Q_DECL_OVERRIDE;
-    void dataChanged(const QString name) Q_DECL_OVERRIDE;
-    void dataRemoved(const QString name) Q_DECL_OVERRIDE;
-    void selectionChanged(const QString dataName) Q_DECL_OVERRIDE;
-    hdps::DataTypes supportedDataTypes() const Q_DECL_OVERRIDE;
+
+    /**
+     * Invoked when a data event occurs
+     * @param dataEvent Data event which occurred
+     */
+    void onDataEvent(hdps::DataEvent* dataEvent);
+
+protected:
+    DropWidget*         _dropWidget;                /** Widget for drag and drop behavior */
+    DatasetRef<Points>  _points;                    /** Declare a points dataset reference */
+    QString             _currentDatasetName;        /** Name of the current dataset */
+    QLabel*             _currentDatasetNameLabel;   /** Label that show the current dataset name */
 };
 
-
-// =============================================================================
-// Factory
-// =============================================================================
-
+/**
+ * Example view plugin factory class
+ *
+ * Note: Factory does not need to be altered (merely responsible for generating new plugins when requested)
+ */
 class ExampleViewPluginFactory : public ViewPluginFactory
 {
     Q_INTERFACES(hdps::plugin::ViewPluginFactory hdps::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleViewPlugin"
+    Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleViewPlugin"
                       FILE  "ExampleViewPlugin.json")
-    
+
 public:
-    ExampleViewPluginFactory(void) {}
-    ~ExampleViewPluginFactory(void) override {}
+
+    /** Default constructor */
+    ExampleViewPluginFactory() {}
+
+    /** Destructor */
+    ~ExampleViewPluginFactory() override {}
     
+    /** Creates an instance of the example view plugin */
     ViewPlugin* produce() override;
+
+    /** Returns the data types that are supported by the example view plugin */
+    hdps::DataTypes supportedDataTypes() const override;
 };

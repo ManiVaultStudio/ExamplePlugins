@@ -39,7 +39,7 @@ void ExampleLoaderPlugin::init()
 void ExampleLoaderPlugin::loadData()
 {
     QString name = _core->addData("Points", "ExampleData");
-    qDebug() << name;
+    
     Points& points = _core->requestData<Points>(name);
 
     // Create 2D example data by randomly generating 1000 points
@@ -66,12 +66,14 @@ void ExampleLoaderPlugin::loadData()
     qDebug() << "Example file loaded. Num data points: " << points.getNumPoints();
 }
 
-// =============================================================================
-// Factory DOES NOT NEED TO BE ALTERED
-// Merely responsible for generating new plugins when requested
-// =============================================================================
-
 ExampleLoaderPlugin* ExampleLoaderPluginFactory::produce()
 {
-    return new ExampleLoaderPlugin();
+    return new ExampleLoaderPlugin(this);
+}
+
+hdps::DataTypes ExampleLoaderPluginFactory::supportedDataTypes() const
+{
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }

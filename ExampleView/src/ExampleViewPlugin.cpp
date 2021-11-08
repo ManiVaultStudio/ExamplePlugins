@@ -67,11 +67,7 @@ void ExampleViewPlugin::init()
                 const auto description = QString("Load %1 into example view").arg(datasetName);
 
                 if (!_points.isValid()) {
-
-                    // Dataset can be dropped
-                    dropRegions << new DropWidget::DropRegion(this, "Points", description, true, [this, datasetName]() {
-                        _points.setDatasetName(datasetName);
-                    });
+                    return dropRegions;
                 }
                 else {
                     if (datasetName == currentDatasetName) {

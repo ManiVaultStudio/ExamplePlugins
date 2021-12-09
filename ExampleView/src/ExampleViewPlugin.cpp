@@ -1,5 +1,7 @@
 #include "ExampleViewPlugin.h"
 
+#include <event/Event.h>
+
 #include <QDebug>
 #include <QMimeData>
 
@@ -52,15 +54,18 @@ void ExampleViewPlugin::init()
 
         // Gather information to generate appropriate drop regions
         const auto datasetName          = tokens[0];
-        const auto dataType             = DataType(tokens[1]);
+        const auto datasetId            = tokens[1];
+        const auto dataType             = DataType(tokens[2]);
         const auto dataTypes            = DataTypes({ PointType });
-        const auto currentDatasetName   = _points.getDatasetName();
 
         // Visually indicate if the dataset is of the wrong data type and thus cannot be dropped
         if (!dataTypes.contains(dataType)) {
-            dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", false);
+            dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", "exclamation-circle", false);
         }
         else {
+
+            // Get points dataset from the core
+            auto candidateDataset = _core->requestDataset<Points>(datasetId);
 
             // Accept points datasets drag and drop
             if (dataType == PointType) {
@@ -70,16 +75,16 @@ void ExampleViewPlugin::init()
                     return dropRegions;
                 }
                 else {
-                    if (datasetName == currentDatasetName) {
+                    if (_points == candidateDataset) {
 
                         // Dataset cannot be dropped because it is already loaded
-                        dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", false);
+                        dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
                     }
                     else {
 
                         // Dataset can be dropped
-                        dropRegions << new DropWidget::DropRegion(this, "Points", description, true, [this, datasetName]() {
-                            _points.setDatasetName(datasetName);
+                        dropRegions << new DropWidget::DropRegion(this, "Points", description, "map-marker-alt", true, [this, candidateDataset]() {
+                            _points = candidateDataset;
                         });
                     }
                 }
@@ -90,7 +95,7 @@ void ExampleViewPlugin::init()
     });
 
     // Respond when the name of the dataset in the dataset reference changes
-    connect(&_points, &DatasetRef<Points>::datasetNameChanged, this, [this](const QString& oldDatasetName, const QString& newDatasetName) {
+    connect(&_points, &Dataset<Points>::dataGuiNameChanged, this, [this](const QString& oldDatasetName, const QString& newDatasetName) {
 
         // Update the current dataset name label
         _currentDatasetNameLabel->setText(QString("Current points dataset: %1").arg(newDatasetName));
@@ -98,10 +103,19 @@ void ExampleViewPlugin::init()
         // Only show the drop indicator when nothing is loaded in the dataset reference
         _dropWidget->setShowDropIndicator(newDatasetName.isEmpty());
     });
+
+    // Alternatively, classes which derive from hdsp::EventListener (all plugins do) can also respond to events
+    registerDataEventByType(PointType, std::bind(&ExampleViewPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
 void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
 {
+    // Get smart pointer to dataset that changed
+    const auto changedDataSet = dataEvent->getDataset();
+
+    // Get GUI name of the dataset that changed
+    const auto datasetGuiName = changedDataSet->getGuiName();
+
     // The data event has a type so that we know what type of data event occurred (e.g. data added, changed, removed, renamed, selection changes)
     switch (dataEvent->getType()) {
 
@@ -111,11 +125,8 @@ void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data added event
             const auto dataAddedEvent = static_cast<DataAddedEvent*>(dataEvent);
 
-            // Get the name of the added points dataset
-            const auto pointsDatasetName = dataAddedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "was added";
+            // Get the GUI name of the added points dataset and print to the console
+            qDebug() << datasetGuiName << "was added";
 
             break;
         }
@@ -126,11 +137,8 @@ void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data changed event
             const auto dataChangedEvent = static_cast<DataChangedEvent*>(dataEvent);
 
-            // Get the name of the points dataset of which the data changed
-            const auto pointsDatasetName = dataChangedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "data changed";
+            // Get the name of the points dataset of which the data changed and print to the console
+            qDebug() << datasetGuiName << "data changed";
 
             break;
         }
@@ -141,32 +149,23 @@ void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data removed event
             const auto dataRemovedEvent = static_cast<DataRemovedEvent*>(dataEvent);
 
-            // Get the name of the removed points dataset
-            const auto pointsDatasetName = dataRemovedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "was removed";
+            // Get the name of the removed points dataset and print to the console
+            qDebug() << datasetGuiName << "was removed";
 
             break;
         }
 
         // Points dataset selection has changed
-        case EventType::SelectionChanged:
+        case EventType::DataSelectionChanged:
         {
-            // Cast the data event to a selection changed event
-            const auto selectionChangedEvent = static_cast<SelectionChangedEvent*>(dataEvent);
-
-            // Get the name of the points dataset of which the selection changed
-            const auto pointsDatasetName = selectionChangedEvent->dataSetName;
-
-            // Get points dataset
-            const auto& changedDataSet = _core->requestData<Points>(dataEvent->dataSetName);
+            // Cast the data event to a data selection changed event
+            const auto dataSelectionChangedEvent = static_cast<DataSelectionChangedEvent*>(dataEvent);
 
             // Get the selection set that changed
-            const auto& selectionSet = changedDataSet.getSelection();
+            const auto& selectionSet = changedDataSet->getSelection<Points>();
 
             // Print to the console
-            qDebug() << pointsDatasetName << "selection has changed";
+            qDebug() << datasetGuiName << "selection has changed";
 
             break;
         }

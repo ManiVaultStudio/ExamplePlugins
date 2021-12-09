@@ -7,7 +7,6 @@ SettingsAction::SettingsAction(QObject* parent) :
     _numberOfIterationsAction(this, "Number of iterations", 0, 1000, 100, 100),
     _startAnalysisAction(this, "Start analysis")
 {
-    // 
     setText("Example Settings");
 
     _currentIterationAction.setEnabled(false);

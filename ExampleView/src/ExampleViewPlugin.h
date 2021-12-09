@@ -2,7 +2,7 @@
 
 #include <ViewPlugin.h>
 
-#include <util/DatasetRef.h>
+#include <Dataset.h>
 #include <widgets/DropWidget.h>
 
 #include <PointData.h>
@@ -59,10 +59,10 @@ public:
     void onDataEvent(hdps::DataEvent* dataEvent);
 
 protected:
-    DropWidget*         _dropWidget;                /** Widget for drag and drop behavior */
-    DatasetRef<Points>  _points;                    /** Declare a points dataset reference */
-    QString             _currentDatasetName;        /** Name of the current dataset */
-    QLabel*             _currentDatasetNameLabel;   /** Label that show the current dataset name */
+    DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
+    hdps::Dataset<Points>   _points;                    /** Points smart pointer */
+    QString                 _currentDatasetName;        /** Name of the current dataset */
+    QLabel*                 _currentDatasetNameLabel;   /** Label that show the current dataset name */
 };
 
 /**

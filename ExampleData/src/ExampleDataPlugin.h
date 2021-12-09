@@ -20,42 +20,75 @@ public:
     
     void init() override;
 
-    hdps::DataSet* createDataSet() const override;
+    hdps::Dataset<hdps::DatasetImpl> createDataSet() const override;
+
+    std::vector<QColor>& getData();
 
     void setData(QImage image);
 
 private:
-    std::vector<QColor> data;       /** Data store of the plugin, this is the core of your plugin */
+    std::vector<QColor> _data;       /** Data store of the plugin, this is the core of your plugin */
 };
 
 // =============================================================================
 // Data Set
 // =============================================================================
 
-class PixelSet : public hdps::DataSet
+class PixelSet : public hdps::DatasetImpl
 {
 public:
     PixelSet(hdps::CoreInterface* core, QString dataName);
     ~PixelSet() override;
 
     /**
-     * Create subset
-     * @param subsetName Name of the subset
-     * @param parentSetName Name of the parent dataset
+     * Create subset and specify where the subset will be placed in the data hierarchy
+     * @param guiName Name of the subset in the GUI
+     * @param parentDataSet Smart pointer to parent dataset in the data hierarchy (default is below the set)
      * @param visible Whether the subset will be visible in the UI
+     * @return Smart pointer to the created subset
      */
-    QString createSubset(const QString subsetName = "subset", const QString parentSetName = "", const bool& visible = true) const override
-    {
-        const hdps::DataSet& selection = getSelection();
-
-        return _core->createSubsetFromSelection(selection, *this, subsetName);
-    }
+    hdps::Dataset<hdps::DatasetImpl> createSubset(const QString& guiName, const hdps::Dataset<hdps::DatasetImpl>& parentDataSet = hdps::Dataset<hdps::DatasetImpl>(), const bool& visible = true) const override;
 
     /** Mandatory override for copying of data sets */
-    DataSet* copy() const override;
+    hdps::Dataset<hdps::DatasetImpl> copy() const override;
 
     /** Get icon for the dataset */
     QIcon getIcon() const override;
+
+public: // Selection
+
+    /**
+     * Get selection indices
+     * @return Selection indices
+     */
+    std::vector<std::uint32_t>& getSelectionIndices() override;
+
+    /**
+     * Select by indices
+     * @param indices Selection indices
+     */
+    void setSelectionIndices(const std::vector<std::uint32_t>& indices) override;
+
+    /** Determines whether items can be selected */
+    bool canSelect() const override;
+
+    /** Determines whether all items can be selected */
+    bool canSelectAll() const override;
+
+    /** Determines whether there are any items which can be deselected */
+    bool canSelectNone() const override;
+
+    /** Determines whether the item selection can be inverted (more than one) */
+    bool canSelectInvert() const override;
+
+    /** Select all items */
+    void selectAll() override;
+
+    /** Deselect all items */
+    void selectNone() override;
+
+    /** Invert item selection */
+    void selectInvert() override;
 
 protected:
     std::vector<unsigned int>   _indices;      /** Indices into the raw data, if this dataset is just a subset */

@@ -32,21 +32,18 @@ ExampleAnalysisPlugin::ExampleAnalysisPlugin(const PluginFactory* factory) :
 
 void ExampleAnalysisPlugin::init()
 {
-    // Create example output dataset (a points dataset which is derived from the input points dataset)
-    const auto outputDatasetName = _core->createDerivedData("Output Data", getInputDatasetName());
-
-    // Set the output dataset name (this will internally update the _output dataset ref)
-    setOutputDatasetName(outputDatasetName);
+    // Create example output dataset (a points dataset which is derived from the input points dataset) and set the output dataset
+    setOutputDataset(_core->createDerivedData("Output Data", getInputDataset()));
 
     // Retrieve the input dataset for our specific data type (in our case points)
     // The HDPS core sets the input dataset reference when the plugin is created
-    const auto& inputPoints  = getInputDataset<Points>();
+    const auto inputPoints  = getInputDataset<Points>();
 
     // Retrieve the output dataset for our specific data type (in our case points)
-    auto& outputPoints = getOutputDataset<Points>();
+    auto outputPoints = getOutputDataset<Points>();
 
     // Set the dimension names as visible in the GUI
-    outputPoints.setDimensionNames(Point::dimensionNames);
+    outputPoints->setDimensionNames(Point::dimensionNames);
 
     // Assign the maximum velocity from the GUI
     Point::maximumVelocity = _settingsAction.getMaxVelocityAction().getValue();
@@ -55,19 +52,19 @@ void ExampleAnalysisPlugin::init()
     const auto updatePoints = [this, &outputPoints]() {
 
         // Assign the output points to the output dataset
-        outputPoints.setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
+        outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
-        _output.notifyDataChanged();
+        _core->notifyDataChanged(_output);
     };
 
     // Initializes the points
-    const auto initializePoints = [this, &inputPoints, updatePoints]() {
+    const auto initializePoints = [this, inputPoints, updatePoints]() {
 
-        if (_points.count() != inputPoints.getNumPoints()) {
+        if (_points.count() != inputPoints->getNumPoints()) {
 
             // Resize the point positions and headings
-            _points.resize(inputPoints.getNumPoints());
+            _points.resize(inputPoints->getNumPoints());
         }
         else {
 
@@ -82,7 +79,7 @@ void ExampleAnalysisPlugin::init()
 
     // Inject the settings action in the output points dataset 
     // By doing so, the settings user interface will be accessible though the data properties widget
-    outputPoints.addAction(_settingsAction);
+    outputPoints->addAction(_settingsAction);
     
     // Update current iteration action
     const auto updateCurrentIterationAction = [this](const std::int32_t& currentIteration = 0) {
@@ -168,11 +165,8 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data added event
             const auto dataAddedEvent = static_cast<DataAddedEvent*>(dataEvent);
 
-            // Get the name of the added points dataset
-            const auto pointsDatasetName = dataAddedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "was added";
+            // Get the GUI name of the added points dataset and print to the console
+            qDebug() << dataAddedEvent->getDataset()->getGuiName() << "was added";
 
             break;
         }
@@ -183,11 +177,8 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data changed event
             const auto dataChangedEvent = static_cast<DataChangedEvent*>(dataEvent);
 
-            // Get the name of the points dataset of which the data changed
-            const auto pointsDatasetName = dataChangedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "data changed";
+            // Get the GUI name of the points dataset of which the data changed and print to the console
+            qDebug() << dataChangedEvent->getDataset()->getGuiName() << "data changed";
 
             break;
         }
@@ -198,32 +189,26 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
             // Cast the data event to a data removed event
             const auto dataRemovedEvent = static_cast<DataRemovedEvent*>(dataEvent);
 
-            // Get the name of the removed points dataset
-            const auto pointsDatasetName = dataRemovedEvent->dataSetName;
-
-            // Print to the console
-            qDebug() << pointsDatasetName << "was removed";
+            // Get the GUI name of the removed points dataset and print to the console
+            qDebug() << dataRemovedEvent->getDataset()->getGuiName() << "was removed";
 
             break;
         }
 
         // Points dataset selection has changed
-        case EventType::SelectionChanged:
+        case EventType::DataSelectionChanged:
         {
-            // Cast the data event to a selection changed event
-            const auto selectionChangedEvent = static_cast<SelectionChangedEvent*>(dataEvent);
-
-            // Get the name of the points dataset of which the selection changed
-            const auto pointsDatasetName = selectionChangedEvent->dataSetName;
+            // Cast the data event to a data selection changed event
+            const auto dataSelectionChangedEvent = static_cast<DataSelectionChangedEvent*>(dataEvent);
 
             // Get points dataset
-            const auto& changedDataSet = _core->requestData<Points>(dataEvent->dataSetName);
+            const auto& changedDataSet = dataSelectionChangedEvent->getDataset();
 
             // Get the selection set that changed
-            const auto& selectionSet = changedDataSet.getSelection();
+            const auto selectionSet = changedDataSet->getSelection<Points>();
 
             // Print to the console
-            qDebug() << pointsDatasetName << "selection has changed";
+            qDebug() << changedDataSet->getGuiName() << "selection has changed";
 
             break;
         }

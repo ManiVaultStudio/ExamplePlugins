@@ -38,10 +38,8 @@ void ExampleLoaderPlugin::init()
  */
 void ExampleLoaderPlugin::loadData()
 {
-    QString name = _core->addData("Points", "ExampleData");
+    auto points = _core->addDataset<Points>("Points", "ExampleData");
     
-    Points& points = _core->requestData<Points>(name);
-
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;
     std::uniform_real_distribution<float> distribution;
@@ -56,14 +54,14 @@ void ExampleLoaderPlugin::loadData()
     }
 
     // Passing example data with 1000 points and 2 dimensions
-    points.setData(exampleData.data(), numPoints, numDimensions);
+    points->setData(exampleData.data(), numPoints, numDimensions);
 
-    qDebug() << "Number of dimensions: " << points.getNumDimensions();
+    qDebug() << "Number of dimensions: " << points->getNumDimensions();
 
     // Notify the core system of the new data
-    _core->notifyDataAdded(name);
+    _core->notifyDataAdded(points);
 
-    qDebug() << "Example file loaded. Num data points: " << points.getNumPoints();
+    qDebug() << "Example file loaded. Num data points: " << points->getNumPoints();
 }
 
 ExampleLoaderPlugin* ExampleLoaderPluginFactory::produce()

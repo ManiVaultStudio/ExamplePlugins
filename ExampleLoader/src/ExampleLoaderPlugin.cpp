@@ -38,10 +38,8 @@ void ExampleLoaderPlugin::init()
  */
 void ExampleLoaderPlugin::loadData()
 {
-    QString name = _core->addData("Points", "ExampleData");
-    qDebug() << name;
-    Points& points = _core->requestData<Points>(name);
-
+    auto points = _core->addDataset<Points>("Points", "ExampleData");
+    
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;
     std::uniform_real_distribution<float> distribution;
@@ -56,22 +54,24 @@ void ExampleLoaderPlugin::loadData()
     }
 
     // Passing example data with 1000 points and 2 dimensions
-    points.setData(exampleData.data(), numPoints, numDimensions);
+    points->setData(exampleData.data(), numPoints, numDimensions);
 
-    qDebug() << "Number of dimensions: " << points.getNumDimensions();
+    qDebug() << "Number of dimensions: " << points->getNumDimensions();
 
     // Notify the core system of the new data
-    _core->notifyDataAdded(name);
+    _core->notifyDatasetAdded(points);
 
-    qDebug() << "Example file loaded. Num data points: " << points.getNumPoints();
+    qDebug() << "Example file loaded. Num data points: " << points->getNumPoints();
 }
-
-// =============================================================================
-// Factory DOES NOT NEED TO BE ALTERED
-// Merely responsible for generating new plugins when requested
-// =============================================================================
 
 ExampleLoaderPlugin* ExampleLoaderPluginFactory::produce()
 {
-    return new ExampleLoaderPlugin();
+    return new ExampleLoaderPlugin(this);
+}
+
+hdps::DataTypes ExampleLoaderPluginFactory::supportedDataTypes() const
+{
+    DataTypes supportedTypes;
+    supportedTypes.append(PointType);
+    return supportedTypes;
 }

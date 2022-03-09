@@ -20,8 +20,8 @@ find_package(Qt5 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 set(SOURCES
     src/ExampleAnalysisPlugin.h
     src/ExampleAnalysisPlugin.cpp
-    src/ExampleSettingsWidget.h
-    src/ExampleSettingsWidget.cpp
+    src/SettingsAction.h
+    src/SettingsAction.cpp
     src/ExampleAnalysisPlugin.json
 )
 

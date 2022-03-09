@@ -32,13 +32,13 @@ void ExampleViewPlugin::init()
     layout->addWidget(_currentDatasetNameLabel);
 
     // Apply the layout
-    setLayout(layout);
+    _widget.setLayout(layout);
     
     // Instantiate new drop widget
     _dropWidget = new DropWidget(_currentDatasetNameLabel);
 
     // Set the drop indicator widget (the widget that indicates that the view is eligible for data dropping)
-    _dropWidget->setDropIndicatorWidget(new DropWidget::DropIndicatorWidget(this, "No data loaded", "Drag an item from the data hierarchy and drop it here to visualize data..."));
+    _dropWidget->setDropIndicatorWidget(new DropWidget::DropIndicatorWidget(&_widget, "No data loaded", "Drag an item from the data hierarchy and drop it here to visualize data..."));
 
     // Initialize the drop regions
     _dropWidget->initialize([this](const QMimeData* mimeData) -> DropWidget::DropRegions {

@@ -38,7 +38,7 @@ using namespace hdps;
  * 
  * @authors J. Thijssen & T. Kroes
  */
-class ExampleAnalysisPlugin : public QObject, public AnalysisPlugin
+class ExampleAnalysisPlugin : public AnalysisPlugin
 {
 Q_OBJECT
 

@@ -59,7 +59,7 @@ void ExampleLoaderPlugin::loadData()
     qDebug() << "Number of dimensions: " << points->getNumDimensions();
 
     // Notify the core system of the new data
-    _core->notifyDataAdded(points);
+    _core->notifyDatasetAdded(points);
 
     qDebug() << "Example file loaded. Num data points: " << points->getNumPoints();
 }

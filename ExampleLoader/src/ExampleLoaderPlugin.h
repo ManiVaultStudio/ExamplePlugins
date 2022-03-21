@@ -8,7 +8,7 @@ using namespace hdps::plugin;
 // Loader
 // =============================================================================
 
-class ExampleLoaderPlugin : public QObject, public LoaderPlugin
+class ExampleLoaderPlugin : public LoaderPlugin
 {
     Q_OBJECT
 public:

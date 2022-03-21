@@ -53,7 +53,7 @@ PixelSet::~PixelSet()
 {
 }
 
-Dataset<DatasetImpl> PixelSet::createSubset(const QString& guiName, const Dataset<DatasetImpl>& parentDataSet /*= Dataset<DatasetImpl>()*/, const bool& visible /*= true*/) const
+Dataset<DatasetImpl> PixelSet::createSubsetFromSelection(const QString& guiName, const Dataset<DatasetImpl>& parentDataSet /*= Dataset<DatasetImpl>()*/, const bool& visible /*= true*/) const
 {
     return _core->createSubsetFromSelection(getSelection<PixelSet>(), const_cast<PixelSet*>(this), guiName, parentDataSet, visible);
 }
@@ -115,7 +115,7 @@ void PixelSet::selectAll()
     std::iota(selectionIndices.begin(), selectionIndices.end(), 0);
 
     // Notify others that the selection changed
-    _core->notifyDataSelectionChanged(this);
+    _core->notifyDatasetSelectionChanged(this);
 }
 
 void PixelSet::selectNone()
@@ -124,7 +124,7 @@ void PixelSet::selectNone()
     getSelectionIndices().clear();
 
     // Notify others that the selection changed
-    _core->notifyDataSelectionChanged(this);
+    _core->notifyDatasetSelectionChanged(this);
 }
 
 void PixelSet::selectInvert()
@@ -149,7 +149,7 @@ void PixelSet::selectInvert()
     }
 
     // Notify others that the selection changed
-    _core->notifyDataSelectionChanged(this);
+    _core->notifyDatasetSelectionChanged(this);
 }
 
 QIcon ExampleDataPluginFactory::getIcon() const

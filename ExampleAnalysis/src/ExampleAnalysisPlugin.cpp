@@ -33,7 +33,7 @@ ExampleAnalysisPlugin::ExampleAnalysisPlugin(const PluginFactory* factory) :
 void ExampleAnalysisPlugin::init()
 {
     // Create example output dataset (a points dataset which is derived from the input points dataset) and set the output dataset
-    setOutputDataset(_core->createDerivedData("Output Data", getInputDataset()));
+    setOutputDataset(_core->createDerivedDataset("Output Data", getInputDataset()));
 
     // Retrieve the input dataset for our specific data type (in our case points)
     // The HDPS core sets the input dataset reference when the plugin is created
@@ -55,7 +55,7 @@ void ExampleAnalysisPlugin::init()
         outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
-        _core->notifyDataChanged(_output);
+        _core->notifyDatasetChanged(_output);
     };
 
     // Initializes the points

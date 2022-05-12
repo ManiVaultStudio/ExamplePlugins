@@ -3,11 +3,11 @@
 ## Requirements
 * Git (https://git-scm.com/)
 * CMake 3.1+ (https://cmake.org/)
-* Qt 5.13 (https://www.qt.io/download)
-* Visual Studio 2017 (only for this guide https://visualstudio.microsoft.com/downloads/)
+* Qt 5.15 (https://www.qt.io/download)
+* Visual Studio 2017+ (only for this guide https://visualstudio.microsoft.com/downloads/)
 
 ## Setting up
-The first step is to pull the repository from github. You can do this in any way you like, but the easiest way is to download a .zip file of the repository from: https://github.com/hdps/ExamplePlugins/archive/master.zip.
+The first step is to pull the repository from github. You can do this in any way you like, but the easiest way is to download a .zip file of the repository from: https://github.com/hdps/ExamplePlugins/archive/release/core_0.2/1.0.zip.
 
 After unzipping the folder continue to the next step.
 

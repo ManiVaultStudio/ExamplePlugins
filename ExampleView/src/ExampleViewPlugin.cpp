@@ -105,7 +105,12 @@ void ExampleViewPlugin::init()
     });
 
     // Alternatively, classes which derive from hdsp::EventListener (all plugins do) can also respond to events
-    registerDataEventByType(PointType, std::bind(&ExampleViewPlugin::onDataEvent, this, std::placeholders::_1));
+    _eventListener.setEventCore(_core);
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataSelectionChanged));
+    _eventListener.registerDataEventByType(PointType, std::bind(&ExampleViewPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
 void ExampleViewPlugin::onDataEvent(hdps::DataEvent* dataEvent)

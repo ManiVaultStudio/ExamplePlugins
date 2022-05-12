@@ -151,7 +151,7 @@ void ExampleAnalysisPlugin::init()
     initializePoints();
 
     // Register for points datasets events using a custom callback function
-    registerDataEventByType(PointType, std::bind(&ExampleAnalysisPlugin::onDataEvent, this, std::placeholders::_1));
+    _eventListener.registerDataEventByType(PointType, std::bind(&ExampleAnalysisPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
 void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)

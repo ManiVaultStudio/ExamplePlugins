@@ -28,7 +28,7 @@ void ExampleViewPlugin::init()
     // Create layout
     auto layout = new QVBoxLayout();
 
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(_currentDatasetNameLabel);
 
     // Apply the layout

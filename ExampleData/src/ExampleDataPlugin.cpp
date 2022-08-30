@@ -21,9 +21,9 @@ void ExampleDataPlugin::init()
 /**
  * Create a new dataset linking back to the original raw data
  */
-Dataset<DatasetImpl> ExampleDataPlugin::createDataSet() const
+Dataset<DatasetImpl> ExampleDataPlugin::createDataSet(const QString& guid /*= ""*/) const
 {
-    return new PixelSet(_core, getName());
+    return new PixelSet(_core, getName(), guid);
 }
 
 std::vector<QColor>& ExampleDataPlugin::getData()
@@ -44,8 +44,8 @@ void ExampleDataPlugin::setData(QImage image) {
     }
 }
 
-PixelSet::PixelSet(CoreInterface* core, QString dataName) :
-    DatasetImpl(core, dataName)
+PixelSet::PixelSet(CoreInterface* core, QString dataName, const QString& guid /*= ""*/) :
+    DatasetImpl(core, dataName, guid)
 {
 }
 
@@ -67,7 +67,7 @@ Dataset<DatasetImpl> PixelSet::copy() const
     return copySet;
 }
 
-QIcon PixelSet::getIcon() const
+QIcon PixelSet::getIcon(const QColor& color /*= Qt::black*/) const
 {
     return QIcon();
 }
@@ -152,9 +152,9 @@ void PixelSet::selectInvert()
     _core->notifyDatasetSelectionChanged(this);
 }
 
-QIcon ExampleDataPluginFactory::getIcon() const
+QIcon ExampleDataPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return Application::getIconFont("FontAwesome").getIcon("database");
+    return Application::getIconFont("FontAwesome").getIcon("database", color);
 }
 
 plugin::RawData* ExampleDataPluginFactory::produce()

@@ -20,7 +20,12 @@ public:
     
     void init() override;
 
-    hdps::Dataset<hdps::DatasetImpl> createDataSet() const override;
+    /**
+     * Create dataset for raw data
+     * @param guid Globally unique dataset identifier (use only for deserialization)
+     * @return Smart pointer to dataset
+     */
+    hdps::Dataset<hdps::DatasetImpl> createDataSet(const QString& guid = "") const override;
 
     std::vector<QColor>& getData();
 
@@ -37,7 +42,7 @@ private:
 class PixelSet : public hdps::DatasetImpl
 {
 public:
-    PixelSet(hdps::CoreInterface* core, QString dataName);
+    PixelSet(hdps::CoreInterface* core, QString dataName, const QString& guid = "");
     ~PixelSet() override;
 
     /**
@@ -52,8 +57,12 @@ public:
     /** Mandatory override for copying of data sets */
     hdps::Dataset<hdps::DatasetImpl> copy() const override;
 
-    /** Get icon for the dataset */
-    QIcon getIcon() const override;
+    /**
+     * Get set icon
+     * @param color Icon color for flat (font) icons
+     * @return Icon
+     */
+    QIcon getIcon(const QColor& color = Qt::black) const override;
 
 public: // Selection
 
@@ -105,8 +114,12 @@ public:
     ExampleDataPluginFactory() {}
     ~ExampleDataPluginFactory() override {}
 
-    /** Returns the plugin icon */
-    QIcon getIcon() const override;
+    /**
+     * Get plugin icon
+     * @param color Icon color for flat (font) icons
+     * @return Icon
+     */
+    QIcon getIcon(const QColor& color = Qt::black) const override;
 
     hdps::plugin::RawData* produce() override;
 };

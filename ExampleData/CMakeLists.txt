@@ -25,6 +25,10 @@ set(SOURCES
     src/ExampleDataPlugin.json
 )
 
+set(EXAMPLE_DATA_HEADERS
+    src/ExampleDataPlugin.h
+)
+
 source_group( Plugin FILES ${SOURCES})
 
 include_directories("${INSTALL_DIR}/$<CONFIGURATION>/include/")
@@ -41,8 +45,18 @@ target_link_libraries(${PROJECT} Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT} "${INSTALL_DIR}/$<CONFIGURATION>/lib/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${LIB_LINK_SUFFIX}")
 target_link_libraries(${PROJECT} "${INSTALL_DIR}/$<CONFIGURATION>/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${LIB_LINK_SUFFIX}")
 
+set_target_properties(${PROJECT} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
+
+install(TARGETS ${PROJECT}
+    RUNTIME DESTINATION Plugins COMPONENT PLUGINS
+    LIBRARY DESTINATION Plugins COMPONENT PLUGINS
+    ARCHIVE DESTINATION lib COMPONENT LINKLIB
+    PUBLIC_HEADER DESTINATION include COMPONENT HEADERS
+)
+
 add_custom_command(TARGET ${PROJECT} POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
-	"$<TARGET_FILE:${PROJECT}>"
-	"${INSTALL_DIR}/$<CONFIGURATION>/Plugins/$<TARGET_FILE_NAME:${PROJECT}>"
+    COMMAND "${CMAKE_COMMAND}"
+        --install ${CMAKE_CURRENT_BINARY_DIR}
+        --config $<CONFIGURATION>
+        --prefix ${INSTALL_DIR}/$<CONFIGURATION>
 )

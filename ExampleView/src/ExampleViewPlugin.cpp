@@ -106,7 +106,6 @@ void ExampleViewPlugin::init()
     });
 
     // Alternatively, classes which derive from hdsp::EventListener (all plugins do) can also respond to events
-    _eventListener.setEventCore(_core);
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));
@@ -194,4 +193,26 @@ hdps::DataTypes ExampleViewPluginFactory::supportedDataTypes() const
     supportedTypes.append(PointType);
 
     return supportedTypes;
+}
+
+hdps::gui::PluginTriggerActions ExampleViewPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+{
+    PluginTriggerActions pluginTriggerActions;
+
+    const auto getPluginInstance = [this]() -> ExampleViewPlugin* {
+        return dynamic_cast<ExampleViewPlugin*>(plugins().requestViewPlugin(getKind()));
+    };
+
+    const auto numberOfDatasets = datasets.count();
+
+    if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewPluginFactory*>(this), this, "Example", "View example data", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+            for (auto dataset : datasets)
+                getPluginInstance();
+        });
+
+        pluginTriggerActions << pluginTriggerAction;
+    }
+
+    return pluginTriggerActions;
 }

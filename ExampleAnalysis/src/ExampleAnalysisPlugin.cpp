@@ -55,7 +55,7 @@ void ExampleAnalysisPlugin::init()
         outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
-        _core->notifyDatasetChanged(_output);
+        events().notifyDatasetChanged(_output);
     };
 
     // Initializes the points
@@ -151,8 +151,6 @@ void ExampleAnalysisPlugin::init()
     initializePoints();
 
     // Register for points datasets events using a custom callback function
-
-    _eventListener.setEventCore(Application::core());
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));

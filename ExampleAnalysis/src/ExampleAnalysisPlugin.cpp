@@ -33,7 +33,7 @@ ExampleAnalysisPlugin::ExampleAnalysisPlugin(const PluginFactory* factory) :
 void ExampleAnalysisPlugin::init()
 {
     // Create example output dataset (a points dataset which is derived from the input points dataset) and set the output dataset
-    setOutputDataset(_core->createDerivedDataset("Output Data", getInputDataset()));
+    setOutputDataset(_core->createDerivedDataset("Output Data", getInputDataset(), getInputDataset()));
 
     // Retrieve the input dataset for our specific data type (in our case points)
     // The HDPS core sets the input dataset reference when the plugin is created
@@ -237,4 +237,26 @@ hdps::DataTypes ExampleAnalysisPluginFactory::supportedDataTypes() const
     supportedTypes.append(PointType);
 
     return supportedTypes;
+}
+
+hdps::gui::PluginTriggerActions ExampleAnalysisPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+{
+    PluginTriggerActions pluginTriggerActions;
+
+    const auto getPluginInstance = [this](const Dataset<Points>& dataset) -> ExampleAnalysisPlugin* {
+        return dynamic_cast<ExampleAnalysisPlugin*>(plugins().requestPlugin(getKind(), { dataset }));
+    };
+
+    const auto numberOfDatasets = datasets.count();
+
+    if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleAnalysisPluginFactory*>(this), this, "Example Analysis", "Perform an Example Analysis", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+            for (auto dataset : datasets)
+                getPluginInstance(dataset);
+            });
+
+        pluginTriggerActions << pluginTriggerAction;
+    }
+
+    return pluginTriggerActions;
 }

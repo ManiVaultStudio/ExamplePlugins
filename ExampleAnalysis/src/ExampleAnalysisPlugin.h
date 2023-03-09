@@ -165,4 +165,7 @@ public:
 
     /** Returns the data types that are supported by the example analysis plugin */
     hdps::DataTypes supportedDataTypes() const override;
+
+    /** Enable right-click on data set to open analysis */
+    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
 };

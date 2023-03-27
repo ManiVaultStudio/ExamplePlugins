@@ -1,0 +1,6 @@
+{
+    "name" : "Example Writer",
+    "menuName" : "Example (.xmp)",
+    "version" : "1",
+    "dependencies" : ["Points"]
+}

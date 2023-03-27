@@ -1,0 +1,5 @@
+{
+    "name" : "Example Transformation",
+    "version" : "1",
+    "dependencies" : ["Points"]
+}

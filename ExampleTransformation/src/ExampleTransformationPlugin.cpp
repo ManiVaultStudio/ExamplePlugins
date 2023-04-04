@@ -1,6 +1,6 @@
 #include "ExampleTransformationPlugin.h"
 
-#include <PointData.h>
+#include <PointData/PointData.h>
 
 #include <actions/PluginTriggerAction.h>
 

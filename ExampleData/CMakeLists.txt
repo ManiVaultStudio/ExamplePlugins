@@ -37,24 +37,32 @@ target_include_directories(${PROJECT} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/i
 
 target_compile_features(${PROJECT} PRIVATE cxx_std_17)
 
-if(MSVC)
-    set(LIB_LINK_SUFFIX ".lib") 
-else()
-    set(LIB_LINK_SUFFIX "${CMAKE_SHARED_LIBRARY_SUFFIX}")
-endif(MSVC)
+# The link path in this repo assume that the ManiVault core was build locally
+# in contrast to installed with an installed. In the latter case you'll have
+# to adapt the HDPS_LINK_PATH and PLUGIN_LINK_PATH to your install folder
+set(HDPS_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/lib")
+set(PLUGIN_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
+set(HDPS_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
+
+set(HDPS_LINK_LIBRARY "${HDPS_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${HDPS_LINK_SUFFIX}")
+set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${HDPS_LINK_SUFFIX}") 
 
 target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
-target_link_libraries(${PROJECT} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/lib/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${LIB_LINK_SUFFIX}")
-target_link_libraries(${PROJECT} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/lib/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${LIB_LINK_SUFFIX}")
+target_link_libraries(${PROJECT} PRIVATE "${HDPS_LINK_LIBRARY}")
+target_link_libraries(${PROJECT} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
 set_target_properties(${PROJECT} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
 
+# In contrast to other plugin types, for data plugins we want to install headers
+# (as well as the dynamic link library on Windows) 
+# in addition to the dynamic plugins libraries to that other plugins might link against this new data
+# more info: https://cmake.org/cmake/help/book/mastering-cmake/chapter/Install.html
 install(TARGETS ${PROJECT}
-    RUNTIME DESTINATION Plugins COMPONENT PLUGINS
-    LIBRARY DESTINATION Plugins COMPONENT PLUGINS
-    ARCHIVE DESTINATION lib COMPONENT LINKLIB
-    PUBLIC_HEADER DESTINATION include COMPONENT HEADERS
+    RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
+    LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
+    ARCHIVE DESTINATION lib     COMPONENT LINKLIB # Windows .lib
+    PUBLIC_HEADER DESTINATION include/${PROJECT} COMPONENT HEADERS
 )
 
 add_custom_command(TARGET ${PROJECT} POST_BUILD

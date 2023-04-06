@@ -45,8 +45,8 @@ target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
 
 # Link to HDPS and data plugins
-# The link path in this repo assume that the ManiVault core was build locally
-# in contrast to installed with an installed. In the latter case you'll have
+# The link path in this repo assumes that the ManiVault core was built locally
+# in contrast to having been installed with an installer. In the latter case you'll have
 # to adapt the HDPS_LINK_PATH and PLUGIN_LINK_PATH to your install folder
 set(HDPS_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/lib")
 set(PLUGIN_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")

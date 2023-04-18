@@ -5,7 +5,7 @@
 #include <Dataset.h>
 #include <widgets/DropWidget.h>
 
-#include <PointData.h>
+#include <PointData/PointData.h>
 
 #include <QWidget>
 

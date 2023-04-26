@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.17)
 
-set(PROJECT "ExampleDataPlugin")
-
-PROJECT(${PROJECT})
+set(EXAMPLEDATA "ExampleDataPlugin")
+PROJECT(${EXAMPLEDATA})
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -15,13 +14,15 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
-# Get the pre-defined install path environment variable
-file(TO_CMAKE_PATH $ENV{HDPS_INSTALL_DIR} INSTALL_DIR)
+# Get the env path and allow the user to change it
+set(INSTALL_DIR $ENV{HDPS_INSTALL_DIR} CACHE PATH "The HDPS Install Directoy")
+# Normalize the incoming install path
+file(TO_CMAKE_PATH ${INSTALL_DIR} INSTALL_DIR)
 
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
 # Define the plugin sources
-set(SOURCES
+set(EXAMPLEDATA_SOURCES
     src/ExampleDataPlugin.h
     src/ExampleDataPlugin.cpp
     src/ExampleDataPlugin.json
@@ -31,20 +32,20 @@ set(EXAMPLE_DATA_HEADERS
     src/ExampleDataPlugin.h
 )
 
-source_group( Plugin FILES ${SOURCES})
+source_group( Plugin FILES ${EXAMPLEDATA_SOURCES})
 
 # Create dynamic library for the plugin
-add_library(${PROJECT} SHARED ${SOURCES})
+add_library(${EXAMPLEDATA} SHARED ${EXAMPLEDATA_SOURCES})
 
 # Include HDPS headers, including system data plugins
-target_include_directories(${PROJECT} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${EXAMPLEDATA} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 # Request C++17
-target_compile_features(${PROJECT} PRIVATE cxx_std_17)
+target_compile_features(${EXAMPLEDATA} PRIVATE cxx_std_17)
 
 # Link to Qt libraries
-target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
-target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
+target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::Widgets)
+target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::WebEngineWidgets)
 
 # Link to HDPS and data plugins
 # The link path in this repo assumes that the ManiVault core was built locally
@@ -57,23 +58,23 @@ set(HDPS_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},$
 set(HDPS_LINK_LIBRARY "${HDPS_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${HDPS_LINK_SUFFIX}")
 set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${HDPS_LINK_SUFFIX}") 
 
-target_link_libraries(${PROJECT} PRIVATE "${HDPS_LINK_LIBRARY}")
-target_link_libraries(${PROJECT} PRIVATE "${POINTDATA_LINK_LIBRARY}")
+target_link_libraries(${EXAMPLEDATA} PRIVATE "${HDPS_LINK_LIBRARY}")
+target_link_libraries(${EXAMPLEDATA} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
-set_target_properties(${PROJECT} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
+set_target_properties(${EXAMPLEDATA} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
 
 # In contrast to other plugin types, for data plugins we want to install headers
 # (as well as the dynamic link library on Windows) 
 # in addition to the dynamic plugins libraries so that other plugins can link against this new data type
 # more info: https://cmake.org/cmake/help/book/mastering-cmake/chapter/Install.html
-install(TARGETS ${PROJECT}
+install(TARGETS ${EXAMPLEDATA}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
     ARCHIVE DESTINATION lib     COMPONENT LINKLIB # Windows .lib
-    PUBLIC_HEADER DESTINATION include/${PROJECT} COMPONENT HEADERS
+    PUBLIC_HEADER DESTINATION include/${EXAMPLEDATA} COMPONENT HEADERS
 )
 
-add_custom_command(TARGET ${PROJECT} POST_BUILD
+add_custom_command(TARGET ${EXAMPLEDATA} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>

@@ -1,7 +1,7 @@
 #include "SettingsAction.h"
 
 SettingsAction::SettingsAction(QObject* parent) :
-    GroupAction(parent, true),
+    GroupAction(parent, "Settings", true),
     _currentIterationAction(this, "Value"),
     _maxVelocityAction(this, "Maximum velocity", 0.001f, 0.1f, 0.02f, 0.02f, 2),
     _numberOfIterationsAction(this, "Number of iterations", 0, 1000, 100, 100),

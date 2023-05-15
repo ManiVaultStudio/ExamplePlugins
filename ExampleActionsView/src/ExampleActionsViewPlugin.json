@@ -1,5 +1,5 @@
 {
-    "name" : "Example View",
+    "name" : "Example Actions View",
     "version" : "1",
-    "dependencies" : []
+    "dependencies" : ["Points"]
 }

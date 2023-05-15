@@ -2,6 +2,8 @@
 
 #include <ViewPlugin.h>
 
+#include <actions/WidgetAction.h>
+
 #include <QWidget>
 
 using namespace hdps::plugin;
@@ -35,7 +37,22 @@ public:
     /** This function is called by the core after the view plugin has been created */
     void init() override;
 
+public: // Serialization
+
+    /**
+     * Load widget action from variant map
+     * @param Variant map representation of the widget action
+     */
+    void fromVariantMap(const QVariantMap& variantMap) override;
+
+    /**
+     * Save widget action to variant map
+     * @return Variant map representation of the widget action
+     */
+    QVariantMap toVariantMap() const override;
+
 protected:
+    hdps::gui::WidgetActions  _actions;
 };
 
 /**

@@ -1,0 +1,47 @@
+<!doctype html>
+
+<head>
+    <title>Radar Chart</title>
+    <meta content="utf-8" http-equiv="encoding">
+
+    <!-- qt connection -->
+    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script type="text/javascript" src="../js_libs/qwebchannel.tools.js"></script>
+    <!-- d3 -->
+    <script type="text/javascript" src="../js_libs/d3.v3.min.js"></script>
+    <script type="text/javascript" src="../js_libs/radar-chart.min.js"></script>
+      <!-- stylesheets -->
+    <link rel="stylesheet" type="text/css" href="../js_libs/radar-chart.min.css">
+    <style>
+        div.chartBody {
+            resize: both;
+        }
+        body {
+            padding: 20px;
+        }
+        .radar-chart .area {
+            fill-opacity: 0.7;
+        }
+        .radar-chart.focus .area {
+            fill-opacity: 0.3;
+        }
+        .radar-chart.focus .area.focused {
+            fill-opacity: 0.9;
+        }
+    </style>
+
+<script type="text/javascript">
+    RadarChart.defaultConfig.color = function() {};
+    RadarChart.defaultConfig.radius = 3;
+  </script>
+
+
+</head>
+
+<body>
+<div id="chartBody" class="radar-chart"></div>
+</body>
+
+<!-- utility functions // this has to be loaded after the other scripts -->
+<script src="radar_chart.tools.js"></script>
+

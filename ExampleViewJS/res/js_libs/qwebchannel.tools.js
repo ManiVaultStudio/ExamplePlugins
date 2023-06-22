@@ -1,28 +1,6 @@
-// find out if the QtBridge is available
 var isQtAvailable = false;
-try {
-    new QWebChannel(qt.webChannelTransport, function (channel) {
-        // Establish connection
-        QtBridge = channel.objects.QtBridge;
 
-        // register signals 
-        QtBridge.qt_js_setDataInJS.connect(function () { setChartData(arguments[0]); });
-        QtBridge.qt_js_setSelectionInJS.connect(function () { setSelectionIDsFromQt(arguments[0]); });
-
-        // confirm successfull connection
-        isQtAvailable = true;
-        notifyBridgeAvailable();
-    });
-} catch (error) {
-	log("ExampleViewJSPlugin: qwebchannel: could not connect qt");
-}
-
-// pipe errors to log
-window.onerror = function (msg, url, num) {
-    log("ExampleViewJSPlugin: qwebchannel: Error: " + msg + "\nURL: " + url + "\nLine: " + num);
-};
-
-// auto log for Qt and console
+// utility function: auto log for Qt and console
 function log(logtext) {
 
 	if (isQtAvailable) {
@@ -33,6 +11,24 @@ function log(logtext) {
 	}
 }
 
+// find out if the QtBridge is available
+try {
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+        // Establish connection
+        QtBridge = channel.objects.QtBridge;
+
+        // register signals 
+        QtBridge.qt_js_setDataInJS.connect(function () { setChartData(arguments[0]); });
+
+        // confirm successfull connection
+        isQtAvailable = true;
+        notifyBridgeAvailable();
+    });
+} catch (error) {
+	log("ExampleViewJSPlugin: qwebchannel: could not connect qt");
+}
+
+// 
 function notifyBridgeAvailable() {
 
     if (isQtAvailable) {
@@ -44,23 +40,15 @@ function notifyBridgeAvailable() {
 
 }
 
+// 
 function passSelectionToQt(dat) {
     if (isQtAvailable) {
         QtBridge.js_passSelectionToQt(dat);
 	}
 }
 
-function setViewBusy() {
-
-    if (isQtAvailable) {
-        QtBridge.js_viewIsBusy(true);
-    }
-}
-
-function setViewAvailable() {
-
-    if (isQtAvailable) {
-        QtBridge.js_viewIsBusy(false);
-    }
-}
+// utility function: pipe errors to log
+window.onerror = function (msg, url, num) {
+    log("ExampleViewJSPlugin: qwebchannel: Error: " + msg + "\nURL: " + url + "\nLine: " + num);
+};
 

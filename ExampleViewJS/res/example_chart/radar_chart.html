@@ -7,21 +7,28 @@
     <!-- qt connection -->
     <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <script type="text/javascript" src="../js_libs/qwebchannel.tools.js"></script>
+
     <!-- d3 -->
     <script type="text/javascript" src="../js_libs/d3.v3.min.js"></script>
     <script type="text/javascript" src="../js_libs/radar-chart.min.js"></script>
+
+    <!-- plot and communication functions // this has to be loaded after the other scripts -->
+    <script src="radar_chart.tools.js"></script>
+
     <!-- stylesheet for radar plot -->
     <link rel="stylesheet" type="text/css" href="../js_libs/radar-chart.min.css">
+
     <!-- auto-resizeable container for plot -->
     <style>
         .svg-container {
-        display: inline-block;
-        position: relative;
-        width: 100%;
-        padding-bottom: 100%;
-        vertical-align: top;
-        overflow: hidden;
+            display: inline-block;
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            vertical-align: top;
+            overflow: hidden;
         }
+
         .svg-content {
             display: inline-block;
             position: absolute;
@@ -34,9 +41,5 @@
 <body>
     <!-- div element to plot into -->
     <div id="container" class="svg-container"></div>
-</body>
-
-<!-- utility functions // this has to be loaded after the other scripts -->
-<script src="radar_chart.tools.js"></script>
-  
+</body>  
 </html>

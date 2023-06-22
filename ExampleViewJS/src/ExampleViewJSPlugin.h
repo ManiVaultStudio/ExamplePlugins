@@ -21,6 +21,17 @@ class ChartWidget;
 
 /**
  * Example view JS plugin class
+ * 
+ * This plugin showcases how a JavaScript-based visualization can be included in ManiVault 
+ * Here, we use a D3 library, but other libraries like Vega-Lite follow the same pattern
+ * 
+ * This project:
+ *  - Sets up a WebWidget, which displays an HTML webpage
+ *  - Connects selections made a D3 plot with ManiVault
+ * 
+ * This projects does not implement selections from ManiVault to the D3 plot,
+ * but such implementation follows the same form as the data-values communication
+ * between cpp and JavaScript that is used here.
  *
  * @authors J. Thijssen & T. Kroes & A. Vieth
  */
@@ -44,9 +55,6 @@ public:
     /** Store a private reference to the data set that should be displayed */
     void loadData(const hdps::Datasets& datasets) override;
 
-signals:
-    void dataSetChanged();
-
 public slots:
     /** Converts ManiVault's point data to a json-like data structure that Qt can pass to the JS code */
     void convertDataAndUpdateChart();
@@ -57,7 +65,7 @@ private:
 
     QString getCurrentDataSetGuid() const;
 
-    /** Dummy function to create data, instead of loading it from the core */
+    /** We create and publish some data in order to provide an self-contained example project */
     void createData();
 
 private:

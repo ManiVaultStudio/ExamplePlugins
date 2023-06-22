@@ -85,16 +85,13 @@ void ExampleViewJSPlugin::init()
         return dropRegions;
         });
 
-    // load data after drop action
-    connect(this, &ExampleViewJSPlugin::dataSetChanged, this, &ExampleViewJSPlugin::convertDataAndUpdateChart);
-
     // update data when data set changed
     connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewJSPlugin::convertDataAndUpdateChart);
 
     // Update the selection (coming from PCP) in core
     connect(&_chartWidget->getCommunicationObject(), &ChartCommObject::passSelectionToCore, this, &ExampleViewJSPlugin::publishSelection);
 
-    //
+    // Create data so that we do not need to load any in this example
     createData();
 }
 
@@ -110,7 +107,8 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
     _currentDataSet = datasets.first();
     _dropWidget->setShowDropIndicator(false);
 
-    emit dataSetChanged();
+    // Send data to JS side and create the plot
+    emit convertDataAndUpdateChart();
 }
 
 void ExampleViewJSPlugin::convertDataAndUpdateChart()
@@ -120,7 +118,7 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
 
     qDebug() << "ExampleViewJSPlugin: Prepare payload";
 
-    // convert data
+    // convert data from ManiVault PointData to a JSON structure
     QVariantList payload;
     QVariantMap entry;
 
@@ -186,6 +184,8 @@ QString ExampleViewJSPlugin::getCurrentDataSetGuid() const
 
 void ExampleViewJSPlugin::createData()
 {
+    // Here, we create a random data set, so that we do not need 
+    // to use other plugins for loading when trying out this example
     auto points = _core->addDataset<Points>("Points", "ExampleViewJSData");
     events().notifyDatasetAdded(points);
 
@@ -218,7 +218,6 @@ void ExampleViewJSPlugin::createData()
     events().notifyDatasetChanged(points);
 
     qDebug() << "Example file loaded. Num data points: " << points->getNumPoints();
-
 }
 
 

@@ -68,10 +68,7 @@ ChartWidget::ChartWidget(ExampleViewJSPlugin* viewJSPlugin):
 void ChartWidget::initWebPage()
 {
     qDebug() << "ChartWidget: WebChannel bridge is available.";
-}
-
-void ChartWidget::passDataToJS(QVariantList& data)
-{
-    emit _comObject.qt_js_setDataInJS(data);
+    // call to data load, used when plugin is opened via right-clicking data set
+    _viewJSPlugin->convertDataAndUpdateChart();
 }
 

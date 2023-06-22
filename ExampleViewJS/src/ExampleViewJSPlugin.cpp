@@ -20,7 +20,8 @@ using namespace hdps;
 ExampleViewJSPlugin::ExampleViewJSPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _chartWidget(nullptr),
-    _dropWidget(nullptr)
+    _dropWidget(nullptr),
+    _currentDataSet(nullptr)
 {
 }
 
@@ -54,7 +55,7 @@ void ExampleViewJSPlugin::init()
         const auto mimeText = mimeData->text();
         const auto tokens = mimeText.split("\n");
 
-        if (tokens.count() != 2)
+        if (tokens.count() < 2)
             return dropRegions;
 
         // Gather information to generate appropriate drop regions
@@ -73,7 +74,6 @@ void ExampleViewJSPlugin::init()
 
                 dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
-                    _dropWidget->setShowDropIndicator(false);
                     });
 
             }
@@ -85,6 +85,13 @@ void ExampleViewJSPlugin::init()
         return dropRegions;
         });
 
+    // load data after drop action
+    connect(this, &ExampleViewJSPlugin::dataSetChanged, this, &ExampleViewJSPlugin::convertDataAndUpdateChart);
+
+    // update data when data set changed
+    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewJSPlugin::convertDataAndUpdateChart);
+
+    //
     createData();
 }
 
@@ -94,11 +101,21 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
     if (datasets.isEmpty())
         return;
 
+    qDebug() << "ExampleViewJSPlugin: Load data set from ManiVault core";
+
     // Load the first dataset, changes to _currentDataSet are connected with onDataInput
     _currentDataSet = datasets.first();
     _dropWidget->setShowDropIndicator(false);
-    
-    getWidget().setWindowTitle(_currentDataSet->getGuiName());
+
+    emit dataSetChanged();
+}
+
+void ExampleViewJSPlugin::convertDataAndUpdateChart()
+{
+    if (!_currentDataSet.isValid())
+        return;
+
+    qDebug() << "ExampleViewJSPlugin: Prepare payload";
 
     // convert data
     QVariantList payload;
@@ -106,13 +123,11 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
 
     _currentDataSet->visitFromBeginToEnd([&entry, &payload, this](auto beginOfData, auto endOfData)
         {
-            qDebug() << "ParallelCoordinatesPlugin: Prepare payload";
-
             auto pointNames = _currentDataSet->getProperty("PointNames");
             auto dimNames = _currentDataSet->getDimensionNames();
             auto numDims = dimNames.size();
 
-            for (const unsigned int pointId : _currentDataSet->indices)
+            for (unsigned int pointId = 0; pointId < _currentDataSet->getNumPoints(); pointId++)
             {
                 entry.clear();
 
@@ -134,7 +149,8 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
             }
         });
 
-    _chartWidget->passDataToJS(payload);
+    qDebug() << "ExampleViewJSPlugin: Send data from Qt cpp to D3 js";
+    emit _chartWidget->getCommunicationObject().qt_js_setDataInJS(payload);
 }
 
 QString ExampleViewJSPlugin::getCurrentDataSetGuid() const
@@ -165,6 +181,7 @@ void ExampleViewJSPlugin::createData()
         for (int i = 0; i < numPoints * numDimensions; i++)
         {
             exampleData.push_back(distribution(generator));
+            qDebug() << "exampleData[" << i << "]: " << exampleData[i];
         }
     }
 
@@ -217,7 +234,8 @@ hdps::gui::PluginTriggerActions ExampleViewJSPluginFactory::getPluginTriggerActi
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
         auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewJSPluginFactory*>(this), this, "Example JS", "View JavaScript visualization", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
             for (auto dataset : datasets)
-                getPluginInstance();
+                getPluginInstance()->loadData(Datasets({ dataset }));
+
         });
 
         pluginTriggerActions << pluginTriggerAction;

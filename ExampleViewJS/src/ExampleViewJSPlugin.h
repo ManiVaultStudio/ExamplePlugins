@@ -29,7 +29,6 @@ class ExampleViewJSPlugin : public ViewPlugin
     Q_OBJECT
 
 public:
-
     /**
      * Constructor
      * @param factory Pointer to the plugin factory
@@ -42,19 +41,24 @@ public:
     /** This function is called by the core after the view plugin has been created */
     void init() override;
 
+    void loadData(const hdps::Datasets& datasets) override;
+
+signals:
+    void dataSetChanged();
+
+public slots:
+    void convertDataAndUpdateChart();
+
 private:
     /** Dummy function to create data, instead of loading it from the core */
     void createData();
 
     QString getCurrentDataSetGuid() const;
 
-    void loadData(const hdps::Datasets& datasets) override;
-
-protected:
+private:
     ChartWidget*            _chartWidget;       // 
     DropWidget*             _dropWidget;        /** Widget for drag and drop behavior */
     hdps::Dataset<Points>   _currentDataSet;    //
-
 };
 
 /**

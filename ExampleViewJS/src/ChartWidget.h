@@ -47,8 +47,6 @@ class ChartWidget : public hdps::gui::WebWidget
 public:
     ChartWidget(ExampleViewJSPlugin* viewJSPlugin);
 
-    void passDataToJS(QVariantList& data);
-
     ChartCommObject& getCommunicationObject() { return _comObject; };
 
 private slots:

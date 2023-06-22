@@ -1,5 +1,5 @@
 <!doctype html>
-
+<html>
 <head>
     <title>Radar Chart</title>
     <meta content="utf-8" http-equiv="encoding">
@@ -30,18 +30,35 @@
         }
     </style>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     RadarChart.defaultConfig.color = function() {};
     RadarChart.defaultConfig.radius = 3;
-  </script>
-
-
+  </script> -->
+    
+  <style>
+    .svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+  </style>
 </head>
 
 <body>
-<div id="chartBody" class="radar-chart"></div>
+<!-- <div id="chartBody" class="radar-chart"></div> -->
+<div id="container" class="svg-container"></div>
 </body>
 
 <!-- utility functions // this has to be loaded after the other scripts -->
 <script src="radar_chart.tools.js"></script>
-
+  
+</html>

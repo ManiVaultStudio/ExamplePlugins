@@ -33,7 +33,7 @@ ChartWidget::ChartWidget(ExampleViewJSPlugin* viewJSPlugin):
     _viewJSPlugin(viewJSPlugin),
     _comObject()
 {
-    // See the ExampleViewPlugin project for more info on drag&drop behavior
+    // For more info on drag&drop behavior, see the ExampleViewPlugin project
     setAcceptDrops(true);
 
     // Ensure linking to the resources defined in res/example_chart.qrc
@@ -49,7 +49,7 @@ ChartWidget::ChartWidget(ExampleViewJSPlugin* viewJSPlugin):
 void ChartWidget::initWebPage()
 {
     qDebug() << "ChartWidget: WebChannel bridge is available.";
-    // call to data load, used when plugin is opened via right-clicking data set
+    // This call ensures data chart setup when this view plugin is opened via the context menu of a data set
     _viewJSPlugin->convertDataAndUpdateChart();
 }
 

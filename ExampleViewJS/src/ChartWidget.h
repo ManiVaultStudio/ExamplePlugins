@@ -18,19 +18,21 @@ public:
 
 signals:
     // Signals from Qt to JS side
+    // This specific signal is used to transfer data from ManiVault to the D3 plot
+    // But other communication like messaging selection IDs can be handled the same
     void qt_js_setDataInJS(QVariantList& data);
-    void qt_js_setSelectionInJS(QVariantList& selection);
 
     // Signals Qt internal
+    // Used to inform the plugin about new selection: the plugin class then updates ManiVault's core
     void passSelectionToCore(const std::vector<unsigned int>& selectionIDs);
 
 public slots:
     // Invoked from JS side 
+    // Used to receive selection IDs from the D3 plot, will emit passSelectionToCore
     void js_qt_passSelectionToQt(QVariantList data);
 
 private:
-    std::vector<unsigned int> _selectedIDsFromJS;
-
+    std::vector<unsigned int> _selectedIDsFromJS;   // Used for converting incoming selection IDs from the js side
 };
 
 
@@ -52,6 +54,6 @@ private slots:
     void initWebPage() override;
 
 private:
-    ExampleViewJSPlugin*  _viewJSPlugin;    //
-    ChartCommObject       _comObject;       //
+    ExampleViewJSPlugin*  _viewJSPlugin;    // Pointer to the main plugin class
+    ChartCommObject       _comObject;       // Communication Object between Qt (cpp) and JavaScript
 };

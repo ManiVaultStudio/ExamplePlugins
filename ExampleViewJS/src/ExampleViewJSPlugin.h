@@ -41,26 +41,29 @@ public:
     /** This function is called by the core after the view plugin has been created */
     void init() override;
 
+    /** Store a private reference to the data set that should be displayed */
     void loadData(const hdps::Datasets& datasets) override;
 
 signals:
     void dataSetChanged();
 
 public slots:
+    /** Converts ManiVault's point data to a json-like data structure that Qt can pass to the JS code */
     void convertDataAndUpdateChart();
 
 private:
-    /** Dummy function to create data, instead of loading it from the core */
-    void createData();
-
+    /** Published selections received from the JS side to ManiVault's core */
     void publishSelection(const std::vector<unsigned int>& selectedIDs);
 
     QString getCurrentDataSetGuid() const;
 
+    /** Dummy function to create data, instead of loading it from the core */
+    void createData();
+
 private:
-    ChartWidget*            _chartWidget;       // 
-    DropWidget*             _dropWidget;        /** Widget for drag and drop behavior */
-    hdps::Dataset<Points>   _currentDataSet;    //
+    ChartWidget*            _chartWidget;       // WebWidget that sets up the HTML page
+    DropWidget*             _dropWidget;        // Widget for drag and drop behavior
+    hdps::Dataset<Points>   _currentDataSet;    // Reference to currently shown data set
 };
 
 /**

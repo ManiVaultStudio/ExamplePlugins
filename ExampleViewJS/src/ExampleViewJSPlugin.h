@@ -53,6 +53,8 @@ private:
     /** Dummy function to create data, instead of loading it from the core */
     void createData();
 
+    void publishSelection(const std::vector<unsigned int>& selectedIDs);
+
     QString getCurrentDataSetGuid() const;
 
 private:

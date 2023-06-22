@@ -91,6 +91,9 @@ void ExampleViewJSPlugin::init()
     // update data when data set changed
     connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewJSPlugin::convertDataAndUpdateChart);
 
+    // Update the selection (coming from PCP) in core
+    connect(&_chartWidget->getCommunicationObject(), &ChartCommObject::passSelectionToCore, this, &ExampleViewJSPlugin::publishSelection);
+
     //
     createData();
 }
@@ -151,6 +154,26 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
 
     qDebug() << "ExampleViewJSPlugin: Send data from Qt cpp to D3 js";
     emit _chartWidget->getCommunicationObject().qt_js_setDataInJS(payload);
+}
+
+void ExampleViewJSPlugin::publishSelection(const std::vector<unsigned int>& selectedIDs)
+{
+    // ask core for the selection set for the current data set
+    auto selectionSet = _currentDataSet->getSelection<Points>();
+    auto& selectionIndices = selectionSet->indices;
+
+    // clear the selection and add the new points
+    selectionIndices.clear();
+    selectionIndices.reserve(_currentDataSet->getNumPoints());
+    for (const auto id : selectedIDs) {
+        selectionIndices.push_back(id);
+    }
+
+    // notify core about the selection change
+    if (_currentDataSet->isDerivedData())
+        events().notifyDatasetSelectionChanged(_currentDataSet->getSourceDataset<DatasetImpl>());
+    else
+        events().notifyDatasetSelectionChanged(_currentDataSet);
 }
 
 QString ExampleViewJSPlugin::getCurrentDataSetGuid() const

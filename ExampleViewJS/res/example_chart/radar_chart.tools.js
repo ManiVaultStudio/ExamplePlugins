@@ -34,3 +34,13 @@ function drawChart() {
       .datum(data)
       .call(chart);
 }
+
+
+function handleClick() {
+    log("Mimic selection")
+    passSelectionToQt([0]) // select item with index 0 
+}
+
+
+d3.selectAll("div#container").on('click', handleClick);
+

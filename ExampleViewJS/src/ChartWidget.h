@@ -28,9 +28,6 @@ public slots:
     // Invoked from JS side 
     void js_qt_passSelectionToQt(QVariantList data);
 
-    // converts vector to array string and emits qt_setSelectionInJS
-    void newSelectionToJS(const std::vector<unsigned int>& selectionIDs);
-
 private:
     std::vector<unsigned int> _selectedIDsFromJS;
 

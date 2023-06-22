@@ -15,7 +15,6 @@ ChartCommObject::ChartCommObject() :
 {
 }
 
-
 void ChartCommObject::js_qt_passSelectionToQt(QVariantList data){
     // convert data structure
     _selectedIDsFromJS.clear();
@@ -25,24 +24,6 @@ void ChartCommObject::js_qt_passSelectionToQt(QVariantList data){
     emit passSelectionToCore(_selectedIDsFromJS);
 }
 
-void ChartCommObject::newSelectionToJS(const std::vector<unsigned int>& selectionIDs) {
-    QVariantList selection;
-
-    // if nothing is selected, tell the chart to not highlight any data entry
-    if (selectionIDs.size() == 0)
-    {
-        selection.append("-");
-    }
-    // otherwise send all IDs
-    else
-    {
-        for (const auto& ID : selectionIDs)
-            selection.append(ID);
-    }
-
-    // send data to JS
-    emit qt_js_setSelectionInJS(selection);
-}
 
 // =============================================================================
 // ChartWidget

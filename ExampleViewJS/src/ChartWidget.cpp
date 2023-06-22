@@ -2,6 +2,7 @@
 #include "ExampleViewJSPlugin.h"
 
 #include <QDebug>
+#include <QString>
 
 using namespace hdps;
 using namespace hdps::gui;
@@ -16,11 +17,21 @@ ChartCommObject::ChartCommObject() :
 }
 
 void ChartCommObject::js_qt_passSelectionToQt(QVariantList data){
-    // convert data structure
     _selectedIDsFromJS.clear();
-    std::for_each(data.begin(), data.end(), [this](const auto &dat) {_selectedIDsFromJS.push_back(dat.toUInt()); });
+
+    if (!data.isEmpty())
+    {
+        // Convert data structure
+        // We will get strings in the form "point 2" from this particular library
+        // and need to extract only the seclection ID
+        std::for_each(data.begin(), data.end(), [this](const auto& dat) {
+            _selectedIDsFromJS.push_back(dat.toString().split(" ").takeLast().toInt() - 1);
+            });
+
+        qDebug() << "Selected item:" << _selectedIDsFromJS[0]; // in this case we know that it is only one
+    }    
     
-    // notify ManiVault core and thereby other plugins about new selection
+    // Notify ManiVault core and thereby other plugins about new selection
     emit passSelectionToCore(_selectedIDsFromJS);
 }
 

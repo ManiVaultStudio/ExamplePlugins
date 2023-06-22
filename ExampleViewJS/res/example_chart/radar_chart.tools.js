@@ -33,14 +33,15 @@ function drawChart() {
       .classed("svg-content", true)
       .datum(data)
       .call(chart);
-}
 
+    d3.select("div#container").select("svg").selectAll("polygon").on('click', function (dd) {
+        d3.event.stopPropagation();
+        passSelectionToQt([chart.config().tooltipFormatClass(dd.className)])
+    });
+}
 
 function handleClick() {
-    log("Mimic selection")
-    passSelectionToQt([0]) // select item with index 0 
+    passSelectionToQt([])
 }
 
-
 d3.selectAll("div#container").on('click', handleClick);
-

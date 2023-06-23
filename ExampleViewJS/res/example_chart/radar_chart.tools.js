@@ -1,20 +1,16 @@
-var data = [];                  // JSON data
-
 // ManiVault invokes this function to set the plot data,
-// we set up the plot immedeatly afterwards
-function setChartData(d) {
-    log("ExampleViewJS: radar_chart.tools.js: setChartData");
+// when emitting qt_js_setDataInJS from the communication object
+// The connection is established in qwebchannel.tools.js
+function drawChart(d) {
+    log("ExampleViewJS: radar_chart.tools.js: set chart data");
     data = d;
 
-    drawChart()
-}
-
-// removes previous charts, plots a new one and sets of selection notifications
-function drawChart() {
-    if(data.length == 0)
+    if (data.length == 0) {
+        log("ExampleViewJS: radar_chart.tools.js: data empty")
         return
+    }
 
-    log("ExampleViewJS: radar_chart.tools.js: drawChart")
+    log("ExampleViewJS: radar_chart.tools.js: draw chart")
 
     // remove possible old chart 
     d3.select("div#container").select("svg").remove();

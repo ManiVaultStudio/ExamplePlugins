@@ -8,8 +8,8 @@ try {
         // Establish connection
         QtBridge = channel.objects.QtBridge;
 
-        // register signals 
-        QtBridge.qt_js_setDataInJS.connect(function () { setChartData(arguments[0]); });
+        // register signals
+        QtBridge.qt_js_setDataAndPlotInJS.connect(function () { drawChart(arguments[0]); });   // drawChart is defined in radar_chart.tools.js
 
         // confirm successfull connection
         isQtAvailable = true;

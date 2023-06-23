@@ -151,7 +151,7 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
         });
 
     qDebug() << "ExampleViewJSPlugin::convertDataAndUpdateChart: Send data from Qt cpp to D3 js";
-    emit _chartWidget->getCommunicationObject().qt_js_setDataInJS(payload);
+    emit _chartWidget->getCommunicationObject().qt_js_setDataAndPlotInJS(payload);
 }
 
 void ExampleViewJSPlugin::publishSelection(const std::vector<unsigned int>& selectedIDs)

@@ -101,7 +101,7 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
     if (datasets.isEmpty())
         return;
 
-    qDebug() << "ExampleViewJSPlugin: Load data set from ManiVault core";
+    qDebug() << "ExampleViewJSPlugin::loadData: Load data set from ManiVault core";
 
     // Load the first dataset, changes to _currentDataSet are connected with onDataInput
     _currentDataSet = datasets.first();
@@ -116,7 +116,7 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
     if (!_currentDataSet.isValid())
         return;
 
-    qDebug() << "ExampleViewJSPlugin: Prepare payload";
+    qDebug() << "ExampleViewJSPlugin::convertDataAndUpdateChart: Prepare payload";
 
     // convert data from ManiVault PointData to a JSON structure
     QVariantList payload;
@@ -150,7 +150,7 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
             }
         });
 
-    qDebug() << "ExampleViewJSPlugin: Send data from Qt cpp to D3 js";
+    qDebug() << "ExampleViewJSPlugin::convertDataAndUpdateChart: Send data from Qt cpp to D3 js";
     emit _chartWidget->getCommunicationObject().qt_js_setDataInJS(payload);
 }
 
@@ -196,6 +196,8 @@ void ExampleViewJSPlugin::createData()
     const QVariant pointNames = QStringList{ "Data point 1", "Data point 2" };
     std::vector<float> exampleData;
 
+    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. 2 points, each with 5 dimensions";
+
     // Create random example data
     {
         std::default_random_engine generator;
@@ -216,8 +218,6 @@ void ExampleViewJSPlugin::createData()
 
     // Notify the core system of the new data
     events().notifyDatasetChanged(points);
-
-    qDebug() << "Example file loaded. Num data points: " << points->getNumPoints();
 }
 
 

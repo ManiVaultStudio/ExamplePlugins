@@ -3,7 +3,7 @@ var data = [];                  // JSON data
 // ManiVault invokes this function to set the plot data,
 // we set up the plot immedeatly afterwards
 function setChartData(d) {
-    log("ExampleViewJS: radar_chart.tools.js: setting data");
+    log("ExampleViewJS: radar_chart.tools.js: setChartData");
     data = d;
 
     drawChart()
@@ -14,7 +14,7 @@ function drawChart() {
     if(data.length == 0)
         return
 
-    log("drawChart")
+    log("ExampleViewJS: radar_chart.tools.js: drawChart")
 
     // remove possible old chart 
     d3.select("div#container").select("svg").remove();

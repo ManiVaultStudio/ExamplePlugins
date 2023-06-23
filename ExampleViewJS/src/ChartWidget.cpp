@@ -28,7 +28,7 @@ void ChartCommObject::js_qt_passSelectionToQt(QVariantList data){
             _selectedIDsFromJS.push_back(dat.toString().split(" ").takeLast().toInt() - 1);
             });
 
-        qDebug() << "Selected item:" << _selectedIDsFromJS[0]; // in this case we know that it is only one
+        qDebug() << "ChartCommObject::js_qt_passSelectionToQt: Selected item:" << _selectedIDsFromJS[0]; // in this case we know that it is only one
     }    
     
     // Notify ManiVault core and thereby other plugins about new selection
@@ -59,7 +59,7 @@ ChartWidget::ChartWidget(ExampleViewJSPlugin* viewJSPlugin):
 
 void ChartWidget::initWebPage()
 {
-    qDebug() << "ChartWidget: WebChannel bridge is available.";
+    qDebug() << "ChartWidget::initWebPage: WebChannel bridge is available.";
     // This call ensures data chart setup when this view plugin is opened via the context menu of a data set
     _viewJSPlugin->convertDataAndUpdateChart();
 }

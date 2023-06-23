@@ -74,6 +74,7 @@ void ExampleViewJSPlugin::init()
 
                 dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
+                    _dropWidget->setShowDropIndicator(false);
                     });
 
             }
@@ -103,12 +104,9 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
 
     qDebug() << "ExampleViewJSPlugin::loadData: Load data set from ManiVault core";
 
-    // Load the first dataset, changes to _currentDataSet are connected with onDataInput
+    // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
-    _dropWidget->setShowDropIndicator(false);
-
-    // Send data to JS side and create the plot
-    emit convertDataAndUpdateChart();
+    events().notifyDatasetChanged(_currentDataSet);
 }
 
 void ExampleViewJSPlugin::convertDataAndUpdateChart()

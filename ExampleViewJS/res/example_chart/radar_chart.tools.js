@@ -2,10 +2,7 @@
 // when emitting qt_js_setDataInJS from the communication object
 // The connection is established in qwebchannel.tools.js
 function drawChart(d) {
-    log("ExampleViewJS: radar_chart.tools.js: set chart data");
-    data = d;
-
-    if (data.length == 0) {
+    if (d.length == 0) {
         log("ExampleViewJS: radar_chart.tools.js: data empty")
         return
     }
@@ -29,7 +26,7 @@ function drawChart(d) {
       .attr("preserveAspectRatio", "xMinYMin meet")
       .attr("viewBox", "0 0 " + window.innerWidth + " " + window.innerHeight)
       .classed("svg-content", true)
-      .datum(data)
+      .datum(d)
       .call(chart);
 
     // Pass selected item ID to ManiVault

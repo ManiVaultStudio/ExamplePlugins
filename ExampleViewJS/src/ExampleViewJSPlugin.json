@@ -1,5 +1,5 @@
 {
-    "name" : "Example View",
+    "name" : "Example View JS",
     "version" : "1",
     "dependencies" : ["Points"]
 }

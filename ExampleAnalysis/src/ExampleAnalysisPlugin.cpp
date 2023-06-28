@@ -1,6 +1,6 @@
 #include "ExampleAnalysisPlugin.h"
 
-#include "PointData.h"
+#include "PointData/PointData.h"
 
 #include <QtCore>
 #include <QDebug>

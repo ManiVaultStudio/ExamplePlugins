@@ -1,6 +1,6 @@
 #include "ExampleWriterPlugin.h"
 
-#include "PointData.h"
+#include "PointData/PointData.h"
 
 #include <random>
 #include <fstream>

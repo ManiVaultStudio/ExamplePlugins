@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="">
+        <file>example_chart/radar_chart.html</file>
+        <file>example_chart/radar_chart.tools.js</file>
+    </qresource>
+    <qresource prefix="">
+        <file>js_libs/d3.v3.min.js</file>
+        <file>js_libs/radar-chart.min.js</file>
+        <file>js_libs/radar-chart.min.css</file>
+        <file>js_libs/qwebchannel.tools.js</file>
+   </qresource>
+</RCC>

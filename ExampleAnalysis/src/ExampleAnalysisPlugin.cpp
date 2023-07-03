@@ -55,7 +55,7 @@ void ExampleAnalysisPlugin::init()
         outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
-        events().notifyDatasetChanged(_output);
+        events().notifyDatasetDataChanged(_output);
     };
 
     // Initializes the points
@@ -151,24 +151,24 @@ void ExampleAnalysisPlugin::init()
     initializePoints();
 
     // Register for points datasets events using a custom callback function
-    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataAdded));
-    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataChanged));
-    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataRemoved));
-    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DataSelectionChanged));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetAdded));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataChanged));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetRemoved));
+    _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataSelectionChanged));
 
     _eventListener.registerDataEventByType(PointType, std::bind(&ExampleAnalysisPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
-void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
+void ExampleAnalysisPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
 {
     // The data event has a type so that we know what type of data event occurred (e.g. data added, changed, removed, renamed, selection changes)
     switch (dataEvent->getType()) {
 
         // A points dataset was added
-        case EventType::DataAdded:
+        case EventType::DatasetAdded:
         {
             // Cast the data event to a data added event
-            const auto dataAddedEvent = static_cast<DataAddedEvent*>(dataEvent);
+            const auto dataAddedEvent = static_cast<DatasetAddedEvent*>(dataEvent);
 
             // Get the GUI name of the added points dataset and print to the console
             qDebug() << dataAddedEvent->getDataset()->getGuiName() << "was added";
@@ -177,10 +177,10 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
         }
 
         // Points dataset data has changed
-        case EventType::DataChanged:
+        case EventType::DatasetDataChanged:
         {
             // Cast the data event to a data changed event
-            const auto dataChangedEvent = static_cast<DataChangedEvent*>(dataEvent);
+            const auto dataChangedEvent = static_cast<DatasetDataChangedEvent*>(dataEvent);
 
             // Get the GUI name of the points dataset of which the data changed and print to the console
             qDebug() << dataChangedEvent->getDataset()->getGuiName() << "data changed";
@@ -189,10 +189,10 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
         }
 
         // Points dataset data was removed
-        case EventType::DataRemoved:
+        case EventType::DatasetRemoved:
         {
             // Cast the data event to a data removed event
-            const auto dataRemovedEvent = static_cast<DataRemovedEvent*>(dataEvent);
+            const auto dataRemovedEvent = static_cast<DatasetRemovedEvent*>(dataEvent);
 
             // Get the GUI name of the removed points dataset and print to the console
             qDebug() << dataRemovedEvent->getDataset()->getGuiName() << "was removed";
@@ -201,10 +201,10 @@ void ExampleAnalysisPlugin::onDataEvent(hdps::DataEvent* dataEvent)
         }
 
         // Points dataset selection has changed
-        case EventType::DataSelectionChanged:
+        case EventType::DatasetDataSelectionChanged:
         {
             // Cast the data event to a data selection changed event
-            const auto dataSelectionChangedEvent = static_cast<DataSelectionChangedEvent*>(dataEvent);
+            const auto dataSelectionChangedEvent = static_cast<DatasetDataSelectionChangedEvent*>(dataEvent);
 
             // Get points dataset
             const auto& changedDataSet = dataSelectionChangedEvent->getDataset();

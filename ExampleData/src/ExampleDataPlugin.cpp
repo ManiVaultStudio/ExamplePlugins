@@ -115,7 +115,7 @@ void PixelSet::selectAll()
     std::iota(selectionIndices.begin(), selectionIndices.end(), 0);
 
     // Notify others that the selection changed
-    events().notifyDatasetSelectionChanged(this);
+    events().notifyDatasetDataSelectionChanged(this);
 }
 
 void PixelSet::selectNone()
@@ -124,7 +124,7 @@ void PixelSet::selectNone()
     getSelectionIndices().clear();
 
     // Notify others that the selection changed
-    events().notifyDatasetSelectionChanged(this);
+    events().notifyDatasetDataSelectionChanged(this);
 }
 
 void PixelSet::selectInvert()
@@ -149,7 +149,7 @@ void PixelSet::selectInvert()
     }
 
     // Notify others that the selection changed
-    events().notifyDatasetSelectionChanged(this);
+    events().notifyDatasetDataSelectionChanged(this);
 }
 
 QIcon ExampleDataPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const

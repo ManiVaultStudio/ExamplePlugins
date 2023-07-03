@@ -14,6 +14,13 @@ using namespace hdps;
 // View
 // =============================================================================
 
+ExampleWriterPlugin::ExampleWriterPlugin(const PluginFactory* factory) : 
+    WriterPlugin(factory),
+    _dataSetName("")
+{
+    
+}
+
 ExampleWriterPlugin::~ExampleWriterPlugin(void)
 {
     

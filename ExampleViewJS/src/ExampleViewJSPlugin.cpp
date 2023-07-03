@@ -2,6 +2,8 @@
 
 #include "ChartWidget.h"
 
+#include <DatasetsMimeData.h>
+
 #include <vector>
 #include <random>
 
@@ -52,27 +54,30 @@ void ExampleViewJSPlugin::init()
         // A drop widget can contain zero or more drop regions
         DropWidget::DropRegions dropRegions;
 
-        const auto mimeText = mimeData->text();
-        const auto tokens = mimeText.split("\n");
+        const auto datasetsMimeData = dynamic_cast<const DatasetsMimeData*>(mimeData);
 
-        if (tokens.count() < 2)
+
+        if (datasetsMimeData == nullptr)
             return dropRegions;
 
-        // Gather information to generate appropriate drop regions
-        const auto datasetName = tokens[0];
-        const auto datasetId = tokens[1];
-        const auto dataType = DataType(tokens[2]);
+        if (datasetsMimeData->getDatasets().count() > 1)
+            return dropRegions;
+
+        const auto dataset = datasetsMimeData->getDatasets().first();
+        const auto datasetGuiName = dataset->text();
+        const auto datasetId = dataset->getId();
+        const auto dataType = dataset->getDataType();
         const auto dataTypes = DataTypes({ PointType });
 
         if (dataTypes.contains(dataType)) {
 
-            if (datasetId == getCurrentDataSetGuid()) {
+            if (datasetId == getCurrentDataSetID()) {
                 dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
             }
             else {
                 auto candidateDataset = _core->requestDataset<Points>(datasetId);
 
-                dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetName), "map-marker-alt", true, [this, candidateDataset]() {
+                dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetGuiName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
                     _dropWidget->setShowDropIndicator(false);
                     });
@@ -106,7 +111,7 @@ void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
-    events().notifyDatasetChanged(_currentDataSet);
+    events().notifyDatasetDataChanged(_currentDataSet);
 }
 
 void ExampleViewJSPlugin::convertDataAndUpdateChart()
@@ -167,15 +172,15 @@ void ExampleViewJSPlugin::publishSelection(const std::vector<unsigned int>& sele
 
     // notify core about the selection change
     if (_currentDataSet->isDerivedData())
-        events().notifyDatasetSelectionChanged(_currentDataSet->getSourceDataset<DatasetImpl>());
+        events().notifyDatasetDataSelectionChanged(_currentDataSet->getSourceDataset<DatasetImpl>());
     else
-        events().notifyDatasetSelectionChanged(_currentDataSet);
+        events().notifyDatasetDataSelectionChanged(_currentDataSet);
 }
 
-QString ExampleViewJSPlugin::getCurrentDataSetGuid() const
+QString ExampleViewJSPlugin::getCurrentDataSetID() const
 {
     if (_currentDataSet.isValid())
-        return _currentDataSet->getGuid();
+        return _currentDataSet->getId();
     else
         return QString{};
 }
@@ -215,7 +220,8 @@ void ExampleViewJSPlugin::createData()
     points->setProperty("PointNames", pointNames);
 
     // Notify the core system of the new data
-    events().notifyDatasetChanged(points);
+    events().notifyDatasetDataChanged(points);
+    events().notifyDatasetDataDimensionsChanged(points);
 }
 
 

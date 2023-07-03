@@ -65,7 +65,7 @@ void ExampleTransformationPlugin::transform()
 
             points->setLocked(false);
 
-            events().notifyDatasetChanged(points);
+            events().notifyDatasetDataChanged(points);
 
             break;
         }
@@ -89,7 +89,7 @@ void ExampleTransformationPlugin::transform()
 
 
             derivedData->setData(transformedData.data(), points->getNumPoints(), points->getNumDimensions());
-            events().notifyDatasetChanged(derivedData);
+            events().notifyDatasetDataChanged(derivedData);
 
             break;
         }

@@ -63,7 +63,7 @@ private:
     /** Published selections received from the JS side to ManiVault's core */
     void publishSelection(const std::vector<unsigned int>& selectedIDs);
 
-    QString getCurrentDataSetGuid() const;
+    QString getCurrentDataSetID() const;
 
     /** We create and publish some data in order to provide an self-contained example project */
     void createData();

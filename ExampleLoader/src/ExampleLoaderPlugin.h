@@ -12,7 +12,7 @@ class ExampleLoaderPlugin : public LoaderPlugin
 {
     Q_OBJECT
 public:
-    ExampleLoaderPlugin(const PluginFactory* factory) : LoaderPlugin(factory) { }
+    ExampleLoaderPlugin(const PluginFactory* factory);
     ~ExampleLoaderPlugin(void) override;
     
     void init() override;
@@ -20,8 +20,6 @@ public:
     void loadData() Q_DECL_OVERRIDE;
 
 private:
-    unsigned int _numDimensions;
-
     QString _dataSetName;
 };
 

@@ -131,7 +131,7 @@ public:
      * Invoked when a points data event occurs
      * @param dataEvent Data event which occurred
      */
-    void onDataEvent(hdps::DataEvent* dataEvent);
+    void onDataEvent(hdps::DatasetEvent* dataEvent);
 
 private:
     SettingsAction      _settingsAction;    /** The place where settings are stored (more info in SettingsAction.h) */

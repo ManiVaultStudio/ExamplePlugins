@@ -16,6 +16,13 @@ using namespace hdps;
 // View
 // =============================================================================
 
+ExampleLoaderPlugin::ExampleLoaderPlugin(const PluginFactory* factory):
+    LoaderPlugin(factory),
+    _dataSetName("")
+{
+    
+}
+
 ExampleLoaderPlugin::~ExampleLoaderPlugin(void)
 {
     
@@ -38,7 +45,8 @@ void ExampleLoaderPlugin::init()
  */
 void ExampleLoaderPlugin::loadData()
 {
-    auto points = _core->addDataset<Points>("Points", "ExampleData");
+    _dataSetName = "ExampleData";
+    auto points = _core->addDataset<Points>("Points", _dataSetName);
     
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;

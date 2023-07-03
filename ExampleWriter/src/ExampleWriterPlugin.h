@@ -13,7 +13,7 @@ class ExampleWriterPlugin : public WriterPlugin
 {
     Q_OBJECT
 public:
-    ExampleWriterPlugin(const PluginFactory* factory) : WriterPlugin(factory) { }
+    ExampleWriterPlugin(const PluginFactory* factory);
     ~ExampleWriterPlugin(void) override;
     
     void init() override;
@@ -21,8 +21,6 @@ public:
     void writeData() Q_DECL_OVERRIDE;
 
 private:
-    unsigned int _numDimensions;
-
     QString _dataSetName;
 };
 

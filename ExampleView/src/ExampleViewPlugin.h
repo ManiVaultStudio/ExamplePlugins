@@ -56,7 +56,7 @@ public:
      * Invoked when a data event occurs
      * @param dataEvent Data event which occurred
      */
-    void onDataEvent(hdps::DataEvent* dataEvent);
+    void onDataEvent(hdps::DatasetEvent* dataEvent);
 
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */

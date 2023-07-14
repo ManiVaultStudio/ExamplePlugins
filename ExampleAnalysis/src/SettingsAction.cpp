@@ -15,4 +15,9 @@ SettingsAction::SettingsAction(QObject* parent) :
     _maxVelocityAction.setToolTip("The speed at which the points move");
     _numberOfIterationsAction.setToolTip("Number of iterations to compute");
     _startAnalysisAction.setToolTip("Start the analysis");
+
+    addAction(&_currentIterationAction);
+    addAction(&_maxVelocityAction);
+    addAction(&_numberOfIterationsAction);
+    addAction(&_startAnalysisAction);
 }

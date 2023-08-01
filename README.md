@@ -1,22 +1,31 @@
-# ExamplePlugins
+# ManiVault Example Plugins
+
+[ManiVault](https://github.com/ManiVaultStudio/Core) can currently be extended by six types of plugins, each dedicated to a specific functionality. Here, you can find exemplary implementations for each plugins type that can be used as a starting point for new plugins:
+- [Analysis](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleAnalysis): general analytics methods, e.g., dimensionality reduction
+- [Transformation](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleTransformation): produces new data in the same shape as the input, e.g., normalizations
+- [Data](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleData): defines data types
+- [Loader](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleLoader)/[Writer](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleWriter): load data into the system or write them to disk 
+- [View](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleView): visualize data and provide interaction, e.g., using OpenGL or [JavaScript backends](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewJS)
 
 ## Requirements
 * ManiVault (https://github.com/ManiVaultStudio/Core)
 * CMake 3.17+ (https://cmake.org/)
-* Qt 6.3.1+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatability Module
+* Qt 6.3.1+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
 * A C++17 compatible compiler
     * For Windows: Visual Studio 2019 or 2022 (https://visualstudio.microsoft.com/downloads/)
 * Optionally: Git (https://git-scm.com/)
 
-## Setting up
-The first step is to pull the repository from github. You can do this in any way you like, for example by downloading a .zip file of this repository (https://github.com/ManiVaultStudio/ExamplePlugins/archive/refs/heads/master.zip) or with 
+## Download
+Be sure to first have ManiVault installed before continuing to download this repository. You can do the latter in any way you like, for example by downloading a .zip file of this repository (https://github.com/ManiVaultStudio/ExamplePlugins/archive/refs/heads/master.zip) or with 
 ```
 git clone https://github.com/ManiVaultStudio/ExamplePlugins.git
 ```
 After unzipping the download file or navigating to the cloned folder, continue with the next step.
 
 ## Project setup
-Fow Windows, using the CMake Gui:
+You'll need to define a `HDPS_INSTALL_DIR` variable either globally as an environment variable of provide it to CMake, as described in the ManiVault install guide. This variable is used to find your local ManiVault installation and defines an install location for the example plugins. 
+
+For Windows, using the CMake GUI:
 1. Launch CMake (available here: https://cmake.org/)
 2. In the source code field browse to the `ExamplePlugins-master` folder (which contains CMakeLists.txt).
 3. In the build field browse to the `ExamplePlugins-master/build` folder. It will create it if it doesn't exist.
@@ -25,7 +34,7 @@ Fow Windows, using the CMake Gui:
 6. Press `Open Project` to launch Visual Studio and the example project.
 
 ## Compiling
-Fow Windows:
+For Windows:
 1. At the top of Visual Studio set the build mode (where it says `Debug`) to `Release`.
 2. Right click the project `ExamplePlugins` in the Solution Explorer and select Set as StartUp Project.
 3. Right click the project again and select Properties.

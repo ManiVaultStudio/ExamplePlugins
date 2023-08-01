@@ -1,25 +1,31 @@
 # ExamplePlugins
 
 ## Requirements
-* Git (https://git-scm.com/)
-* CMake 3.1+ (https://cmake.org/)
-* Qt 5.15 (https://www.qt.io/download)
-* Visual Studio 2017+ (only for this guide https://visualstudio.microsoft.com/downloads/)
+* ManiVault (https://github.com/ManiVaultStudio/Core)
+* CMake 3.17+ (https://cmake.org/)
+* Qt 6.3.1+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatability Module
+* A C++17 compatible compiler
+    * For Windows: Visual Studio 2019 or 2022 (https://visualstudio.microsoft.com/downloads/)
+* Optionally: Git (https://git-scm.com/)
 
 ## Setting up
-The first step is to pull the repository from github. You can do this in any way you like, but the easiest way is to download a .zip file of the repository from: https://github.com/hdps/ExamplePlugins/archive/release/core_0.2/1.0.zip.
+The first step is to pull the repository from github. You can do this in any way you like, for example by downloading a .zip file of this repository (https://github.com/ManiVaultStudio/ExamplePlugins/archive/refs/heads/master.zip) or with 
+```
+git clone https://github.com/ManiVaultStudio/ExamplePlugins.git
+```
+After unzipping the download file or navigating to the cloned folder, continue with the next step.
 
-After unzipping the folder continue to the next step.
-
-## Building
+## Project setup
+Fow Windows, using the CMake Gui:
 1. Launch CMake (available here: https://cmake.org/)
 2. In the source code field browse to the `ExamplePlugins-master` folder (which contains CMakeLists.txt).
 3. In the build field browse to the `ExamplePlugins-master/build` folder. It will create it if it doesn't exist.
-4. Press `Configure` and select the `Visual Studio 15 2017` generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio 2017. Press Finish to configure the project.
+4. Press `Configure` and select the `Visual Studio 15 2019` (or 16 2022) generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio. Press Finish to configure the project.
 5. A lot of red paths should now appear. Check that the ones pointing to Qt directories seem correct and then press `Generate` to generate the Visual Studio solution.
 6. Press `Open Project` to launch Visual Studio and the example project.
 
 ## Compiling
+Fow Windows:
 1. At the top of Visual Studio set the build mode (where it says `Debug`) to `Release`.
 2. Right click the project `ExamplePlugins` in the Solution Explorer and select Set as StartUp Project.
 3. Right click the project again and select Properties.

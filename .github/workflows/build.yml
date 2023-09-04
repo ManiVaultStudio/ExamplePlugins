@@ -28,13 +28,15 @@ jobs:
             build-runtime: MD
             build-config: Release
 
-          # - name: Linux_gcc9
-          #   os: ubuntu-18.04
-          #   build-compiler: gcc
-          #   build-cversion: 9
-          #   build-config: Release
-          #   build-os: Linux
-          #   build-libcxx: libstdc++
+          - name: Linux_gcc10
+            os: ubuntu-22.04
+            build-cc: gcc
+            build-cxx: g++
+            build-compiler: gcc
+            build-cversion: 10
+            build-config: Release
+            build-os: Linux
+            build-libcxx: libstdc++
 
           - name: Macos_xcode12.4
             os: macos-11
@@ -94,8 +96,23 @@ jobs:
           conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}
           rs_ssh_key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
 
-      - name: Linux Mac build
-        if: "!startsWith(runner.os, 'Windows')"
+      - name: Linux build
+        if: startsWith(runner.os, 'Linux')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
+        with:
+          conan-compiler: ${{matrix.build-compiler}}
+          conan-compiler-version: ${{matrix.build-cversion}}
+          conan-libcxx-version: ${{matrix.build-libcxx}}
+          conan-build-type: ${{matrix.build-config}}
+          conan-build-os: ${{matrix.build-os}}
+          conan-user: ${{secrets.LKEB_UPLOAD_USER}}
+          conan-password: ${{secrets.LKEB_UPLOAD_USER_PASSWORD}}
+          conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}
+          conan-cc: gcc-${{matrix.build-cversion}}
+          conan-cxx: g++-${{matrix.build-cversion}}
+  
+      - name: Mac build
+        if: startsWith(runner.os, 'Macos') && ${{ vars.ENABLE_MACOS_BUILD == 'True'}}
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

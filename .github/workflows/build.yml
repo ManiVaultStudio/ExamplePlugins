@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      forceMacBuild:
+        description: 'If set true override the ENABLE_MACOS_BUILD to force a build'
+        type: boolean
+        default: false
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -113,7 +118,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
   
       - name: Mac build
-        if: startsWith(runner.os, 'Macos') && vars.ENABLE_MACOS_BUILD == 'True'
+        if: startsWith(runner.os, 'Macos') && (${{ inputs.forceMacBuild }} || vars.ENABLE_MACOS_BUILD == 'True')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

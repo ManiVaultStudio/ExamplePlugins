@@ -118,7 +118,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
   
       - name: Mac build
-        if: startsWith(runner.os, 'Macos') && (${{ inputs.forceMacBuild }} || vars.ENABLE_MACOS_BUILD == 'True')
+        if: startsWith(runner.os, 'Macos') && (inputs.forceMacBuild || vars.ENABLE_MACOS_BUILD == 'True')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

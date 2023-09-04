@@ -8,6 +8,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  ENABLE_MACOS_BUILD: ${{ vars.ENABLE_MACOS_BUILD == 'True'}}
 
 # for matrix check https://docs.github.com/en/actions/reference/specifications-for-github-hosted-runners
 jobs:
@@ -112,7 +113,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
   
       - name: Mac build
-        if: startsWith(runner.os, 'Macos') && ${{ vars.ENABLE_MACOS_BUILD == 'True'}}
+        if: ${{ startsWith(runner.os, 'Macos') && env.ENABLE_MACOS_BUILD }}
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

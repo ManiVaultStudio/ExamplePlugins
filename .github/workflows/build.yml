@@ -13,7 +13,6 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  ENABLE_MACOS_BUILD: ${{ vars.ENABLE_MACOS_BUILD == 'True'}}
 
 # for matrix check https://docs.github.com/en/actions/reference/specifications-for-github-hosted-runners
 jobs:
@@ -91,7 +90,7 @@ jobs:
           known_hosts: github.com AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
 
       - name: Windows build
-        if: startsWith(runner.os, 'Windows')
+        if: startsWith(matrix.os, 'windows')
         uses: ManiVaultStudio/github-actions/conan_windows_build@main
         with:
           conan-visual-version: ${{matrix.build-cversion}}
@@ -103,7 +102,7 @@ jobs:
           rs_ssh_key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
 
       - name: Linux build
-        if: startsWith(runner.os, 'Linux')
+        if: startsWith(matrix.os, 'ubuntu')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}
@@ -118,7 +117,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
   
       - name: Mac build
-        if: startsWith(runner.os, 'Macos') && (inputs.forceMacBuild || vars.ENABLE_MACOS_BUILD == 'True')
+        if: startsWith(matrix.os, 'macos') && (${{ inputs.forceMacBuild }} || vars.ENABLE_MACOS_BUILD == 'True')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

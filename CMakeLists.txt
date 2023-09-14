@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.17)
 
+# -----------------------------------------------------------------------------
+# ExamplePlugins
+# -----------------------------------------------------------------------------
 set(PROJECT "ExamplePlugins")
-
 PROJECT(${PROJECT})
 
 add_subdirectory(ExampleView)

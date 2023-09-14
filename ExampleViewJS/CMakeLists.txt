@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 
+# -----------------------------------------------------------------------------
+# ExampleViewJS Plugin
+# -----------------------------------------------------------------------------
 set(EXAMPLEVIEWJS "ExampleViewJSPlugin")
 PROJECT(${EXAMPLEVIEWJS})
 
+# -----------------------------------------------------------------------------
+# CMake Options
+# -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -14,13 +20,22 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
+# -----------------------------------------------------------------------------
+# Set install directory
+# -----------------------------------------------------------------------------
 # Get the env path and allow the user to change it
 set(INSTALL_DIR $ENV{HDPS_INSTALL_DIR} CACHE PATH "The HDPS Install Directoy")
 # Normalize the incoming install path
 file(TO_CMAKE_PATH ${INSTALL_DIR} INSTALL_DIR)
 
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
+# -----------------------------------------------------------------------------
+# Source files
+# -----------------------------------------------------------------------------
 # Define the plugin sources
 set(EXAMPLEVIEWJS_SOURCES
     src/ExampleViewJSPlugin.h
@@ -28,6 +43,10 @@ set(EXAMPLEVIEWJS_SOURCES
     src/ChartWidget.h
     src/ChartWidget.cpp
     src/ExampleViewJSPlugin.json
+)
+
+set(PLUGIN_MOC_HEADERS
+	src/ExampleViewJSPlugin.h
 )
 
 set(WEB
@@ -49,15 +68,30 @@ source_group( Plugin FILES ${EXAMPLEVIEWJS_SOURCES})
 source_group( Web FILES ${WEB})
 source_group( Aux FILES ${AUX})
 
+# -----------------------------------------------------------------------------
+# CMake Target
+# -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
 add_library(${EXAMPLEVIEWJS} SHARED ${EXAMPLEVIEWJS_SOURCES} ${AUX} ${WEB} ${RESOURCE_FILES})
 
+qt_wrap_cpp(EXAMPLEVIEWJS_MOC ${PLUGIN_MOC_HEADERS} TARGET ${EXAMPLEVIEWJS})
+target_sources(${EXAMPLEVIEWJS} PRIVATE ${EXAMPLEVIEWJS_MOC})
+
+# -----------------------------------------------------------------------------
+# Target include directories
+# -----------------------------------------------------------------------------
 # Include HDPS headers, including system data plugins
 target_include_directories(${EXAMPLEVIEWJS} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
 
+# -----------------------------------------------------------------------------
+# Target properties
+# -----------------------------------------------------------------------------
 # Request C++17
 target_compile_features(${EXAMPLEVIEWJS} PRIVATE cxx_std_17)
 
+# -----------------------------------------------------------------------------
+# Target library linking
+# -----------------------------------------------------------------------------
 # Link to Qt libraries
 target_link_libraries(${EXAMPLEVIEWJS} PRIVATE Qt6::Widgets)
 target_link_libraries(${EXAMPLEVIEWJS} PRIVATE Qt6::WebEngineWidgets)
@@ -76,6 +110,9 @@ set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}Po
 target_link_libraries(${EXAMPLEVIEWJS} PRIVATE "${HDPS_LINK_LIBRARY}")
 target_link_libraries(${EXAMPLEVIEWJS} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
+# -----------------------------------------------------------------------------
+# Target installation
+# -----------------------------------------------------------------------------
 # Install the shared plugin libary to the "Plugins" folder in the ManiVault install directory
 install(TARGETS ${EXAMPLEVIEWJS}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
@@ -89,6 +126,9 @@ add_custom_command(TARGET ${EXAMPLEVIEWJS} POST_BUILD
         --prefix ${INSTALL_DIR}/$<CONFIGURATION>
 )
 
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
     set_property(TARGET ${EXAMPLEVIEWJS} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug,${INSTALL_DIR}/release>)

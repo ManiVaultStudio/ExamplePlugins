@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 
+# -----------------------------------------------------------------------------
+# ExampleTransformation Plugin
+# -----------------------------------------------------------------------------
 set(EXAMPLETRANSFORMATION "ExampleTransformationPlugin")
 PROJECT(${EXAMPLETRANSFORMATION})
 
+# -----------------------------------------------------------------------------
+# CMake Options
+# -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -14,13 +20,22 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
+# -----------------------------------------------------------------------------
+# Set install directory
+# -----------------------------------------------------------------------------
 # Get the env path and allow the user to change it
 set(INSTALL_DIR $ENV{HDPS_INSTALL_DIR} CACHE PATH "The HDPS Install Directoy")
 # Normalize the incoming install path
 file(TO_CMAKE_PATH ${INSTALL_DIR} INSTALL_DIR)
 
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
+# -----------------------------------------------------------------------------
+# Source files
+# -----------------------------------------------------------------------------
 # Define the plugin sources
 set(EXAMPLETRANSFORMATION_SOURCES
     src/ExampleTransformationPlugin.h
@@ -28,17 +43,36 @@ set(EXAMPLETRANSFORMATION_SOURCES
     src/ExampleTransformationPlugin.json
 )
 
+set(PLUGIN_MOC_HEADERS
+	src/ExampleTransformationPlugin.h
+)
+
 source_group( Plugin FILES ${EXAMPLETRANSFORMATION_SOURCES})
 
+# -----------------------------------------------------------------------------
+# CMake Target
+# -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
 add_library(${EXAMPLETRANSFORMATION} SHARED ${EXAMPLETRANSFORMATION_SOURCES})
 
+qt_wrap_cpp(EXAMPLETRANSFORMATION_MOC ${PLUGIN_MOC_HEADERS} TARGET ${EXAMPLETRANSFORMATION})
+target_sources(${EXAMPLETRANSFORMATION} PRIVATE ${EXAMPLETRANSFORMATION_MOC})
+
+# -----------------------------------------------------------------------------
+# Target include directories
+# -----------------------------------------------------------------------------
 # Include HDPS headers, including system data plugins
 target_include_directories(${EXAMPLETRANSFORMATION} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
 
+# -----------------------------------------------------------------------------
+# Target properties
+# -----------------------------------------------------------------------------
 # Request C++17
 target_compile_features(${EXAMPLETRANSFORMATION} PRIVATE cxx_std_17)
 
+# -----------------------------------------------------------------------------
+# Target library linking
+# -----------------------------------------------------------------------------
 # Link to Qt libraries
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE Qt6::Widgets)
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE Qt6::WebEngineWidgets)
@@ -57,6 +91,9 @@ set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}Po
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE "${HDPS_LINK_LIBRARY}")
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
+# -----------------------------------------------------------------------------
+# Target installation
+# -----------------------------------------------------------------------------
 # Install the shared plugin libary to the "Plugins" folder in the ManiVault install directory
 install(TARGETS ${EXAMPLETRANSFORMATION}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
@@ -70,6 +107,9 @@ add_custom_command(TARGET ${EXAMPLETRANSFORMATION} POST_BUILD
         --prefix ${INSTALL_DIR}/$<CONFIGURATION>
 )
 
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
     set_property(TARGET ${EXAMPLETRANSFORMATION} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug,${INSTALL_DIR}/release>)

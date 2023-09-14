@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 
+# -----------------------------------------------------------------------------
+# ExampleData Plugin
+# -----------------------------------------------------------------------------
 set(EXAMPLEDATA "ExampleDataPlugin")
 PROJECT(${EXAMPLEDATA})
 
+# -----------------------------------------------------------------------------
+# CMake Options
+# -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -14,13 +20,22 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
+# -----------------------------------------------------------------------------
+# Set install directory
+# -----------------------------------------------------------------------------
 # Get the env path and allow the user to change it
 set(INSTALL_DIR $ENV{HDPS_INSTALL_DIR} CACHE PATH "The HDPS Install Directoy")
 # Normalize the incoming install path
 file(TO_CMAKE_PATH ${INSTALL_DIR} INSTALL_DIR)
 
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
+# -----------------------------------------------------------------------------
+# Source files
+# -----------------------------------------------------------------------------
 # Define the plugin sources
 set(EXAMPLEDATA_SOURCES
     src/ExampleDataPlugin.h
@@ -34,15 +49,32 @@ set(EXAMPLE_DATA_HEADERS
 
 source_group( Plugin FILES ${EXAMPLEDATA_SOURCES})
 
+# -----------------------------------------------------------------------------
+# CMake Target
+# -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
 add_library(${EXAMPLEDATA} SHARED ${EXAMPLEDATA_SOURCES})
 
+qt_wrap_cpp(EXAMPLEDATA_MOC ${EXAMPLE_DATA_HEADERS} TARGET ${EXAMPLEDATA})
+target_sources(${EXAMPLEDATA} PRIVATE ${EXAMPLEDATA_MOC})
+
+# -----------------------------------------------------------------------------
+# Target include directories
+# -----------------------------------------------------------------------------
 # Include HDPS headers, including system data plugins
 target_include_directories(${EXAMPLEDATA} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
 
+# -----------------------------------------------------------------------------
+# Target properties
+# -----------------------------------------------------------------------------
 # Request C++17
 target_compile_features(${EXAMPLEDATA} PRIVATE cxx_std_17)
 
+set_target_properties(${EXAMPLEDATA} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
+
+# -----------------------------------------------------------------------------
+# Target library linking
+# -----------------------------------------------------------------------------
 # Link to Qt libraries
 target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::Widgets)
 target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::WebEngineWidgets)
@@ -61,8 +93,9 @@ set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}Po
 target_link_libraries(${EXAMPLEDATA} PRIVATE "${HDPS_LINK_LIBRARY}")
 target_link_libraries(${EXAMPLEDATA} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
-set_target_properties(${EXAMPLEDATA} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
-
+# -----------------------------------------------------------------------------
+# Target installation
+# -----------------------------------------------------------------------------
 # In contrast to other plugin types, for data plugins we want to install headers
 # (as well as the dynamic link library on Windows) 
 # in addition to the dynamic plugins libraries so that other plugins can link against this new data type
@@ -80,3 +113,12 @@ add_custom_command(TARGET ${EXAMPLEDATA} POST_BUILD
         --config $<CONFIGURATION>
         --prefix ${INSTALL_DIR}/$<CONFIGURATION>
 )
+
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
+# Automatically set the debug environment (command + working directory) for MSVC
+if(MSVC)
+    set_property(TARGET ${EXAMPLEDATA} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug,${INSTALL_DIR}/release>)
+    set_property(TARGET ${EXAMPLEDATA} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug/HDPS.exe,${INSTALL_DIR}/release/HDPS.exe>)
+endif()

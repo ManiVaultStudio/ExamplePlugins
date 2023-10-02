@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include <random>
+#include <numeric>
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewGLPlugin")
 
@@ -74,7 +75,7 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     });
 
     // update data when data set changed
-    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, [](){qDebug() << "Loaded data";});
+    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::setDataInWidget);
 
     // Create data so that we do not need to load any in this example
     createData();
@@ -98,6 +99,32 @@ void ExampleViewGLPlugin::init()
 
 }
 
+void ExampleViewGLPlugin::setDataInWidget()
+{
+    if (!_currentDataSet.isValid())
+    {
+        qDebug() << "ExampleViewGLPlugin:: dataset is not valid - no data will be displayed";
+        return;
+    }
+    
+    std::vector<float> data;
+    std::vector<unsigned int> dimensionIndices = {0, 1}; 
+
+    // TODO: let user select dimensions
+    //std::vector<bool> enabledDimensions = _dimensionSelectionAction.getPickerAction().getEnabledDimensions();
+    //const auto numEnabledDimensions = count_if(enabledDimensions.begin(), enabledDimensions.end(), [](bool b) { return b; });
+    //for (uint32_t i = 0; i < coreDataset->getNumDimensions(); i++)
+    //    if (enabledDimensions[i])
+    //        dimensionIndices.push_back(i);
+
+    data.resize(_currentDataSet->getNumDimensions() * _currentDataSet->getNumPoints());
+
+    _currentDataSet->populateDataForDimensions(data, dimensionIndices);
+
+    _exampleGLWidget->setData(data);
+}
+
+
 void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
 {
     // Exit if there is nothing to load
@@ -108,6 +135,7 @@ void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
+    setDataInWidget();
 }
 
 QString ExampleViewGLPlugin::getCurrentDataSetID() const
@@ -129,7 +157,7 @@ void ExampleViewGLPlugin::createData()
     int numDimensions = 3;
     const std::vector<QString> dimNames {"Dim 1", "Dim 2", "Dim 3"};
 
-    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. 2 points, each with 5 dimensions";
+    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. 5 points, each with 3 dimensions";
 
     // Create random example data
     std::vector<float> exampleData;

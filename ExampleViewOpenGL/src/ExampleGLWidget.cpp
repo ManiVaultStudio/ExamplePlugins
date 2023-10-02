@@ -6,9 +6,12 @@
 
 ExampleGLWidget::ExampleGLWidget() : 
     _isInitialized(false),
-    _backgroundColor(1, 1, 1),
+    _backgroundColor(0.5f, 0.5f, 0.5f),
     _pointRenderer(),
-    _pixelRatio(1.0f)
+    _pixelRatio(1.0f),
+    _points(),
+    _bounds(),
+    _colors()
 {
     setAcceptDrops(true);
 }
@@ -18,14 +21,39 @@ bool ExampleGLWidget::isInitialized()
     return _isInitialized;
 }
 
-QColor ExampleGLWidget::getBackgroundColor()
+void ExampleGLWidget::setData(const std::vector<float>& points)
 {
-    return _backgroundColor;
-}
+    assert(points.size() % 2 == 0);
+    auto numPoints = points.size() / 2;
 
-void ExampleGLWidget::setBackgroundColor(QColor color)
-{
-    _backgroundColor = color;
+    _points.clear();
+    _points.reserve(numPoints);
+
+    _colors.clear();
+    _colors.reserve(numPoints);
+
+    for(unsigned long i = 0; i < numPoints; i++)
+    {
+        _points.emplace_back(Vector2f{points[2*i], points[2*i+1]});
+        _colors.emplace_back(Vector3f{0.f, 0.f, 1.f});
+    }
+
+    _bounds = Bounds::Max;
+
+    for (const Vector2f& point : _points)
+    {
+        _bounds.setLeft(std::min(point.x, _bounds.getLeft()));
+        _bounds.setRight(std::max(point.x, _bounds.getRight()));
+        _bounds.setBottom(std::min(point.y, _bounds.getBottom()));
+        _bounds.setTop(std::max(point.y, _bounds.getTop()));
+    }
+
+    _bounds.makeSquare();
+    _bounds.expand(0.1f);
+
+    _pointRenderer.setData(_points);
+    _pointRenderer.setColors(_colors);
+    _pointRenderer.setBounds(_bounds);
 
     update();
 }
@@ -41,7 +69,9 @@ void ExampleGLWidget::initializeGL()
     _pointRenderer.init();
 
     // Set a default color map for both renderers
-    _pointRenderer.setScalarEffect(PointEffect::Color);
+    _pointRenderer.setScalarEffect(None);
+    _pointRenderer.setPointSize(1.f);
+    _pointRenderer.setAlpha(0.f);
     _pointRenderer.setSelectionOutlineColor(Vector3f(1, 0, 0));
 
     // OpenGL is initialized

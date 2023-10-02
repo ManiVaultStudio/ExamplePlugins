@@ -59,6 +59,8 @@ private:
 
     QString getCurrentDataSetID() const;
 
+    void setDataInWidget();
+
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
     ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */

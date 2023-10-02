@@ -6,6 +6,8 @@
 #include <PointData/PointData.h>
 #include <actions/HorizontalToolbarAction.h>
 
+#include "SettingsAction.h"
+
 #include <QWidget>
 
 /** All plugin related classes are in the HDPS plugin namespace */
@@ -18,7 +20,6 @@ using namespace hdps::gui;
 using namespace hdps::util;
 
 class ExampleGLWidget;
-class SettingsAction;
 
 /**
  * Example view plugin class
@@ -67,9 +68,9 @@ private:
 
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
-    SettingsAction*         _settingsAction;            /** Settings action */
-    HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
     ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */
+    HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
+    SettingsAction         _settingsAction;            /** Settings action */
     hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
     QString                 _currentDatasetName;        /** Name of the current dataset */
 };

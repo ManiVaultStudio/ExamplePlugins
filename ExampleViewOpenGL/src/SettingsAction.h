@@ -29,7 +29,7 @@ class SettingsAction : public VerticalGroupAction
      * Get action context menu
      * @return Pointer to menu
      */
-    QMenu* getContextMenu();
+    QMenu* getContextMenu(QWidget* parent = nullptr) override;
 
 public: // Action getters
     

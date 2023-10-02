@@ -1,6 +1,5 @@
 #include "ExampleViewGLPlugin.h"
 #include "ExampleGLWidget.h"
-#include "SettingsAction.h"
 
 #include <DatasetsMimeData.h>
 
@@ -28,9 +27,9 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
 {
     setObjectName("Example OpenGL view");
 
-    _primaryToolbarAction.addAction(&_settingsAction->getDatasetNameAction());
-    _primaryToolbarAction.addAction(&_settingsAction->getXDimensionPickerAction());
-    _primaryToolbarAction.addAction(&_settingsAction->getYDimensionPickerAction());
+    _primaryToolbarAction.addAction(&_settingsAction.getDatasetNameAction());
+    _primaryToolbarAction.addAction(&_settingsAction.getXDimensionPickerAction());
+    _primaryToolbarAction.addAction(&_settingsAction.getYDimensionPickerAction());
 
     // Instantiate new drop widget, setting the example Widget as its parent
     // the parent widget hat to setAcceptDrops(true) for the drop widget to work

@@ -10,7 +10,7 @@ ExampleGLWidget::ExampleGLWidget() :
     _pointRenderer(),
     _pixelRatio(1.0f)
 {
-
+    setAcceptDrops(true);
 }
 
 bool ExampleGLWidget::isInitialized()

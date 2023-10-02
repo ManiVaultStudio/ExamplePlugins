@@ -50,14 +50,19 @@ public:
     /** This function is called by the core after the view plugin has been created */
     void init() override;
 
+    /** Store a private reference to the data set that should be displayed */
+    void loadData(const hdps::Datasets& datasets) override;
+
 private:
     /** We create and publish some data in order to provide an self-contained example project */
     void createData();
 
+    QString getCurrentDataSetID() const;
+
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
     ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */
-    hdps::Dataset<Points>   _points;                    /** Points smart pointer */
+    hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
     QString                 _currentDatasetName;        /** Name of the current dataset */
 };
 

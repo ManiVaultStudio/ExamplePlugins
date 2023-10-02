@@ -19,16 +19,17 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _dropWidget(nullptr),
     _exampleGLWidget(new ExampleGLWidget()),
-    _points(),
+    _currentDataSet(),
     _currentDatasetName()
 {
     setObjectName("Example OpenGL view");
 
     // Instantiate new drop widget, setting the example Widget as its parent
+    // the parent widget hat to setAcceptDrops(true) for the drop widget to work
     _dropWidget = new DropWidget(_exampleGLWidget);
 
     // Set the drop indicator widget (the widget that indicates that the view is eligible for data dropping)
-    _dropWidget->setDropIndicatorWidget(new DropWidget::DropIndicatorWidget(&getWidget(), "No data loaded", "Drag an item from the data hierarchy and drop it here to visualize data..."));
+    _dropWidget->setDropIndicatorWidget(new DropWidget::DropIndicatorWidget(&getWidget(), "No data loaded", "Drag the ExampleViewGLData from the data hierarchy here"));
 
     // Initialize the drop regions
     _dropWidget->initialize([this](const QMimeData* mimeData) -> DropWidget::DropRegions {
@@ -50,48 +51,71 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
         const auto dataType = dataset->getDataType();
         const auto dataTypes = DataTypes({ PointType });
 
-        // Visually indicate if the dataset is of the wrong data type and thus cannot be dropped
-        if (!dataTypes.contains(dataType)) {
-            dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", "exclamation-circle", false);
+        if (dataTypes.contains(dataType)) {
+
+            if (datasetId == getCurrentDataSetID()) {
+                dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
+            }
+            else {
+                auto candidateDataset = _core->requestDataset<Points>(datasetId);
+
+                dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetGuiName), "map-marker-alt", true, [this, candidateDataset]() {
+                    loadData({ candidateDataset });
+                    _dropWidget->setShowDropIndicator(false);
+                    });
+
+            }
         }
         else {
-
-            // Get points dataset from the core
-            auto candidateDataset = _core->requestDataset<Points>(datasetId);
-
-            // Accept points datasets drag and drop
-            if (dataType == PointType) {
-                const auto description = QString("Load %1 into example view").arg(datasetGuiName);
-
-                if (_points == candidateDataset) {
-
-                    // Dataset cannot be dropped because it is already loaded
-                    dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
-                }
-                else {
-
-                    // Dataset can be dropped
-                    dropRegions << new DropWidget::DropRegion(this, "Points", description, "map-marker-alt", true, [this, candidateDataset]() {
-                        _points = candidateDataset;
-                    });
-                }
-            }
+            dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", "exclamation-circle", false);
         }
 
         return dropRegions;
     });
 
-    // Respond when the name of the dataset in the dataset reference changes
-    connect(&_points, &Dataset<Points>::guiNameChanged, this, [this]() {
-
-        auto newDatasetName = _points->getGuiName();
-
-        // Only show the drop indicator when nothing is loaded in the dataset reference
-        _dropWidget->setShowDropIndicator(newDatasetName.isEmpty());
-    });
+    // update data when data set changed
+    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, [](){qDebug() << "Loaded data";});
 
     // Create data so that we do not need to load any in this example
     createData();
+}
+
+
+void ExampleViewGLPlugin::init()
+{
+    // Create layout
+    auto layout = new QVBoxLayout();
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(_exampleGLWidget, 100);
+
+    // Apply the layout
+    getWidget().setLayout(layout);
+
+    // Update the data when the scatter plot widget is initialized
+    connect(_exampleGLWidget, &ExampleGLWidget::initialized, this, []() { qDebug() << "ExampleGLWidget is initialized."; } );
+
+}
+
+void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
+{
+    // Exit if there is nothing to load
+    if (datasets.isEmpty())
+        return;
+
+    qDebug() << "ExampleViewJSPlugin::loadData: Load data set from ManiVault core";
+
+    // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
+    _currentDataSet = datasets.first();
+}
+
+QString ExampleViewGLPlugin::getCurrentDataSetID() const
+{
+    if (_currentDataSet.isValid())
+        return _currentDataSet->getId();
+    else
+        return QString{};
 }
 
 void ExampleViewGLPlugin::createData()
@@ -127,24 +151,6 @@ void ExampleViewGLPlugin::createData()
     // Notify the core system of the new data
     events().notifyDatasetDataChanged(points);
     events().notifyDatasetDataDimensionsChanged(points);
-}
-
-
-void ExampleViewGLPlugin::init()
-{
-    // Create layout
-    auto layout = new QVBoxLayout();
-
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(_exampleGLWidget, 100);
-
-    // Apply the layout
-    getWidget().setLayout(layout);
-
-    // Update the data when the scatter plot widget is initialized
-    connect(_exampleGLWidget, &ExampleGLWidget::initialized, this, []() { qDebug() << "ExampleGLWidget is initialized."; } );
-
 }
 
 // -----------------------------------------------------------------------------

@@ -6,14 +6,42 @@
 
 ExampleGLWidget::ExampleGLWidget() : 
     _isInitialized(false),
-    _backgroundColor(0.5f, 0.5f, 0.5f),
+    _backgroundColor(125, 125, 125, 255),
     _pointRenderer(),
     _pixelRatio(1.0f),
     _points(),
+    _colors(),
     _bounds(),
-    _colors()
+    _sizes(),
+    _opacities()
 {
     setAcceptDrops(true);
+
+    QSurfaceFormat surfaceFormat;
+
+    surfaceFormat.setRenderableType(QSurfaceFormat::OpenGL);
+
+#if defined(__APPLE__) || defined(__linux__ )
+    // Ask for an OpenGL 3.3 Core Context as the default
+    surfaceFormat.setVersion(3, 3);
+    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    //QSurfaceFormat::setDefaultFormat(defaultFormat);
+#else
+    // Ask for an OpenGL 4.3 Core Context as the default
+    surfaceFormat.setVersion(4, 3);
+    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+#endif
+
+#ifdef _DEBUG
+    surfaceFormat.setOption(QSurfaceFormat::DebugContext);
+#endif
+
+    surfaceFormat.setSamples(16);
+
+    setFormat(surfaceFormat);
+
 }
 
 bool ExampleGLWidget::isInitialized()
@@ -32,10 +60,18 @@ void ExampleGLWidget::setData(const std::vector<float>& points)
     _colors.clear();
     _colors.reserve(numPoints);
 
+    _sizes.clear();
+    _sizes.reserve(numPoints);
+
+    _opacities.clear();
+    _opacities.reserve(numPoints);
+
     for(unsigned long i = 0; i < numPoints; i++)
     {
         _points.emplace_back(Vector2f{points[2*i], points[2*i+1]});
-        _colors.emplace_back(Vector3f{0.f, 0.f, 1.f});
+        _colors.emplace_back(Vector3f{0.f, 0.f, 0.f});
+        _sizes.emplace_back(10);
+        _opacities.emplace_back(0.5f);
     }
 
     _bounds = Bounds::Max;
@@ -51,9 +87,12 @@ void ExampleGLWidget::setData(const std::vector<float>& points)
     _bounds.makeSquare();
     _bounds.expand(0.1f);
 
+    _pointRenderer.setBounds(_bounds);
     _pointRenderer.setData(_points);
     _pointRenderer.setColors(_colors);
-    _pointRenderer.setBounds(_bounds);
+    _pointRenderer.setSizeChannelScalars(_sizes);
+    _pointRenderer.setPointSize(*std::max_element(_sizes.begin(), _sizes.end()));
+    _pointRenderer.setOpacityChannelScalars(_opacities);
 
     update();
 }
@@ -69,9 +108,10 @@ void ExampleGLWidget::initializeGL()
     _pointRenderer.init();
 
     // Set a default color map for both renderers
-    _pointRenderer.setScalarEffect(None);
+    _pointRenderer.setScalarEffect(PointEffect::None);
+    _pointRenderer.setPointScaling(Absolute);
     _pointRenderer.setPointSize(1.f);
-    _pointRenderer.setAlpha(0.f);
+    _pointRenderer.setAlpha(0.5f);
     _pointRenderer.setSelectionOutlineColor(Vector3f(1, 0, 0));
 
     // OpenGL is initialized

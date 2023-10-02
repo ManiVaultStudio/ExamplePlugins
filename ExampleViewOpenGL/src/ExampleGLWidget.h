@@ -41,5 +41,7 @@ private:
     float                   _pixelRatio;
     std::vector<Vector2f>   _points;
     std::vector<Vector3f>   _colors;
+    std::vector<float>      _sizes;
+    std::vector<float>      _opacities;
     Bounds                  _bounds;
 };

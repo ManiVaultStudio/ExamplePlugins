@@ -4,6 +4,7 @@
 #include <Dataset.h>
 #include <widgets/DropWidget.h>
 #include <PointData/PointData.h>
+#include <actions/HorizontalToolbarAction.h>
 
 #include <QWidget>
 
@@ -17,6 +18,7 @@ using namespace hdps::gui;
 using namespace hdps::util;
 
 class ExampleGLWidget;
+class SettingsAction;
 
 /**
  * Example view plugin class
@@ -53,16 +55,20 @@ public:
     /** Store a private reference to the data set that should be displayed */
     void loadData(const hdps::Datasets& datasets) override;
 
+    const hdps::Dataset<Points>& getDataset() const { return _currentDataSet; }
+
+    void updateData();
+
 private:
     /** We create and publish some data in order to provide an self-contained example project */
     void createData();
 
     QString getCurrentDataSetID() const;
 
-    void setDataInWidget();
-
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
+    SettingsAction*         _settingsAction;            /** Settings action */
+    HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
     ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */
     hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
     QString                 _currentDatasetName;        /** Name of the current dataset */

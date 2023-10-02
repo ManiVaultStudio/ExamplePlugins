@@ -1,5 +1,6 @@
 #include "ExampleViewGLPlugin.h"
 #include "ExampleGLWidget.h"
+#include "SettingsAction.h"
 
 #include <DatasetsMimeData.h>
 
@@ -21,9 +22,15 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     _dropWidget(nullptr),
     _exampleGLWidget(new ExampleGLWidget()),
     _currentDataSet(),
-    _currentDatasetName()
+    _currentDatasetName(),
+    _primaryToolbarAction(this, "Primary Toolbar"),
+    _settingsAction(this, "Settings Action")
 {
     setObjectName("Example OpenGL view");
+
+    _primaryToolbarAction.addAction(&_settingsAction->getDatasetNameAction());
+    _primaryToolbarAction.addAction(&_settingsAction->getXDimensionPickerAction());
+    _primaryToolbarAction.addAction(&_settingsAction->getYDimensionPickerAction());
 
     // Instantiate new drop widget, setting the example Widget as its parent
     // the parent widget hat to setAcceptDrops(true) for the drop widget to work
@@ -75,7 +82,7 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     });
 
     // update data when data set changed
-    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::setDataInWidget);
+    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::updateData);
 
     // Create data so that we do not need to load any in this example
     createData();
@@ -99,7 +106,7 @@ void ExampleViewGLPlugin::init()
 
 }
 
-void ExampleViewGLPlugin::setDataInWidget()
+void ExampleViewGLPlugin::updateData()
 {
     if (!_currentDataSet.isValid())
     {
@@ -117,7 +124,9 @@ void ExampleViewGLPlugin::setDataInWidget()
     //    if (enabledDimensions[i])
     //        dimensionIndices.push_back(i);
 
-    data.resize(_currentDataSet->getNumDimensions() * _currentDataSet->getNumPoints());
+    // points.extractDataForDimensions(_positions, _settingsAction.getPositionAction().getDimensionX(), _settingsAction.getPositionAction().getDimensionY());
+
+    data.resize(2ll * _currentDataSet->getNumPoints());
 
     _currentDataSet->populateDataForDimensions(data, dimensionIndices);
 
@@ -135,7 +144,7 @@ void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
-    setDataInWidget();
+    updateData();
 }
 
 QString ExampleViewGLPlugin::getCurrentDataSetID() const

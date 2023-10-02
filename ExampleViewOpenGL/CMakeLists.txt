@@ -52,14 +52,20 @@ set(EXAMPLEVIEWGL_WIDGET
     src/ExampleGLWidget.cpp
 )
 
+set(EXAMPLEVIEWGL_ACTIONS
+    src/SettingsAction.h
+    src/SettingsAction.cpp
+)
+
 source_group( Plugin FILES ${EXAMPLEVIEWGL_SOURCES})
 source_group( Widget FILES ${EXAMPLEVIEWGL_WIDGET})
+source_group( Actions FILES ${EXAMPLEVIEWGL_ACTIONS})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${EXAMPLEVIEWGL} SHARED ${EXAMPLEVIEWGL_SOURCES} ${EXAMPLEVIEWGL_WIDGET})
+add_library(${EXAMPLEVIEWGL} SHARED ${EXAMPLEVIEWGL_SOURCES} ${EXAMPLEVIEWGL_WIDGET} ${EXAMPLEVIEWGL_ACTIONS})
 
 qt_wrap_cpp(EXAMPLEVIEWGL_MOC ${PLUGIN_MOC_HEADERS} TARGET ${EXAMPLEVIEWGL})
 target_sources(${EXAMPLEVIEWGL} PRIVATE ${EXAMPLEVIEWGL_MOC})
@@ -69,9 +75,6 @@ target_sources(${EXAMPLEVIEWGL} PRIVATE ${EXAMPLEVIEWGL_MOC})
 # -----------------------------------------------------------------------------
 # Include HDPS headers, including system data plugins
 target_include_directories(${EXAMPLEVIEWGL} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
-
-# Include OpenGL library headers
-target_include_directories(${EXAMPLEVIEWGL} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/third_party/")
 
 # -----------------------------------------------------------------------------
 # Target properties

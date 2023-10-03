@@ -49,13 +49,11 @@ bool ExampleGLWidget::isInitialized()
     return _isInitialized;
 }
 
-void ExampleGLWidget::setData(const std::vector<float>& points)
+void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points)
 {
-    assert(points.size() % 2 == 0);
-    auto numPoints = points.size() / 2;
+    auto numPoints = points.size();
 
-    _points.clear();
-    _points.reserve(numPoints);
+    _points = points;
 
     _colors.clear();
     _colors.reserve(numPoints);
@@ -68,7 +66,6 @@ void ExampleGLWidget::setData(const std::vector<float>& points)
 
     for(unsigned long i = 0; i < numPoints; i++)
     {
-        _points.emplace_back(Vector2f{points[2*i], points[2*i+1]});
         _colors.emplace_back(Vector3f{0.f, 0.f, 0.f});
         _sizes.emplace_back(10);
         _opacities.emplace_back(0.5f);

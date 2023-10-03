@@ -23,7 +23,7 @@ public:
     /** Returns true when the widget was initialized and is ready to be used. */
     bool isInitialized();
 
-    void setData(const std::vector<float>& points);
+    void setData(const std::vector<hdps::Vector2f>& points);
 
 protected:
     void initializeGL()         Q_DECL_OVERRIDE;

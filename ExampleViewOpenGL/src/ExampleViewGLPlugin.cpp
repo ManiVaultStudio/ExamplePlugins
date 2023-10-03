@@ -1,6 +1,8 @@
 #include "ExampleViewGLPlugin.h"
 #include "ExampleGLWidget.h"
 
+#include <graphics/Vector2f.h>
+
 #include <DatasetsMimeData.h>
 
 #include <QLabel>
@@ -18,12 +20,12 @@ using namespace hdps;
 // -----------------------------------------------------------------------------
 ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
+    _currentDataSet(),
+    _currentDimensions({0, 1}),
     _dropWidget(nullptr),
     _exampleGLWidget(new ExampleGLWidget()),
-    _currentDataSet(),
-    _currentDatasetName(),
-    _primaryToolbarAction(this, "Primary Toolbar"),
-    _settingsAction(this, "Settings Action")
+    _settingsAction(this, "Settings Action"),
+    _primaryToolbarAction(this, "Primary Toolbar")
 {
     setObjectName("Example OpenGL view");
 
@@ -83,6 +85,31 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     // update data when data set changed
     connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::updateData);
 
+    connect(&_currentDataSet, &Dataset<Points>::changed, this, [this]() {
+        const auto enabled = _currentDataSet.isValid();
+
+        auto& nameString = _settingsAction.getDatasetNameAction();
+        auto& xDimPicker = _settingsAction.getXDimensionPickerAction();
+        auto& yDimPicker = _settingsAction.getYDimensionPickerAction();
+
+        xDimPicker.setEnabled(enabled);
+        yDimPicker.setEnabled(enabled);
+
+        if (!enabled)
+            return;
+
+        nameString.setString(_currentDataSet->getGuiName());
+
+        xDimPicker.setPointsDataset(_currentDataSet);
+        yDimPicker.setPointsDataset(_currentDataSet);
+
+        xDimPicker.setCurrentDimensionIndex(0);
+
+        const auto yIndex = xDimPicker.getNumberOfDimensions() >= 2 ? 1 : 0;
+        yDimPicker.setCurrentDimensionIndex(yIndex);
+
+    });
+
     // Create data so that we do not need to load any in this example
     createData();
 }
@@ -95,6 +122,7 @@ void ExampleViewGLPlugin::init()
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addWidget(_primaryToolbarAction.createWidget(&getWidget()));
     layout->addWidget(_exampleGLWidget, 100);
 
     // Apply the layout
@@ -112,23 +140,25 @@ void ExampleViewGLPlugin::updateData()
         qDebug() << "ExampleViewGLPlugin:: dataset is not valid - no data will be displayed";
         return;
     }
-    
-    std::vector<float> data;
-    std::vector<unsigned int> dimensionIndices = {0, 1}; 
 
-    // TODO: let user select dimensions
-    //std::vector<bool> enabledDimensions = _dimensionSelectionAction.getPickerAction().getEnabledDimensions();
-    //const auto numEnabledDimensions = count_if(enabledDimensions.begin(), enabledDimensions.end(), [](bool b) { return b; });
-    //for (uint32_t i = 0; i < coreDataset->getNumDimensions(); i++)
-    //    if (enabledDimensions[i])
-    //        dimensionIndices.push_back(i);
+    if (_currentDataSet->getNumDimensions() < 2)
+    {
+        qDebug() << "ExampleViewGLPlugin:: dataset must have at least two dimensions";
+        return;
+    }
 
-    // points.extractDataForDimensions(_positions, _settingsAction.getPositionAction().getDimensionX(), _settingsAction.getPositionAction().getDimensionY());
+    std::vector<hdps::Vector2f> data;
 
-    data.resize(2ll * _currentDataSet->getNumPoints());
+    auto newDimX = _settingsAction.getXDimensionPickerAction().getCurrentDimensionIndex();
+    auto newDimY = _settingsAction.getYDimensionPickerAction().getCurrentDimensionIndex();
 
-    _currentDataSet->populateDataForDimensions(data, dimensionIndices);
+    if (newDimX >= 0)
+        _currentDimensions[0] = static_cast<unsigned int>(newDimX);
 
+    if (newDimY >= 0)
+        _currentDimensions[1] = static_cast<unsigned int>(newDimY);
+
+    _currentDataSet->extractDataForDimensions(data, _currentDimensions[0], _currentDimensions[1]);
     _exampleGLWidget->setData(data);
 }
 
@@ -152,6 +182,11 @@ QString ExampleViewGLPlugin::getCurrentDataSetID() const
         return _currentDataSet->getId();
     else
         return QString{};
+}
+
+hdps::Dataset<Points>& ExampleViewGLPlugin::getDataset()
+{ 
+    return _currentDataSet; 
 }
 
 void ExampleViewGLPlugin::createData()
@@ -220,7 +255,7 @@ hdps::gui::PluginTriggerActions ExampleViewGLPluginFactory::getPluginTriggerActi
 
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
         auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewGLPluginFactory*>(this), this, "Example", "OpenGL view example data", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
-            for (auto dataset : datasets)
+            for (auto& dataset : datasets)
                 getPluginInstance();
         });
 

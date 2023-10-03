@@ -56,7 +56,7 @@ public:
     /** Store a private reference to the data set that should be displayed */
     void loadData(const hdps::Datasets& datasets) override;
 
-    const hdps::Dataset<Points>& getDataset() const { return _currentDataSet; }
+    hdps::Dataset<Points>& getDataset();
 
     void updateData();
 
@@ -72,7 +72,7 @@ protected:
     HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
     SettingsAction         _settingsAction;            /** Settings action */
     hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
-    QString                 _currentDatasetName;        /** Name of the current dataset */
+    std::vector<unsigned int> _currentDimensions;
 };
 
 /**

@@ -20,8 +20,12 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     addAction(&_xDimensionPickerAction);
     addAction(&_yDimensionPickerAction);
 
+    _datasetNameAction.setToolTip("Name of currently shown dataset");
     _xDimensionPickerAction.setToolTip("X dimension");
     _yDimensionPickerAction.setToolTip("Y dimension");
+
+    _datasetNameAction.setEnabled(false);
+    _datasetNameAction.setText("[No dataset loaded yet]");
 
     connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
         _exampleViewGLPlugin->updateData();
@@ -30,29 +34,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
         _exampleViewGLPlugin->updateData();
     });
-
-    connect(&_exampleViewGLPlugin->getDataset(), &Dataset<Points>::changed, this, [this]() {
-        _xDimensionPickerAction.setPointsDataset(_exampleViewGLPlugin->getDataset());
-        _yDimensionPickerAction.setPointsDataset(_exampleViewGLPlugin->getDataset());
-
-        _xDimensionPickerAction.setCurrentDimensionIndex(0);
-
-        const auto yIndex = _xDimensionPickerAction.getNumberOfDimensions() >= 2 ? 1 : 0;
-
-        _yDimensionPickerAction.setCurrentDimensionIndex(yIndex);
-    });
-
-    const auto updateEnabled = [this]() {
-        const auto enabled = _exampleViewGLPlugin->getDataset().isValid();
-
-        _datasetNameAction.setEnabled(enabled);
-        _xDimensionPickerAction.setEnabled(enabled);
-        _yDimensionPickerAction.setEnabled(enabled);
-    };
-
-    updateEnabled();
-
-    connect(&_exampleViewGLPlugin->getDataset(), &Dataset<Points>::changed, this, updateEnabled);
 }
 
 QMenu* SettingsAction::getContextMenu(QWidget* parent /*= nullptr*/)

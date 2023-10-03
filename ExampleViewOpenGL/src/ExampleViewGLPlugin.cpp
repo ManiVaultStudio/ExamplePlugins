@@ -193,7 +193,7 @@ void ExampleViewGLPlugin::createData()
     auto points = _core->addDataset<Points>("Points", "ExampleViewGLData");
     events().notifyDatasetAdded(points);
 
-    int numPoints = 5;
+    int numPoints = 50;
     int numDimensions = 3;
     const std::vector<QString> dimNames {"Dim 1", "Dim 2", "Dim 3"};
 

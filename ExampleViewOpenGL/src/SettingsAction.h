@@ -8,8 +8,6 @@
 using namespace hdps::gui;
 
 class ExampleViewGLPlugin;
-class QMenu;
-
 /**
  * Settings action class
  *
@@ -24,12 +22,6 @@ public:
      * @param title Title
      */
     Q_INVOKABLE SettingsAction(QObject* parent, const QString& title);
-
-    /**
-     * Get action context menu
-     * @return Pointer to menu
-     */
-    QMenu* getContextMenu(QWidget* parent = nullptr) override;
 
 public: // Action getters
     

@@ -2,7 +2,6 @@
 
 #include "ExampleViewGLPlugin.h"
 
-#include <QMenu>
 #include <QHBoxLayout>
 
 using namespace hdps::gui;
@@ -38,22 +37,6 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
         _exampleViewGLPlugin->updateData();
     });
 
-}
-
-QMenu* SettingsAction::getContextMenu(QWidget* parent /*= nullptr*/)
-{
-    auto menu = new QMenu("Position", parent);
-
-    auto xDimensionMenu = new QMenu("X dimension");
-    auto yDimensionMenu = new QMenu("Y dimension");
-
-    xDimensionMenu->addAction(&_xDimensionPickerAction);
-    yDimensionMenu->addAction(&_yDimensionPickerAction);
-
-    menu->addMenu(xDimensionMenu);
-    menu->addMenu(yDimensionMenu);
-
-    return menu;
 }
 
 SettingsAction::Widget::Widget(QWidget* parent, SettingsAction* settingsAction) :

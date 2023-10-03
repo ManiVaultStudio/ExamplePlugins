@@ -4,7 +4,6 @@
 #include <Dataset.h>
 #include <widgets/DropWidget.h>
 #include <PointData/PointData.h>
-#include <actions/HorizontalToolbarAction.h>
 
 #include "SettingsAction.h"
 
@@ -69,7 +68,6 @@ private:
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
     ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */
-    HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
     SettingsAction         _settingsAction;            /** Settings action */
     hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
     std::vector<unsigned int> _currentDimensions;

@@ -24,14 +24,9 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     _currentDimensions({0, 1}),
     _dropWidget(nullptr),
     _exampleGLWidget(new ExampleGLWidget()),
-    _settingsAction(this, "Settings Action"),
-    _primaryToolbarAction(this, "Primary Toolbar")
+    _settingsAction(this, "Settings Action")
 {
     setObjectName("Example OpenGL view");
-
-    _primaryToolbarAction.addAction(&_settingsAction.getDatasetNameAction());
-    _primaryToolbarAction.addAction(&_settingsAction.getXDimensionPickerAction());
-    _primaryToolbarAction.addAction(&_settingsAction.getYDimensionPickerAction());
 
     // Instantiate new drop widget, setting the example Widget as its parent
     // the parent widget hat to setAcceptDrops(true) for the drop widget to work
@@ -91,9 +86,11 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
         auto& nameString = _settingsAction.getDatasetNameAction();
         auto& xDimPicker = _settingsAction.getXDimensionPickerAction();
         auto& yDimPicker = _settingsAction.getYDimensionPickerAction();
+        auto& pointSizeA = _settingsAction.getPointSizeAction();
 
         xDimPicker.setEnabled(enabled);
         yDimPicker.setEnabled(enabled);
+        pointSizeA.setEnabled(enabled);
 
         if (!enabled)
             return;
@@ -122,7 +119,7 @@ void ExampleViewGLPlugin::init()
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(_primaryToolbarAction.createWidget(&getWidget()));
+    layout->addWidget(_settingsAction.createWidget(&getWidget()));
     layout->addWidget(_exampleGLWidget, 100);
 
     // Apply the layout
@@ -159,7 +156,7 @@ void ExampleViewGLPlugin::updateData()
         _currentDimensions[1] = static_cast<unsigned int>(newDimY);
 
     _currentDataSet->extractDataForDimensions(data, _currentDimensions[0], _currentDimensions[1]);
-    _exampleGLWidget->setData(data);
+    _exampleGLWidget->setData(data, _settingsAction.getPointSizeAction().getValue());
 }
 
 

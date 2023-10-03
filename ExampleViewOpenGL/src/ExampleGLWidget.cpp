@@ -9,6 +9,7 @@ ExampleGLWidget::ExampleGLWidget() :
     _backgroundColor(125, 125, 125, 255),
     _pointRenderer(),
     _pixelRatio(1.0f),
+    _pointSize(10.f),
     _points(),
     _colors(),
     _bounds(),
@@ -49,11 +50,13 @@ bool ExampleGLWidget::isInitialized()
     return _isInitialized;
 }
 
-void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points)
+void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float pointSize)
 {
     auto numPoints = points.size();
 
     _points = points;
+
+    _pointSize = pointSize;
 
     _colors.clear();
     _colors.reserve(numPoints);
@@ -67,7 +70,7 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points)
     for(unsigned long i = 0; i < numPoints; i++)
     {
         _colors.emplace_back(Vector3f{0.f, 0.f, 0.f});
-        _sizes.emplace_back(10);
+        _sizes.emplace_back(_pointSize);
         _opacities.emplace_back(0.5f);
     }
 

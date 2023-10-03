@@ -65,7 +65,6 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
 
                 dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetGuiName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
-                    _dropWidget->setShowDropIndicator(false);
                     });
 
             }
@@ -167,6 +166,7 @@ void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
         return;
 
     qDebug() << "ExampleViewJSPlugin::loadData: Load data set from ManiVault core";
+    _dropWidget->setShowDropIndicator(false);
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
@@ -197,7 +197,7 @@ void ExampleViewGLPlugin::createData()
     int numDimensions = 3;
     const std::vector<QString> dimNames {"Dim 1", "Dim 2", "Dim 3"};
 
-    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. 5 points, each with 3 dimensions";
+    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. " << numPoints << " points, each with " << numDimensions << " dimensions";
 
     // Create random example data
     std::vector<float> exampleData;
@@ -230,6 +230,11 @@ ViewPlugin* ExampleViewGLPluginFactory::produce()
     return new ExampleViewGLPlugin(this);
 }
 
+QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+{
+    return hdps::Application::getIconFont("FontAwesome").getIcon("braille", color);
+}
+
 hdps::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
@@ -251,9 +256,9 @@ hdps::gui::PluginTriggerActions ExampleViewGLPluginFactory::getPluginTriggerActi
     const auto numberOfDatasets = datasets.count();
 
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
-        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewGLPluginFactory*>(this), this, "Example", "OpenGL view example data", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewGLPluginFactory*>(this), this, "Example GL", "OpenGL view example data", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
             for (auto& dataset : datasets)
-                getPluginInstance();
+                getPluginInstance()->loadData(Datasets({ dataset }));
         });
 
         pluginTriggerActions << pluginTriggerAction;

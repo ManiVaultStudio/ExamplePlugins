@@ -6,14 +6,14 @@
 #include <graphics/Bounds.h>
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLFunctions>
 
 #include <QColor>
 
 using namespace hdps;
 using namespace hdps::gui;
 
-class ExampleGLWidget : public QOpenGLWidget, QOpenGLFunctions_3_3_Core
+class ExampleGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 

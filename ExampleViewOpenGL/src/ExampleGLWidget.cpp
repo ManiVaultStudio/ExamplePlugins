@@ -5,6 +5,7 @@
 #include <QPainter>
 
 ExampleGLWidget::ExampleGLWidget() : 
+    QOpenGLWidget(),
     _isInitialized(false),
     _backgroundColor(125, 125, 125, 255),
     _pointRenderer(),
@@ -25,17 +26,19 @@ ExampleGLWidget::ExampleGLWidget() :
     // Ask for an different OpenGL versions depending on OS
 #if defined(__APPLE__) 
     surfaceFormat.setVersion(4, 1); // https://support.apple.com/en-us/101525
+    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
 #elif defined(__linux__ )
     surfaceFormat.setVersion(4, 2); // glxinfo | grep "OpenGL version"
+    surfaceFormat.setProfile(QSurfaceFormat::CompatibilityProfile);
 #else
     surfaceFormat.setVersion(4, 3);
+    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
 #endif
 
 #ifdef _DEBUG
     surfaceFormat.setOption(QSurfaceFormat::DebugContext);
 #endif
 
-    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
     surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     surfaceFormat.setSamples(16);
 
@@ -145,8 +148,8 @@ void ExampleGLWidget::paintGL()
 
     // Reset the blending function
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     _pointRenderer.render();                
 }
 

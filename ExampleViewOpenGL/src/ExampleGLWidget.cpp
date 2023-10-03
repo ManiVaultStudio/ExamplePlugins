@@ -85,6 +85,7 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float p
     _bounds.makeSquare();
     _bounds.expand(0.1f);
 
+    makeCurrent();
     _pointRenderer.setBounds(_bounds);
     _pointRenderer.setData(_points);
     _pointRenderer.setColors(_colors);
@@ -134,40 +135,19 @@ void ExampleGLWidget::resizeGL(int w, int h)
 
 void ExampleGLWidget::paintGL()
 {
-    try {
-        QPainter painter;
+    initializeOpenGLFunctions();
+    // Bind the framebuffer belonging to the widget
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
 
-        // Begin mixed OpenGL/native painting
-        if (!painter.begin(this))
-            throw std::runtime_error("Unable to begin painting");
+    // Clear the widget to the background color
+    glClearColor(_backgroundColor.redF(), _backgroundColor.greenF(), _backgroundColor.blueF(), _backgroundColor.alphaF());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw layers with OpenGL
-        painter.beginNativePainting();
-        {
-            // Bind the framebuffer belonging to the widget
-            // glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
-
-            // Clear the widget to the background color
-            glClearColor(_backgroundColor.redF(), _backgroundColor.greenF(), _backgroundColor.blueF(), _backgroundColor.alphaF());
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Reset the blending function
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               
-            _pointRenderer.render();                
-        }
-        painter.endNativePainting();
+    // Reset the blending function
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
-        painter.end();
-    }
-    catch (std::exception& e)
-    {
-        hdps::util::exceptionMessageBox("Rendering failed", e);
-    }
-    catch (...) {
-        hdps::util::exceptionMessageBox("Rendering failed");
-    }
+    _pointRenderer.render();                
 }
 
 void ExampleGLWidget::cleanup()

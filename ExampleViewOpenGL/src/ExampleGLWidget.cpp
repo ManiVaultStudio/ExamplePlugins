@@ -22,23 +22,21 @@ ExampleGLWidget::ExampleGLWidget() :
 
     surfaceFormat.setRenderableType(QSurfaceFormat::OpenGL);
 
-#if defined(__APPLE__) || defined(__linux__ )
-    // Ask for an OpenGL 3.3 Core Context as the default
-    surfaceFormat.setVersion(3, 3);
-    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
-    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    //QSurfaceFormat::setDefaultFormat(defaultFormat);
+    // Ask for an different OpenGL versions depending on OS
+#if defined(__APPLE__) 
+    surfaceFormat.setVersion(4, 1); // https://support.apple.com/en-us/101525
+#elif defined(__linux__ )
+    surfaceFormat.setVersion(4, 2); // glxinfo | grep "OpenGL version"
 #else
-    // Ask for an OpenGL 4.3 Core Context as the default
     surfaceFormat.setVersion(4, 3);
-    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
-    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
 #endif
 
 #ifdef _DEBUG
     surfaceFormat.setOption(QSurfaceFormat::DebugContext);
 #endif
 
+    surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+    surfaceFormat.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     surfaceFormat.setSamples(16);
 
     setFormat(surfaceFormat);

@@ -208,7 +208,7 @@ void ExampleViewGLPlugin::createData()
         for (int i = 0; i < numPoints * numDimensions; i++)
         {
             exampleData.push_back(distribution(generator));
-            qDebug() << "exampleData[" << i << "]: " << exampleData[i];
+            //qDebug() << "exampleData[" << i << "]: " << exampleData[i];
         }
     }
 

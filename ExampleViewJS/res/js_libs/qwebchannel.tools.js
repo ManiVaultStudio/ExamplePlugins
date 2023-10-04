@@ -11,7 +11,7 @@ try {
         // register signals
         QtBridge.qt_js_setDataAndPlotInJS.connect(function () { drawChart(arguments[0]); });   // drawChart is defined in radar_chart.tools.js
 
-        // confirm successfull connection
+        // confirm successful connection
         isQtAvailable = true;
         notifyBridgeAvailable();
     });

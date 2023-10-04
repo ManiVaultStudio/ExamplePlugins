@@ -23,7 +23,7 @@ public:
     /** Returns true when the widget was initialized and is ready to be used. */
     bool isInitialized();
 
-    void setData(const std::vector<hdps::Vector2f>& points, float pointSize);
+    void setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity);
 
 protected:
     void initializeGL()         Q_DECL_OVERRIDE;
@@ -39,10 +39,7 @@ private:
     QColor                  _backgroundColor;
     PointRenderer           _pointRenderer;
     float                   _pixelRatio;
-    float                   _pointSize;
     std::vector<Vector2f>   _points;
     std::vector<Vector3f>   _colors;
-    std::vector<float>      _sizes;
-    std::vector<float>      _opacities;
     Bounds                  _bounds;
 };

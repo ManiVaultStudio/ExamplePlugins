@@ -7,15 +7,12 @@
 ExampleGLWidget::ExampleGLWidget() : 
     QOpenGLWidget(),
     _isInitialized(false),
-    _backgroundColor(125, 125, 125, 255),
+    _backgroundColor(235, 235, 235, 255),
     _pointRenderer(),
     _pixelRatio(1.0f),
-    _pointSize(10.f),
     _points(),
     _colors(),
-    _bounds(),
-    _sizes(),
-    _opacities()
+    _bounds()
 {
     setAcceptDrops(true);
 
@@ -51,29 +48,19 @@ bool ExampleGLWidget::isInitialized()
     return _isInitialized;
 }
 
-void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float pointSize)
+void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity)
 {
-    auto numPoints = points.size();
+    const auto numPoints = points.size();
 
     _points = points;
-
-    _pointSize = pointSize;
 
     _colors.clear();
     _colors.reserve(numPoints);
 
-    _sizes.clear();
-    _sizes.reserve(numPoints);
-
-    _opacities.clear();
-    _opacities.reserve(numPoints);
+    constexpr hdps::Vector3f pointColor = {0.f, 0.f, 0.f};
 
     for(unsigned long i = 0; i < numPoints; i++)
-    {
-        _colors.emplace_back(Vector3f{0.f, 0.f, 0.f});
-        _sizes.emplace_back(_pointSize);
-        _opacities.emplace_back(0.5f);
-    }
+        _colors.emplace_back(pointColor);
 
     _bounds = Bounds::Max;
 
@@ -92,9 +79,9 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float p
     _pointRenderer.setBounds(_bounds);
     _pointRenderer.setData(_points);
     _pointRenderer.setColors(_colors);
-    _pointRenderer.setSizeChannelScalars(_sizes);
-    _pointRenderer.setPointSize(*std::max_element(_sizes.begin(), _sizes.end()));
-    _pointRenderer.setOpacityChannelScalars(_opacities);
+
+    _pointRenderer.setPointSize(pointSize);
+    _pointRenderer.setAlpha(pointOpacity);
 
     update();
 }

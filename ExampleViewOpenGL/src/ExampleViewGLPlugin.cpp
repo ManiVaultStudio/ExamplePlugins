@@ -155,7 +155,7 @@ void ExampleViewGLPlugin::updateData()
         _currentDimensions[1] = static_cast<unsigned int>(newDimY);
 
     _currentDataSet->extractDataForDimensions(data, _currentDimensions[0], _currentDimensions[1]);
-    _exampleGLWidget->setData(data, _settingsAction.getPointSizeAction().getValue());
+    _exampleGLWidget->setData(data, _settingsAction.getPointSizeAction().getValue(), _settingsAction.getPointOpacityAction().getValue());
 }
 
 

@@ -12,7 +12,8 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _datasetNameAction(this, "Dataset Name"),
     _xDimensionPickerAction(this, "X"),
     _yDimensionPickerAction(this, "Y"),
-    _pointSizeAction(this, "Point Size", 1, 50, 10)
+    _pointSizeAction(this, "Point Size", 1, 50, 10),
+    _pointOpacityAction(this, "Opacity", 0.f, 1.f, 0.75f, 2)
 {
     setText("Settings");
 
@@ -20,6 +21,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _xDimensionPickerAction.setToolTip("X dimension");
     _yDimensionPickerAction.setToolTip("Y dimension");
     _pointSizeAction.setToolTip("Size of individual points");
+    _pointOpacityAction.setToolTip("Opacity of individual points");
 
     _datasetNameAction.setEnabled(false);
     _datasetNameAction.setText("Dataset name");
@@ -34,6 +36,10 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     });
 
     connect(&_pointSizeAction, &DecimalAction::valueChanged, [this](float val) {
+        _exampleViewGLPlugin->updateData();
+    });
+
+    connect(&_pointOpacityAction, &DecimalAction::valueChanged, [this](float val) {
         _exampleViewGLPlugin->updateData();
     });
 
@@ -62,6 +68,9 @@ SettingsAction::Widget::Widget(QWidget* parent, SettingsAction* settingsAction) 
 
     layout->addWidget(settingsAction->getPointSizeAction().createLabelWidget(this));
     layout->addWidget(settingsAction->getPointSizeAction().createWidget(this));
+
+    layout->addWidget(settingsAction->getPointOpacityAction().createLabelWidget(this));
+    layout->addWidget(settingsAction->getPointOpacityAction().createWidget(this));
 
     setLayout(layout);
 }

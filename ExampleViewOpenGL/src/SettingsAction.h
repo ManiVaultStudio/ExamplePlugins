@@ -29,6 +29,7 @@ public: // Action getters
     DimensionPickerAction& getXDimensionPickerAction() { return _xDimensionPickerAction; }
     DimensionPickerAction& getYDimensionPickerAction() { return _yDimensionPickerAction; }
     DecimalAction& getPointSizeAction() { return _pointSizeAction; }
+    DecimalAction& getPointOpacityAction() { return _pointOpacityAction; }
 
 protected:
 
@@ -46,5 +47,6 @@ private:
     StringAction            _datasetNameAction;         /** Action for displaying the current data set name */
     DimensionPickerAction   _xDimensionPickerAction;    /** X-dimension picker action */
     DimensionPickerAction   _yDimensionPickerAction;    /** Y-dimension picker action */
-    DecimalAction           _pointSizeAction;           /** Y-dimension picker action */
+    DecimalAction           _pointSizeAction;           /** point size action */
+    DecimalAction           _pointOpacityAction;        /** point opacity action */
 };

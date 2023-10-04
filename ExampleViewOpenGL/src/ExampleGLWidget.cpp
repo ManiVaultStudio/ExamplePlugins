@@ -42,9 +42,9 @@ ExampleGLWidget::ExampleGLWidget() :
 
 }
 
-bool ExampleGLWidget::isInitialized()
+ExampleGLWidget::~ExampleGLWidget()
 {
-    return _isInitialized;
+    cleanup();
 }
 
 void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity)
@@ -74,7 +74,7 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float p
     _bounds.makeSquare();
     _bounds.expand(0.1f);
 
-    makeCurrent();
+    // Send the data to the renderer
     _pointRenderer.setBounds(_bounds);
     _pointRenderer.setData(_points);
     _pointRenderer.setColors(_colors);
@@ -82,6 +82,7 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float p
     _pointRenderer.setPointSize(pointSize);
     _pointRenderer.setAlpha(pointOpacity);
 
+    // Calls paintGL()
     update();
 }
 

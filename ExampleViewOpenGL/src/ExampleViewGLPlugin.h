@@ -23,14 +23,14 @@ class ExampleGLWidget;
 /**
  * Example view plugin class
  *
- * This view plugin class provides skeleton code that shows how to develop
- * a OpenGL view plugin in ManiVault. It shows how to use the built-in drag and drop
- * behavior.
- *
- * To see the plugin in action, please follow the steps below:
- *
- * 1. Go to the visualization menu in ManiVault
- * 2. Choose the Example view menu item, the view will be added to the layout
+ * This plugin showcases how a OpenGL-based visualization can be included in ManiVault.
+ * We are implemented a bare-bone scatterplot using ManiVault's point renderer.
+ * 
+ * This project:
+ *  - Sets up a QOpenGLWidget, which is used to render OpenGL graphics
+ *  - Uses ManiVault's DropWidget to drag&drop data sets into the view
+ * 
+ * To keep this example concise this projects does not implement selections.
  *
  * @authors J. Thijssen & T. Kroes & A. Vieth
  */
@@ -55,9 +55,8 @@ public:
     /** Store a private reference to the data set that should be displayed */
     void loadData(const hdps::Datasets& datasets) override;
 
-    hdps::Dataset<Points>& getDataset();
-
-    void updateData();
+    /** Retrieves data to be shown and updates the OpenGL plot */
+    void updatePlot();
 
 private:
     /** We create and publish some data in order to provide an self-contained example project */
@@ -66,11 +65,11 @@ private:
     QString getCurrentDataSetID() const;
 
 protected:
-    DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
-    ExampleGLWidget*        _exampleGLWidget;           /** The visualization widget */
-    SettingsAction         _settingsAction;            /** Settings action */
-    hdps::Dataset<Points>   _currentDataSet;            /** Points smart pointer */
-    std::vector<unsigned int> _currentDimensions;
+    DropWidget*                 _dropWidget;            /** Widget for drag and drop behavior */
+    ExampleGLWidget*            _exampleGLWidget;       /** The OpenGL widget */
+    SettingsAction              _settingsAction;        /** Settings action */
+    hdps::Dataset<Points>       _currentDataSet;        /** Points smart pointer */
+    std::vector<unsigned int>   _currentDimensions;     /** Stores which dimensions of the current data are shown */
 };
 
 /**

@@ -28,19 +28,19 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _datasetNameAction.setString(" (No data loaded yet)");
 
     connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
-        _exampleViewGLPlugin->updateData();
+        _exampleViewGLPlugin->updatePlot();
     });
 
     connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
-        _exampleViewGLPlugin->updateData();
+        _exampleViewGLPlugin->updatePlot();
     });
 
     connect(&_pointSizeAction, &DecimalAction::valueChanged, [this](float val) {
-        _exampleViewGLPlugin->updateData();
+        _exampleViewGLPlugin->updatePlot();
     });
 
     connect(&_pointOpacityAction, &DecimalAction::valueChanged, [this](float val) {
-        _exampleViewGLPlugin->updateData();
+        _exampleViewGLPlugin->updatePlot();
     });
 
 }

@@ -77,8 +77,9 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     });
 
     // update data when data set changed
-    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::updateData);
+    connect(&_currentDataSet, &Dataset<Points>::dataChanged, this, &ExampleViewGLPlugin::updatePlot);
 
+    // update settings UI when data set changed
     connect(&_currentDataSet, &Dataset<Points>::changed, this, [this]() {
         const auto enabled = _currentDataSet.isValid();
 
@@ -129,7 +130,7 @@ void ExampleViewGLPlugin::init()
 
 }
 
-void ExampleViewGLPlugin::updateData()
+void ExampleViewGLPlugin::updatePlot()
 {
     if (!_currentDataSet.isValid())
     {
@@ -143,8 +144,7 @@ void ExampleViewGLPlugin::updateData()
         return;
     }
 
-    std::vector<hdps::Vector2f> data;
-
+    // Retrieve the data that is to be shown from the core
     auto newDimX = _settingsAction.getXDimensionPickerAction().getCurrentDimensionIndex();
     auto newDimY = _settingsAction.getYDimensionPickerAction().getCurrentDimensionIndex();
 
@@ -154,7 +154,10 @@ void ExampleViewGLPlugin::updateData()
     if (newDimY >= 0)
         _currentDimensions[1] = static_cast<unsigned int>(newDimY);
 
+    std::vector<hdps::Vector2f> data;
     _currentDataSet->extractDataForDimensions(data, _currentDimensions[0], _currentDimensions[1]);
+
+    // Set data in OpenGL widget
     _exampleGLWidget->setData(data, _settingsAction.getPointSizeAction().getValue(), _settingsAction.getPointOpacityAction().getValue());
 }
 
@@ -170,7 +173,7 @@ void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart
     _currentDataSet = datasets.first();
-    updateData();
+    updatePlot();
 }
 
 QString ExampleViewGLPlugin::getCurrentDataSetID() const
@@ -179,11 +182,6 @@ QString ExampleViewGLPlugin::getCurrentDataSetID() const
         return _currentDataSet->getId();
     else
         return QString{};
-}
-
-hdps::Dataset<Points>& ExampleViewGLPlugin::getDataset()
-{ 
-    return _currentDataSet; 
 }
 
 void ExampleViewGLPlugin::createData()

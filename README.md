@@ -5,7 +5,7 @@
 - [Transformation](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleTransformation): produces new data in the same shape as the input, e.g., normalizations
 - [Data](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleData): defines data types
 - [Loader](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleLoader)/[Writer](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleWriter): load data into the system or write them to disk 
-- [View](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleView): visualize data and provide interaction, e.g., using OpenGL or [JavaScript backends](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewJS)
+- [View](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleView): visualize data and provide interaction, e.g., using [OpenGL](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewOpenGL) or [JavaScript](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewJS) backends
 
 ## Requirements
 * ManiVault (https://github.com/ManiVaultStudio/Core)

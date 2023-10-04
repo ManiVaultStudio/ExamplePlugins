@@ -26,11 +26,11 @@ public:
     void setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity);
 
 protected:
-    void initializeGL()         Q_DECL_OVERRIDE;
-    void resizeGL(int w, int h) Q_DECL_OVERRIDE;
-    void paintGL()              Q_DECL_OVERRIDE;
+    void initializeGL()         override;
+    void resizeGL(int w, int h) override;
+    void paintGL()              override;
     void cleanup();
-    
+
 signals:
     void initialized();
 

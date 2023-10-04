@@ -17,7 +17,6 @@ ExampleGLWidget::ExampleGLWidget() :
     setAcceptDrops(true);
 
     QSurfaceFormat surfaceFormat;
-
     surfaceFormat.setRenderableType(QSurfaceFormat::OpenGL);
 
     // Ask for an different OpenGL versions depending on OS
@@ -135,7 +134,6 @@ void ExampleGLWidget::paintGL()
 
     // Reset the blending function
     glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     _pointRenderer.render();                
 }

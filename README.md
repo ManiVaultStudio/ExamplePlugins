@@ -23,7 +23,7 @@ git clone https://github.com/ManiVaultStudio/ExamplePlugins.git
 After unzipping the download file or navigating to the cloned folder, continue with the next step.
 
 ## Project setup
-You'll need to define a `HDPS_INSTALL_DIR` variable either globally as an environment variable of provide it to CMake, as described in the ManiVault install guide. This variable is used to find your local ManiVault installation and defines an install location for the example plugins. 
+You'll need to define a `MV_INSTALL_DIR` variable and provide it to CMake, as described in the ManiVault install guide. This variable is used to find your local ManiVault installation and defines an install location for the example plugins. 
 
 For Windows, using the CMake GUI:
 1. Launch CMake (available here: https://cmake.org/)

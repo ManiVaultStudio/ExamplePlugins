@@ -23,10 +23,12 @@ endif(MSVC)
 # -----------------------------------------------------------------------------
 # Set install directory
 # -----------------------------------------------------------------------------
-# Get the env path and allow the user to change it
-set(INSTALL_DIR $ENV{HDPS_INSTALL_DIR} CACHE PATH "The HDPS Install Directoy")
-# Normalize the incoming install path
-file(TO_CMAKE_PATH ${INSTALL_DIR} INSTALL_DIR)
+# Check if the directory to the ManiVault installation has been provided
+if(NOT DEFINED MV_INSTALL_DIR)
+    set(MV_INSTALL_DIR "" CACHE PATH "Directory where ManiVault is installed")
+    message(FATAL_ERROR "Please set MV_INSTALL_DIR to the directory where ManiVault is installed")
+endif()
+file(TO_CMAKE_PATH ${MV_INSTALL_DIR} MV_INSTALL_DIR)
 
 # -----------------------------------------------------------------------------
 # Dependencies
@@ -62,7 +64,7 @@ target_sources(${EXAMPLEVIEW} PRIVATE ${EXAMPLEVIEW_MOC})
 # Target include directories
 # -----------------------------------------------------------------------------
 # Include HDPS headers, including system data plugins
-target_include_directories(${EXAMPLEVIEW} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${EXAMPLEVIEW} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 # -----------------------------------------------------------------------------
 # Target properties
@@ -81,8 +83,8 @@ target_link_libraries(${EXAMPLEVIEW} PRIVATE Qt6::WebEngineWidgets)
 # The link path in this repo assumes that the ManiVault core was built locally
 # in contrast to having been installed with an installer. In the latter case you'll have
 # to adapt the HDPS_LINK_PATH and PLUGIN_LINK_PATH to your install folder
-set(HDPS_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/lib")
-set(PLUGIN_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
+set(HDPS_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/lib")
+set(PLUGIN_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
 set(HDPS_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
 
 set(HDPS_LINK_LIBRARY "${HDPS_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${HDPS_LINK_SUFFIX}")
@@ -104,7 +106,7 @@ add_custom_command(TARGET ${EXAMPLEVIEW} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
-        --prefix ${INSTALL_DIR}/$<CONFIGURATION>
+        --prefix ${MV_INSTALL_DIR}/$<CONFIGURATION>
 )
 
 # -----------------------------------------------------------------------------
@@ -112,6 +114,6 @@ add_custom_command(TARGET ${EXAMPLEVIEW} POST_BUILD
 # -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${EXAMPLEVIEW} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug,${INSTALL_DIR}/release>)
-    set_property(TARGET ${EXAMPLEVIEW} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug/HDPS.exe,${INSTALL_DIR}/release/HDPS.exe>)
+    set_property(TARGET ${EXAMPLEVIEW} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
+    set_property(TARGET ${EXAMPLEVIEW} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug/HDPS.exe,${MV_INSTALL_DIR}/release/HDPS.exe>)
 endif()

@@ -49,8 +49,7 @@ For Windows, using the CMake GUI:
 ## Compiling
 For Windows:
 1. At the top of Visual Studio set the build mode (where it says `Debug`) to `Release`.
-2. Right click the project `ExamplePlugins` in the Solution Explorer and select Set as StartUp Project.
-3. Right click the project again and select Properties.
-4. In the Configuration Properties -> Debugging set the `Command` by browsing to your `HDPS.exe` file. Set the `Working Directory` field by browsing to the folder containing the `HDPS.exe` file.
-5. Press Apply and OK and right click the project in the Solution Explorer and press Build.
-6. If all is well the build should succeed and if you run the project with Ctrl+F5 it will launch `HDPS.exe` and load the Example project as an available plug-in.
+2. Right click the project `ALL_BUILD` in the Solution Explorer and select Properties.
+3. In the Configuration Properties -> Debugging set the `Command` by browsing to your `ManiVault Studio.exe` file. Set the `Working Directory` field by browsing to the folder containing the `ManiVault Studio.exe` file.
+4. Press Apply and OK and right click the project in the Solution Explorer and press Build.
+5. If all is well the build should succeed and if you run the project with Ctrl+F5 it will launch `ManiVault Studio.exe` and load the Example project as an available plug-in.

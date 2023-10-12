@@ -9,7 +9,7 @@
 - [View](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleView): visualize data and provide interaction, e.g., using [OpenGL](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewOpenGL) or [JavaScript](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewJS) backends
 
 ## Requirements
-* ManiVault (https://github.com/ManiVaultStudio/Core)
+* ManiVault Studio (https://github.com/ManiVaultStudio/Core)
 * CMake 3.17+ (https://cmake.org/)
 * Qt 6.3.1+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
 * A C++17 compatible compiler

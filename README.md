@@ -20,18 +20,31 @@ Be sure to first have ManiVault installed before continuing to download this rep
 ```
 git clone https://github.com/ManiVaultStudio/ExamplePlugins.git
 ```
-After unzipping the download file or navigating to the cloned folder, continue with the next step.
+With SSH this would be:
+```
+git clone git@github.com:ManiVaultStudio/ExamplePlugins.git
+```
+After unzipping you should have an `ExamplePlugins-master`, after cloning you should have an `ExamplePlugins` folder, after navigating to this folder, continue with the next step.
 
 ## Project setup
 You'll need to define a `MV_INSTALL_DIR` variable and provide it to CMake, as described in the ManiVault install guide. This variable is used to find your local ManiVault installation and defines an install location for the example plugins. 
 
 For Windows, using the CMake GUI:
 1. Launch CMake (available here: https://cmake.org/)
-2. In the source code field browse to the `ExamplePlugins-master` folder (which contains CMakeLists.txt).
-3. In the build field browse to the `ExamplePlugins-master/build` folder. It will create it if it doesn't exist.
-4. Press `Configure` and select the `Visual Studio 15 2019` (or 16 2022) generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio. Press Finish to configure the project.
-5. A lot of red paths should now appear. Check that the ones pointing to Qt directories seem correct and then press `Generate` to generate the Visual Studio solution.
-6. Press `Open Project` to launch Visual Studio and the example project.
+2. In the source code field browse to the `ExamplePlugins-master` or `ExamplePlugins` folder (which contains CMakeLists.txt).
+3. In the build field browse to the `ExamplePlugins-master/build` or `ExamplePlugins/build` folder. It will create it if it doesn't exist.
+
+   The source and build fields in your cmake should now roughly look like this:
+
+   `Source: C:/YourOwnFolder/ExamplePlugins-master`  
+   `Build:  C:/YourOwnFolder/ExamplePlugins-master/build`
+   
+4. Press `Configure` and select the `Visual Studio 15 2019` (or 17 2022) generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio. Press Finish to configure the project.
+5. CMake should now ask you to provide an `MV_INSTALL_DIR` path that points to where ManiVault is installed. Double click the `MV_INSTALL_DIR` variable and press the small button on the right to browse to the folder where ManiVault Studio is installed. (The folder containing either or both the Debug and Release folder).
+![image](https://github.com/ManiVaultStudio/ExamplePlugins/assets/2978176/8f082e77-d90d-45fb-bc0d-e0b8a5a634f3)
+
+6. A lot of red paths should now appear. Check that the ones pointing to Qt directories seem correct and then press `Generate` to generate the Visual Studio solution. If it is asking you for a Qt6_DIR please refer to [CMake cannot find my Qt Installation](https://github.com/ManiVaultStudio/PublicWiki/wiki/FAQ#cmake-cannot-find-my-qt-installation).
+7. Press `Open Project` to launch Visual Studio and the example project.
 
 ## Compiling
 For Windows:

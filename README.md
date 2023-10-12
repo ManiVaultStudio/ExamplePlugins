@@ -1,4 +1,5 @@
 # ManiVault Example Plugins
+<sub>(ManiVault version 0.9)</sub>
 
 [ManiVault](https://github.com/ManiVaultStudio/Core) can currently be extended by six types of plugins, each dedicated to a specific functionality. Here, you can find exemplary implementations for each plugins type that can be used as a starting point for new plugins:
 - [Analysis](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleAnalysis): general analytics methods, e.g., dimensionality reduction

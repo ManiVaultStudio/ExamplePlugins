@@ -34,71 +34,74 @@ void ExampleTransformationPlugin::transform()
         if (!points.isValid())
             continue;
 
-        points->getDataHierarchyItem().setTaskName("Transforming");
-        points->getDataHierarchyItem().setTaskRunning();
-        points->getDataHierarchyItem().setTaskDescription(QString("%1 transformation").arg(getTypeName(_type)));
+        // Get reference to dataset task for reporting progress
+        auto& datasetTask = inputDataset->getTask();
+
+        datasetTask.setName("Transforming");
+        datasetTask.setRunning();
+        datasetTask.setProgressDescription(QString("%1 transformation").arg(getTypeName(_type)));
 
         switch (_type)
         {
-        // Transform points in place
-        case ExampleTransformationPlugin::Type::Abs:
-        {
-            points->setLocked(true);
+            // Transform points in place
+            case ExampleTransformationPlugin::Type::Abs:
+            {
+                points->setLocked(true);
 
-            points->visitData([this, &points](auto pointData) {
-                std::uint32_t noPointsProcessed = 0;
+                points->visitData([this, &points, &datasetTask](auto pointData) {
+                    std::uint32_t noPointsProcessed = 0;
 
-                for (auto point : pointData) {
-                    for (std::uint32_t dimensionIndex = 0; dimensionIndex < points->getNumDimensions(); dimensionIndex++) {
-                        point[dimensionIndex] = std::abs(point[dimensionIndex]);
+                    for (auto point : pointData) {
+                        for (std::uint32_t dimensionIndex = 0; dimensionIndex < points->getNumDimensions(); dimensionIndex++) {
+                            point[dimensionIndex] = std::abs(point[dimensionIndex]);
+                        }
+
+                        ++noPointsProcessed;
+
+                        if (noPointsProcessed % 1000 == 0) {
+                            datasetTask.setProgress(static_cast<float>(noPointsProcessed) / static_cast<float>(points->getNumPoints()));
+
+                            QApplication::processEvents();
+                        }
                     }
+                    });
 
-                    ++noPointsProcessed;
+                points->setLocked(false);
 
-                    if (noPointsProcessed % 1000 == 0) {
-                        points->getDataHierarchyItem().setTaskProgress(static_cast<float>(noPointsProcessed) / static_cast<float>(points->getNumPoints()));
+                events().notifyDatasetDataChanged(points);
 
-                        QApplication::processEvents();
+                break;
+            }
+            // Create new data set
+            case ExampleTransformationPlugin::Type::Pow2:
+            {
+                auto derivedData = _core->createDerivedDataset<Points>(points->getGuiName() + "(Pow2)", points);
+                events().notifyDatasetAdded(derivedData);
+
+                std::vector<float> transformedData;
+                transformedData.resize(points->getNumPoints() * points->getNumDimensions());
+
+                points->constVisitFromBeginToEnd([&transformedData](auto begin, auto end) {
+                    std::uint32_t noItemsProcessed = 0;
+
+                    for (auto it = begin; it != end; ++it) {
+                        transformedData[noItemsProcessed] = std::pow(*it, 2.0f);
+                        noItemsProcessed++;
                     }
-                }
-                });
-
-            points->setLocked(false);
-
-            events().notifyDatasetDataChanged(points);
-
-            break;
-        }
-        // Create new data set
-        case ExampleTransformationPlugin::Type::Pow2:
-        {
-            auto derivedData = _core->createDerivedDataset<Points>(points->getGuiName() + "(Pow2)", points);
-            events().notifyDatasetAdded(derivedData);
-
-            std::vector<float> transformedData;
-            transformedData.resize(points->getNumPoints() * points->getNumDimensions());
-
-            points->constVisitFromBeginToEnd([&transformedData](auto begin, auto end) {
-                std::uint32_t noItemsProcessed = 0;
-
-                for (auto it = begin; it != end; ++it) {
-                    transformedData[noItemsProcessed] = std::pow(*it, 2.0f);
-                    noItemsProcessed++;
-                }
-                });
+                    });
 
 
-            derivedData->setData(transformedData.data(), points->getNumPoints(), points->getNumDimensions());
-            events().notifyDatasetDataChanged(derivedData);
+                derivedData->setData(transformedData.data(), points->getNumPoints(), points->getNumDimensions());
+                events().notifyDatasetDataChanged(derivedData);
 
-            break;
-        }
-        default:
-            break;
+                break;
+            }
+            default:
+                break;
         }
 
-        points->getDataHierarchyItem().setTaskProgress(1.0f);
-        points->getDataHierarchyItem().setTaskFinished();
+        datasetTask.setProgress(1.0f);
+        datasetTask.setFinished();
 
     }
 }

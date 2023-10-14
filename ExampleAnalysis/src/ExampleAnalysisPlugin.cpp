@@ -96,23 +96,26 @@ void ExampleAnalysisPlugin::init()
         _settingsAction.getMaxVelocityAction().setEnabled(false);
         _settingsAction.getNumberOfIterationsAction().setEnabled(false);
 
+        // Get reference to dataset task for reporting progress
+        auto& datasetTask = getOutputDataset()->getTask();
+
         // Set the task name as it will appear in the data hierarchy viewer
-        setTaskName("Example analysis");
+        datasetTask.setName("Example analysis");
 
         // In order to report progress the task status has to be set to running
-        setTaskRunning();
+        datasetTask.setRunning();
 
         // Zero progress at the start
-        setTaskProgress(0.0f);
+        datasetTask.setProgress(0.0f);
 
         // Set task description as it will appear in the data hierarchy viewer
-        setTaskDescription("Initializing");
+        datasetTask.setProgressDescription("Initializing");
 
         // Get the number of iterations from the settings
         const auto numberOfIterations = _settingsAction.getNumberOfIterationsAction().getValue();
 
         // Do computation
-        setTaskDescription("Computing...");
+        datasetTask.setProgressDescription("Computing...");
 
         // Perform the loop
         for (int i = 0; i < numberOfIterations; i++)
@@ -120,10 +123,10 @@ void ExampleAnalysisPlugin::init()
             QCoreApplication::processEvents();
             
             // Update task progress
-            setTaskProgress(i / static_cast<float>(numberOfIterations));
+            datasetTask.setProgress(i / static_cast<float>(numberOfIterations));
 
             // Update task progress
-            setTaskDescription(QString("Computing iteration %1/%2").arg(QString::number(i), QString::number(numberOfIterations)));
+            datasetTask.setProgressDescription(QString("Computing iteration %1/%2").arg(QString::number(i), QString::number(numberOfIterations)));
 
             // Advance the points
             for (auto& point : _points)
@@ -137,7 +140,7 @@ void ExampleAnalysisPlugin::init()
         }
 
         // Flag the analysis task as finished
-        setTaskFinished();
+        datasetTask.setFinished();
 
         // Enabled actions again
         _settingsAction.getMaxVelocityAction().setEnabled(true);

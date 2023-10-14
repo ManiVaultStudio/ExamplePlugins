@@ -4,8 +4,8 @@
 #include <actions/StringAction.h>
 
 /** All plugin related classes are in the HDPS plugin namespace */
-using namespace hdps::plugin;
-using namespace hdps::gui;
+using namespace mv::plugin;
+using namespace mv::gui;
 
 /**
  * Example transformation plugin class
@@ -86,7 +86,7 @@ private:
  */
 class ExampleTransformationPluginFactory : public TransformationPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::TransformationPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::TransformationPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleTransformationPlugin"
                       FILE  "ExampleTransformationPlugin.json")
@@ -103,9 +103,9 @@ public:
     ExampleTransformationPlugin* produce() override;
 
     /** Returns the data types that are supported by the example transformation plugin */
-    hdps::DataTypes supportedDataTypes() const override;
+    mv::DataTypes supportedDataTypes() const override;
 
     /** Enable right-click on data set to execute transformation */
-    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 
 };

@@ -2,7 +2,7 @@
 
 #include <LoaderPlugin.h>
 
-using namespace hdps::plugin;
+using namespace mv::plugin;
 
 // =============================================================================
 // Loader
@@ -30,7 +30,7 @@ private:
 
 class ExampleLoaderPluginFactory : public LoaderPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::LoaderPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::LoaderPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleLoaderPlugin"
                       FILE  "ExampleLoaderPlugin.json")
@@ -41,5 +41,5 @@ public:
 
     ExampleLoaderPlugin* produce() override;
 
-    hdps::DataTypes supportedDataTypes() const override;
+    mv::DataTypes supportedDataTypes() const override;
 };

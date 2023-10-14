@@ -13,7 +13,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewGLPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 // -----------------------------------------------------------------------------
 // ExampleViewGLPlugin
@@ -154,7 +154,7 @@ void ExampleViewGLPlugin::updatePlot()
     if (newDimY >= 0)
         _currentDimensions[1] = static_cast<unsigned int>(newDimY);
 
-    std::vector<hdps::Vector2f> data;
+    std::vector<mv::Vector2f> data;
     _currentDataSet->extractDataForDimensions(data, _currentDimensions[0], _currentDimensions[1]);
 
     // Set data in OpenGL widget
@@ -162,7 +162,7 @@ void ExampleViewGLPlugin::updatePlot()
 }
 
 
-void ExampleViewGLPlugin::loadData(const hdps::Datasets& datasets)
+void ExampleViewGLPlugin::loadData(const mv::Datasets& datasets)
 {
     // Exit if there is nothing to load
     if (datasets.isEmpty())
@@ -230,10 +230,10 @@ ViewPlugin* ExampleViewGLPluginFactory::produce()
 
 QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return hdps::Application::getIconFont("FontAwesome").getIcon("braille", color);
+    return mv::Application::getIconFont("FontAwesome").getIcon("braille", color);
 }
 
-hdps::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
 
@@ -243,7 +243,7 @@ hdps::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-hdps::gui::PluginTriggerActions ExampleViewGLPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+mv::gui::PluginTriggerActions ExampleViewGLPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

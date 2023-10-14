@@ -3,7 +3,7 @@
 #include "actions/Actions.h"
 
 /** All GUI related classes are in the HDPS Graphical User Interface namespace */
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * ExampleSettingsAction class
@@ -41,8 +41,8 @@ public: // Action getters
     TriggerAction& getStartAnalysisAction() { return _startAnalysisAction; }
 
 public:
-    StringAction    _currentIterationAction;        /** Current iteration string action from the hdps::gui namespace */
-    DecimalAction   _maxVelocityAction;             /** Maximum velocity decimal action from the hdps::gui namespace */
-    IntegralAction  _numberOfIterationsAction;      /** Number of iterations action from the hdps::gui namespace */
-    TriggerAction   _startAnalysisAction;           /** Start loop  trigger action from the hdps::gui namespace */
+    StringAction    _currentIterationAction;        /** Current iteration string action from the mv::gui namespace */
+    DecimalAction   _maxVelocityAction;             /** Maximum velocity decimal action from the mv::gui namespace */
+    IntegralAction  _numberOfIterationsAction;      /** Number of iterations action from the mv::gui namespace */
+    TriggerAction   _startAnalysisAction;           /** Start loop  trigger action from the mv::gui namespace */
 };

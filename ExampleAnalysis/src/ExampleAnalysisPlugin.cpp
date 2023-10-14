@@ -7,8 +7,8 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleAnalysisPlugin")
 
-using namespace hdps;
-using namespace hdps::plugin;
+using namespace mv;
+using namespace mv::plugin;
 
 // Initialize the random number generator
 QRandomGenerator ExampleAnalysisPlugin::Point::rng;
@@ -87,7 +87,7 @@ void ExampleAnalysisPlugin::init()
     };
 
     // Start the analysis when the user clicks the start analysis push button
-    connect(&_settingsAction.getStartAnalysisAction(), &hdps::gui::TriggerAction::triggered, this, [this, initializePoints, updatePoints, updateCurrentIterationAction]() {
+    connect(&_settingsAction.getStartAnalysisAction(), &mv::gui::TriggerAction::triggered, this, [this, initializePoints, updatePoints, updateCurrentIterationAction]() {
 
         // Initialize our points
         initializePoints();
@@ -162,7 +162,7 @@ void ExampleAnalysisPlugin::init()
     _eventListener.registerDataEventByType(PointType, std::bind(&ExampleAnalysisPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
-void ExampleAnalysisPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
+void ExampleAnalysisPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
     // The data event has a type so that we know what type of data event occurred (e.g. data added, changed, removed, renamed, selection changes)
     switch (dataEvent->getType()) {
@@ -232,7 +232,7 @@ AnalysisPlugin* ExampleAnalysisPluginFactory::produce()
     return new ExampleAnalysisPlugin(this);
 }
 
-hdps::DataTypes ExampleAnalysisPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleAnalysisPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
 
@@ -242,7 +242,7 @@ hdps::DataTypes ExampleAnalysisPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-hdps::gui::PluginTriggerActions ExampleAnalysisPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+mv::gui::PluginTriggerActions ExampleAnalysisPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

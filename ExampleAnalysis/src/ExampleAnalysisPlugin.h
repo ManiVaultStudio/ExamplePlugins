@@ -10,10 +10,10 @@
 #include <QtMath>
 
 /** All plugin related classes are in the HDPS plugin namespace */
-using namespace hdps::plugin;
+using namespace mv::plugin;
 
 /** Vector classes used in this plugin are in the HDPS namespace */
-using namespace hdps;
+using namespace mv;
 
 /**
  * Example analysis plugin class
@@ -131,7 +131,7 @@ public:
      * Invoked when a points data event occurs
      * @param dataEvent Data event which occurred
      */
-    void onDataEvent(hdps::DatasetEvent* dataEvent);
+    void onDataEvent(mv::DatasetEvent* dataEvent);
 
 private:
     SettingsAction      _settingsAction;    /** The place where settings are stored (more info in SettingsAction.h) */
@@ -147,7 +147,7 @@ private:
  */
 class ExampleAnalysisPluginFactory : public AnalysisPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::AnalysisPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::AnalysisPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleAnalysisPlugin"
                       FILE  "ExampleAnalysisPlugin.json")
@@ -164,8 +164,8 @@ public:
     AnalysisPlugin* produce() override;
 
     /** Returns the data types that are supported by the example analysis plugin */
-    hdps::DataTypes supportedDataTypes() const override;
+    mv::DataTypes supportedDataTypes() const override;
 
     /** Enable right-click on data set to open analysis */
-    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 };

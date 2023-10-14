@@ -8,9 +8,9 @@
 #include <QString>
 #include <QColor>
 
-using namespace hdps::plugin;
+using namespace mv::plugin;
 
-const hdps::DataType ExampleType = hdps::DataType(QString("Example"));
+const mv::DataType ExampleType = mv::DataType(QString("Example"));
 
 class ExampleDataPlugin : public RawData
 {
@@ -25,7 +25,7 @@ public:
      * @param guid Globally unique dataset identifier (use only for deserialization)
      * @return Smart pointer to dataset
      */
-    hdps::Dataset<hdps::DatasetImpl> createDataSet(const QString& guid = "") const override;
+    mv::Dataset<mv::DatasetImpl> createDataSet(const QString& guid = "") const override;
 
     std::vector<QColor>& getData();
 
@@ -39,10 +39,10 @@ private:
 // Data Set
 // =============================================================================
 
-class PixelSet : public hdps::DatasetImpl
+class PixelSet : public mv::DatasetImpl
 {
 public:
-    PixelSet(hdps::CoreInterface* core, QString dataName, const QString& guid = "");
+    PixelSet(mv::CoreInterface* core, QString dataName, const QString& guid = "");
     ~PixelSet() override;
 
     /**
@@ -52,10 +52,10 @@ public:
      * @param visible Whether the subset will be visible in the UI
      * @return Smart pointer to the created subset
      */
-    hdps::Dataset<hdps::DatasetImpl> createSubsetFromSelection(const QString& guiName, const hdps::Dataset<hdps::DatasetImpl>& parentDataSet = hdps::Dataset<hdps::DatasetImpl>(), const bool& visible = true) const override;
+    mv::Dataset<mv::DatasetImpl> createSubsetFromSelection(const QString& guiName, const mv::Dataset<mv::DatasetImpl>& parentDataSet = mv::Dataset<mv::DatasetImpl>(), const bool& visible = true) const override;
 
     /** Mandatory override for copying of data sets */
-    hdps::Dataset<hdps::DatasetImpl> copy() const override;
+    mv::Dataset<mv::DatasetImpl> copy() const override;
 
     /**
      * Get set icon
@@ -105,7 +105,7 @@ protected:
 
 class ExampleDataPluginFactory : public RawDataFactory
 {
-    Q_INTERFACES(hdps::plugin::RawDataFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::RawDataFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleDataPlugin"
                       FILE  "ExampleDataPlugin.json")
@@ -121,5 +121,5 @@ public:
      */
     QIcon getIcon(const QColor& color = Qt::black) const override;
 
-    hdps::plugin::RawData* produce() override;
+    mv::plugin::RawData* produce() override;
 };

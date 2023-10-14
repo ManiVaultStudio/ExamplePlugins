@@ -11,8 +11,8 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleTransformationPlugin")
 
-using namespace hdps;
-using namespace hdps::util;
+using namespace mv;
+using namespace mv::util;
 
 const QMap<ExampleTransformationPlugin::Type, QString> ExampleTransformationPlugin::types = QMap<ExampleTransformationPlugin::Type, QString>({
     { ExampleTransformationPlugin::Type::Abs, "Abs (in-place)" },
@@ -131,7 +131,7 @@ ExampleTransformationPlugin* ExampleTransformationPluginFactory::produce()
     return new ExampleTransformationPlugin(this);
 }
 
-hdps::DataTypes ExampleTransformationPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleTransformationPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
 
@@ -141,7 +141,7 @@ hdps::DataTypes ExampleTransformationPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-PluginTriggerActions ExampleTransformationPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+PluginTriggerActions ExampleTransformationPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

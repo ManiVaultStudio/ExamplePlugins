@@ -2,8 +2,8 @@
 
 #include <WriterPlugin.h>
 
-using namespace hdps::plugin;
-using namespace hdps::gui;
+using namespace mv::plugin;
+using namespace mv::gui;
 
 // =============================================================================
 // Writer
@@ -31,7 +31,7 @@ private:
 
 class ExampleWriterPluginFactory : public WriterPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::WriterPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::WriterPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleWriterPlugin"
                       FILE  "ExampleWriterPlugin.json")
@@ -44,9 +44,9 @@ public:
     ExampleWriterPlugin* produce() override;
 
     /** Returns the data types that are supported by the example writer plugin */
-    hdps::DataTypes supportedDataTypes() const override;
+    mv::DataTypes supportedDataTypes() const override;
 
     /** Enable right-click on data set to execute transformation */
-    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 
 };

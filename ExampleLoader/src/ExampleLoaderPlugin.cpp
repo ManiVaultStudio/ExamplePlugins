@@ -10,7 +10,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleLoaderPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 // =============================================================================
 // View
@@ -77,7 +77,7 @@ ExampleLoaderPlugin* ExampleLoaderPluginFactory::produce()
     return new ExampleLoaderPlugin(this);
 }
 
-hdps::DataTypes ExampleLoaderPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleLoaderPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
     supportedTypes.append(PointType);

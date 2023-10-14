@@ -4,7 +4,7 @@
 
 #include <QHBoxLayout>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     WidgetAction(parent, title),

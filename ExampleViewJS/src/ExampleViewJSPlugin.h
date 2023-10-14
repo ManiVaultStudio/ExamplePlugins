@@ -9,13 +9,13 @@
 #include <QWidget>
 
 /** All plugin related classes are in the HDPS plugin namespace */
-using namespace hdps::plugin;
+using namespace mv::plugin;
 
 /** Drop widget used in this plugin is located in the HDPS gui namespace */
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /** Dataset reference used in this plugin is located in the HDPS util namespace */
-using namespace hdps::util;
+using namespace mv::util;
 
 class ChartWidget;
 
@@ -53,7 +53,7 @@ public:
     void init() override;
 
     /** Store a private reference to the data set that should be displayed */
-    void loadData(const hdps::Datasets& datasets) override;
+    void loadData(const mv::Datasets& datasets) override;
 
 public slots:
     /** Converts ManiVault's point data to a json-like data structure that Qt can pass to the JS code */
@@ -71,7 +71,7 @@ private:
 private:
     ChartWidget*            _chartWidget;       // WebWidget that sets up the HTML page
     DropWidget*             _dropWidget;        // Widget for drag and drop behavior
-    hdps::Dataset<Points>   _currentDataSet;    // Reference to currently shown data set
+    mv::Dataset<Points>   _currentDataSet;    // Reference to currently shown data set
 };
 
 /**
@@ -81,7 +81,7 @@ private:
  */
 class ExampleViewJSPluginFactory : public ViewPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::ViewPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleViewJSPlugin"
                       FILE  "ExampleViewJSPlugin.json")
@@ -101,12 +101,12 @@ public:
     ViewPlugin* produce() override;
 
     /** Returns the data types that are supported by the example view plugin */
-    hdps::DataTypes supportedDataTypes() const override;
+    mv::DataTypes supportedDataTypes() const override;
 
     /**
      * Get plugin trigger actions given \p datasets
      * @param datasets Vector of input datasets
      * @return Vector of plugin trigger actions
      */
-    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 };

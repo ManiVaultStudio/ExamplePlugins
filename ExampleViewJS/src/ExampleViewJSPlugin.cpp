@@ -17,7 +17,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewJSPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 ExampleViewJSPlugin::ExampleViewJSPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
@@ -101,7 +101,7 @@ void ExampleViewJSPlugin::init()
     createData();
 }
 
-void ExampleViewJSPlugin::loadData(const hdps::Datasets& datasets)
+void ExampleViewJSPlugin::loadData(const mv::Datasets& datasets)
 {
     // Exit if there is nothing to load
     if (datasets.isEmpty())
@@ -231,7 +231,7 @@ void ExampleViewJSPlugin::createData()
 
 QIcon ExampleViewJSPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return hdps::Application::getIconFont("FontAwesome").getIcon("bullseye", color);
+    return mv::Application::getIconFont("FontAwesome").getIcon("bullseye", color);
 }
 
 ViewPlugin* ExampleViewJSPluginFactory::produce()
@@ -239,7 +239,7 @@ ViewPlugin* ExampleViewJSPluginFactory::produce()
     return new ExampleViewJSPlugin(this);
 }
 
-hdps::DataTypes ExampleViewJSPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleViewJSPluginFactory::supportedDataTypes() const
 {
     // This example analysis plugin is compatible with points datasets
     DataTypes supportedTypes;
@@ -247,7 +247,7 @@ hdps::DataTypes ExampleViewJSPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-hdps::gui::PluginTriggerActions ExampleViewJSPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+mv::gui::PluginTriggerActions ExampleViewJSPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

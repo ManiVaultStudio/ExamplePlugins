@@ -10,8 +10,8 @@
 
 #include <QColor>
 
-using namespace hdps;
-using namespace hdps::gui;
+using namespace mv;
+using namespace mv::gui;
 
 class ExampleGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -25,7 +25,7 @@ public:
     bool isInitialized() const { return _isInitialized;};
 
     /** Sets 2D point positions and visual properties in the renderer */
-    void setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity);
+    void setData(const std::vector<mv::Vector2f>& points, float pointSize, float pointOpacity);
 
 protected:
     // We have to override some QOpenGLWidget functions that handle the actual drawing

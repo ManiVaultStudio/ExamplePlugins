@@ -8,7 +8,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleWriterPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 // =============================================================================
 // View
@@ -71,14 +71,14 @@ ExampleWriterPlugin* ExampleWriterPluginFactory::produce()
     return new ExampleWriterPlugin(this);
 }
 
-hdps::DataTypes ExampleWriterPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleWriterPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
     supportedTypes.append(PointType);
     return supportedTypes;
 }
 
-PluginTriggerActions ExampleWriterPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+PluginTriggerActions ExampleWriterPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

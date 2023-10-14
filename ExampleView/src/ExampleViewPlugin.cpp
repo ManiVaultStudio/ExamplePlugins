@@ -9,7 +9,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 ExampleViewPlugin::ExampleViewPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
@@ -114,7 +114,7 @@ void ExampleViewPlugin::init()
     _eventListener.registerDataEventByType(PointType, std::bind(&ExampleViewPlugin::onDataEvent, this, std::placeholders::_1));
 }
 
-void ExampleViewPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
+void ExampleViewPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
     // Get smart pointer to dataset that changed
     const auto changedDataSet = dataEvent->getDataset();
@@ -186,7 +186,7 @@ ViewPlugin* ExampleViewPluginFactory::produce()
     return new ExampleViewPlugin(this);
 }
 
-hdps::DataTypes ExampleViewPluginFactory::supportedDataTypes() const
+mv::DataTypes ExampleViewPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
 
@@ -196,7 +196,7 @@ hdps::DataTypes ExampleViewPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-hdps::gui::PluginTriggerActions ExampleViewPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+mv::gui::PluginTriggerActions ExampleViewPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

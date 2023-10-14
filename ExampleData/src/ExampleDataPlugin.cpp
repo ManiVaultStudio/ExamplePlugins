@@ -7,7 +7,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleDataPlugin")
 
-using namespace hdps;
+using namespace mv;
 
 ExampleDataPlugin::~ExampleDataPlugin(void)
 {

@@ -47,7 +47,7 @@ ExampleGLWidget::~ExampleGLWidget()
     cleanup();
 }
 
-void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float pointSize, float pointOpacity)
+void ExampleGLWidget::setData(const std::vector<mv::Vector2f>& points, float pointSize, float pointOpacity)
 {
     const auto numPoints = points.size();
 
@@ -56,7 +56,7 @@ void ExampleGLWidget::setData(const std::vector<hdps::Vector2f>& points, float p
     _colors.clear();
     _colors.reserve(numPoints);
 
-    constexpr hdps::Vector3f pointColor = {0.f, 0.f, 0.f};
+    constexpr mv::Vector3f pointColor = {0.f, 0.f, 0.f};
 
     for(unsigned long i = 0; i < numPoints; i++)
         _colors.emplace_back(pointColor);

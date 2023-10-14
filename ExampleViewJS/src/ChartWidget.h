@@ -10,7 +10,7 @@ class ExampleViewJSPlugin;
 // ParlCoorCommunicationObject
 // =============================================================================
 
-class ChartCommObject : public hdps::gui::WebCommunicationObject
+class ChartCommObject : public mv::gui::WebCommunicationObject
 {
     Q_OBJECT
 public:
@@ -40,7 +40,7 @@ private:
 // ChartWidget
 // =============================================================================
 
-class ChartWidget : public hdps::gui::WebWidget
+class ChartWidget : public mv::gui::WebWidget
 {
     Q_OBJECT
 public:
@@ -49,7 +49,7 @@ public:
     ChartCommObject& getCommunicationObject() { return _comObject; };
 
 private slots:
-    /** Is invoked when the js side calls js_available of the hdps::gui::WebCommunicationObject (ChartCommObject) 
+    /** Is invoked when the js side calls js_available of the mv::gui::WebCommunicationObject (ChartCommObject) 
         js_available emits notifyJsBridgeIsAvailable, which is conencted to this slot in WebWidget.cpp*/
     void initWebPage() override;
 

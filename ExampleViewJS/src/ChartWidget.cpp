@@ -16,7 +16,7 @@ ChartCommObject::ChartCommObject() :
 {
 }
 
-void ChartCommObject::js_qt_passSelectionToQt(QVariantList data){
+void ChartCommObject::js_qt_passSelectionToQt(const QVariantList& data){
     _selectedIDsFromJS.clear();
 
     if (!data.isEmpty())

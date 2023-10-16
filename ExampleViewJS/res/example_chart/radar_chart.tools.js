@@ -2,7 +2,7 @@
 // when emitting qt_js_setDataInJS from the communication object
 // The connection is established in qwebchannel.tools.js
 function drawChart(d) {
-    if (d.length == 0) {
+    if (d != null && d.length < 1) {
         log("ExampleViewJS: radar_chart.tools.js: data empty")
         return
     }

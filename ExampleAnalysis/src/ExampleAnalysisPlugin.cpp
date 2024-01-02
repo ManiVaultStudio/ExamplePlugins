@@ -55,7 +55,7 @@ void ExampleAnalysisPlugin::init()
         outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
-        events().notifyDatasetDataChanged(_output);
+        events().notifyDatasetDataChanged(outputPoints);
     };
 
     // Initializes the points

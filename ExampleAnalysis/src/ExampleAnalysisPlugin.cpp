@@ -38,7 +38,7 @@ void ExampleAnalysisPlugin::init()
     setOutputDataset(mv::data().createDerivedDataset("Output Data", getInputDataset(), getInputDataset()));
 
     // Retrieve the input dataset for our specific data type (in our case points)
-    // The HDPS core sets the input dataset reference when the plugin is created
+    // The ManiVault core sets the input dataset reference when the plugin is created
     const auto inputPoints  = getInputDataset<Points>();
 
     // Retrieve the output dataset for our specific data type (in our case points)

@@ -12,9 +12,9 @@ class ExamplePluginsConan(ConanFile):
     """Class to package ExamplePlugins using conan
 
     Packages both RELEASE and DEBUG.
-    Uses rules_support (github.com/hdps/rulessupport) to derive
+    Uses rules_support (github.com/ManiVaultStudio/rulessupport) to derive
     versioninfo based on the branch naming convention
-    as described in https://github.com/hdps/core/wiki/Branch-naming-rules
+    as described in https://github.com/ManiVaultStudio/core/wiki/Branch-naming-rules
     """
 
     name = "ExamplePlugins"
@@ -22,7 +22,7 @@ class ExamplePluginsConan(ConanFile):
         "A collection of examples including analys, data, loader and view plugins."
     )
     topics = ("hdps", "plugin", "examples", "various")
-    url = "https://github.com/hdps/ExamplePlugins"
+    url = "https://github.com/ManiVaultStudio/ExamplePlugins"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
 
@@ -36,7 +36,7 @@ class ExamplePluginsConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "hdps/ExamplePlugins",
+        "subfolder": "ManiVaultStudio/ExamplePlugins",
         "url": "auto",
         "revision": "auto",
     }
@@ -115,7 +115,7 @@ class ExamplePluginsConan(ConanFile):
     def build(self):
         print("Build OS is : ", self.settings.os)
 
-        # The ExamplePlugins build expects the HDPS package to be in this install dir
+        # The ExamplePlugins build expects the ManiVaultStudio package to be in this install dir
         hdps_pkg_root = self.deps_cpp_info["hdps-core"].rootpath
         print("Install dir type: ", self.install_dir)
         shutil.copytree(hdps_pkg_root, self.install_dir)

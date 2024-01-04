@@ -9,13 +9,13 @@
 
 #include <QWidget>
 
-/** All plugin related classes are in the HDPS plugin namespace */
+/** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
 
-/** Drop widget used in this plugin is located in the HDPS gui namespace */
+/** Drop widget used in this plugin is located in the ManiVault gui namespace */
 using namespace mv::gui;
 
-/** Dataset reference used in this plugin is located in the HDPS util namespace */
+/** Dataset reference used in this plugin is located in the ManiVault util namespace */
 using namespace mv::util;
 
 class QLabel;
@@ -24,12 +24,12 @@ class QLabel;
  * Example view plugin class
  *
  * This view plugin class provides skeleton code that shows how to develop
- * a view plugin in HDPS. It shows how to use the built-in drag and drop
+ * a view plugin in ManiVault. It shows how to use the built-in drag and drop
  * behavior.
  *
  * To see the plugin in action, please follow the steps below:
  *
- * 1. Go to the visualization menu in HDPS
+ * 1. Go to the visualization menu in ManiVault
  * 2. Choose the Example view menu item, the view will be added to the layout
  *
  * @authors J. Thijssen & T. Kroes

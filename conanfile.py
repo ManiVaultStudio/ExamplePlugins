@@ -36,7 +36,7 @@ class ExamplePluginsConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "ManiVaultStudio/ExamplePlugins",
+        "subfolder": "hdps/ExamplePlugins",
         "url": "auto",
         "revision": "auto",
     }

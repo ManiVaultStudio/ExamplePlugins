@@ -1,6 +1,10 @@
 #pragma once
 
-#include "actions/Actions.h"
+#include "actions/GroupAction.h"
+#include "actions/DecimalAction.h"
+#include "actions/IntegralAction.h"
+#include "actions/StringAction.h"
+#include "actions/TriggerAction.h"
 
 /** All GUI related classes are in the ManiVault Graphical User Interface namespace */
 using namespace mv::gui;

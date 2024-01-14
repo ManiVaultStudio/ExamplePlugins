@@ -2,6 +2,8 @@
 
 #include "PointData/PointData.h"
 
+#include <event/Event.h>
+
 #include <QtCore>
 #include <QDebug>
 
@@ -33,7 +35,7 @@ ExampleAnalysisPlugin::ExampleAnalysisPlugin(const PluginFactory* factory) :
 void ExampleAnalysisPlugin::init()
 {
     // Create example output dataset (a points dataset which is derived from the input points dataset) and set the output dataset
-    setOutputDataset(_core->createDerivedDataset("Output Data", getInputDataset(), getInputDataset()));
+    setOutputDataset(mv::data().createDerivedDataset("Output Data", getInputDataset(), getInputDataset()));
 
     // Retrieve the input dataset for our specific data type (in our case points)
     // The HDPS core sets the input dataset reference when the plugin is created

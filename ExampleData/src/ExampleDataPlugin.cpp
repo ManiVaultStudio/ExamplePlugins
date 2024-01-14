@@ -23,7 +23,7 @@ void ExampleDataPlugin::init()
  */
 Dataset<DatasetImpl> ExampleDataPlugin::createDataSet(const QString& guid /*= ""*/) const
 {
-    return new PixelSet(_core, getName(), guid);
+    return new PixelSet(getName(), guid);
 }
 
 std::vector<QColor>& ExampleDataPlugin::getData()
@@ -44,8 +44,8 @@ void ExampleDataPlugin::setData(QImage image) {
     }
 }
 
-PixelSet::PixelSet(CoreInterface* core, QString dataName, const QString& guid /*= ""*/) :
-    DatasetImpl(core, dataName, guid)
+PixelSet::PixelSet(QString dataName, const QString& guid /*= ""*/) :
+    DatasetImpl(dataName, true, guid)
 {
 }
 
@@ -55,12 +55,12 @@ PixelSet::~PixelSet()
 
 Dataset<DatasetImpl> PixelSet::createSubsetFromSelection(const QString& guiName, const Dataset<DatasetImpl>& parentDataSet /*= Dataset<DatasetImpl>()*/, const bool& visible /*= true*/) const
 {
-    return _core->createSubsetFromSelection(getSelection<PixelSet>(), const_cast<PixelSet*>(this), guiName, parentDataSet, visible);
+    return mv::data().createSubsetFromSelection(getSelection<PixelSet>(), const_cast<PixelSet*>(this), guiName, parentDataSet, visible);
 }
 
 Dataset<DatasetImpl> PixelSet::copy() const
 {
-    auto copySet = new PixelSet(_core, getRawDataName());
+    auto copySet = new PixelSet(getRawDataName());
 
     copySet->_indices = _indices;
 
@@ -84,12 +84,12 @@ void PixelSet::setSelectionIndices(const std::vector<std::uint32_t>& indices)
 
 bool PixelSet::canSelect() const
 {
-    return getRawData<ExampleDataPlugin>().getData().size() >= 1;
+    return getRawData<ExampleDataPlugin>()->getData().size() >= 1;
 }
 
 bool PixelSet::canSelectAll() const
 {
-    return canSelect() && (getSelectionSize() < getRawData<ExampleDataPlugin>().getData().size());
+    return canSelect() && (getSelectionSize() < getRawData<ExampleDataPlugin>()->getData().size());
 }
 
 bool PixelSet::canSelectNone() const
@@ -109,7 +109,7 @@ void PixelSet::selectAll()
 
     // Clear and resize
     selectionIndices.clear();
-    selectionIndices.resize(getRawData<ExampleDataPlugin>().getData().size());
+    selectionIndices.resize(getRawData<ExampleDataPlugin>()->getData().size());
 
     // Generate cluster selection indices
     std::iota(selectionIndices.begin(), selectionIndices.end(), 0);
@@ -136,7 +136,7 @@ void PixelSet::selectInvert()
     std::set<std::uint32_t> selectionSet(selectionIndices.begin(), selectionIndices.end());
 
     // Get number of items
-    const auto numberOfItems = getRawData<ExampleDataPlugin>().getData().size();
+    const auto numberOfItems = getRawData<ExampleDataPlugin>()->getData().size();
 
     // Clear and resize
     selectionIndices.clear();

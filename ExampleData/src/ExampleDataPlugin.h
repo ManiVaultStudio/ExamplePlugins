@@ -42,7 +42,7 @@ private:
 class PixelSet : public mv::DatasetImpl
 {
 public:
-    PixelSet(mv::CoreInterface* core, QString dataName, const QString& guid = "");
+    PixelSet(QString dataName, const QString& guid = "");
     ~PixelSet() override;
 
     /**

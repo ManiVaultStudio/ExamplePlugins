@@ -75,7 +75,7 @@ void ExampleViewJSPlugin::init()
                 dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
             }
             else {
-                auto candidateDataset = _core->requestDataset<Points>(datasetId);
+                auto candidateDataset = mv::data().getDataset<Points>(datasetId);
 
                 dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetGuiName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
@@ -189,8 +189,7 @@ void ExampleViewJSPlugin::createData()
 {
     // Here, we create a random data set, so that we do not need 
     // to use other plugins for loading when trying out this example
-    auto points = _core->addDataset<Points>("Points", "ExampleViewJSData");
-    events().notifyDatasetAdded(points);
+    auto points = mv::data().createDataset<Points>("Points", "ExampleViewJSData");
 
     int numPoints = 2;
     int numDimensions = 5;

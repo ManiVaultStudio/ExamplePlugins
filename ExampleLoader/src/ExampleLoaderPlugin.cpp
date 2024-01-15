@@ -46,7 +46,7 @@ void ExampleLoaderPlugin::init()
 void ExampleLoaderPlugin::loadData()
 {
     _dataSetName = "ExampleData";
-    auto points = _core->addDataset<Points>("Points", _dataSetName);
+    auto points = mv::data().createDataset<Points>("Points", _dataSetName);
     
     // Create 2D example data by randomly generating 1000 points
     std::default_random_engine generator;

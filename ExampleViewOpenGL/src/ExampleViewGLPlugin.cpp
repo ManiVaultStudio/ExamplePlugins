@@ -61,7 +61,7 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
                 dropRegions << new DropWidget::DropRegion(this, "Warning", "Data already loaded", "exclamation-circle", false);
             }
             else {
-                auto candidateDataset = _core->requestDataset<Points>(datasetId);
+                auto candidateDataset = mv::data().getDataset<Points>(datasetId);
 
                 dropRegions << new DropWidget::DropRegion(this, "Points", QString("Visualize %1 as parallel coordinates").arg(datasetGuiName), "map-marker-alt", true, [this, candidateDataset]() {
                     loadData({ candidateDataset });
@@ -188,8 +188,7 @@ void ExampleViewGLPlugin::createData()
 {
     // Here, we create a random data set, so that we do not need 
     // to use other plugins for loading when trying out this example
-    auto points = _core->addDataset<Points>("Points", "ExampleViewGLData");
-    events().notifyDatasetAdded(points);
+    auto points = mv::data().createDataset<Points>("Points", "ExampleViewGLData");
 
     int numPoints = 50;
     int numDimensions = 3;

@@ -70,7 +70,7 @@ void ExampleViewPlugin::init()
         else {
 
             // Get points dataset from the core
-            auto candidateDataset = _core->requestDataset<Points>(datasetId);
+            auto candidateDataset = mv::data().getDataset<Points>(datasetId);
 
             // Accept points datasets drag and drop
             if (dataType == PointType) {

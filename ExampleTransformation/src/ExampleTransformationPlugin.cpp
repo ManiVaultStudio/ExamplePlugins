@@ -75,8 +75,7 @@ void ExampleTransformationPlugin::transform()
             // Create new data set
             case ExampleTransformationPlugin::Type::Pow2:
             {
-                auto derivedData = _core->createDerivedDataset<Points>(points->getGuiName() + "(Pow2)", points);
-                events().notifyDatasetAdded(derivedData);
+                auto derivedData = mv::data().createDerivedDataset<Points>(points->getGuiName() + "(Pow2)", points);
 
                 std::vector<float> transformedData;
                 transformedData.resize(points->getNumPoints() * points->getNumDimensions());

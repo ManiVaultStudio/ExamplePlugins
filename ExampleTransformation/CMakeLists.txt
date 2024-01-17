@@ -63,7 +63,7 @@ target_sources(${EXAMPLETRANSFORMATION} PRIVATE ${EXAMPLETRANSFORMATION_MOC})
 # -----------------------------------------------------------------------------
 # Target include directories
 # -----------------------------------------------------------------------------
-# Include HDPS headers, including system data plugins
+# Include ManiVault headers, including system data plugins
 target_include_directories(${EXAMPLETRANSFORMATION} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 # -----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ target_compile_features(${EXAMPLETRANSFORMATION} PRIVATE cxx_std_17)
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE Qt6::Widgets)
 target_link_libraries(${EXAMPLETRANSFORMATION} PRIVATE Qt6::WebEngineWidgets)
 
-# Link to HDPS and data plugins
+# Link to ManiVault and data plugins
 # The link path in this repo assumes that the ManiVault core was built locally
 # in contrast to having been installed with an installer. In the latter case you'll have
 # to adapt the MV_LINK_PATH and PLUGIN_LINK_PATH to your install folder

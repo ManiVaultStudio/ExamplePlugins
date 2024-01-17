@@ -8,13 +8,13 @@
 
 #include <QWidget>
 
-/** All plugin related classes are in the HDPS plugin namespace */
+/** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
 
-/** Drop widget used in this plugin is located in the HDPS gui namespace */
+/** Drop widget used in this plugin is located in the ManiVault gui namespace */
 using namespace mv::gui;
 
-/** Dataset reference used in this plugin is located in the HDPS util namespace */
+/** Dataset reference used in this plugin is located in the ManiVault util namespace */
 using namespace mv::util;
 
 class ChartWidget;

@@ -1,17 +1,18 @@
 #pragma once
 
 #include <TransformationPlugin.h>
-#include <actions/StringAction.h>
 
-/** All plugin related classes are in the HDPS plugin namespace */
+#include <QMap>
+#include <QString>
+
+/** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
-using namespace mv::gui;
 
 /**
  * Example transformation plugin class
  *
  * This transformation plugin class provides skeleton code that shows how to develop 
- * an transformation plugin in HDPS.
+ * an transformation plugin in ManiVault.
  * 
  * In contrast to analysis plugins, transformation do not create an output data set by default,
  * but operate on the input data set. In this example, we provide to transformation options,
@@ -106,6 +107,6 @@ public:
     mv::DataTypes supportedDataTypes() const override;
 
     /** Enable right-click on data set to execute transformation */
-    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
+    mv::gui::PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 
 };

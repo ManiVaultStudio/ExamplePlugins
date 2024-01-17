@@ -2,10 +2,8 @@
 
 #include <PointData/PointData.h>
 
-#include <actions/PluginTriggerAction.h>
-
-#include <QtCore>
 #include <QDebug>
+#include <QtCore>
 
 #include <cmath>
 
@@ -28,81 +26,80 @@ ExampleTransformationPlugin::ExampleTransformationPlugin(const PluginFactory* fa
 
 void ExampleTransformationPlugin::transform()
 {
-    for (auto inputDataset : getInputDatasets()) {
-        auto points = Dataset<Points>(inputDataset);
+    auto points = getInputDataset<Points>();
 
-        if (!points.isValid())
-            continue;
+    if (!points.isValid())
+        return;
 
-        // Get reference to dataset task for reporting progress
-        auto& datasetTask = inputDataset->getTask();
+    // Get reference to dataset task for reporting progress
+    auto& datasetTask = points->getTask();
 
-        datasetTask.setName("Transforming");
-        datasetTask.setRunning();
-        datasetTask.setProgressDescription(QString("%1 transformation").arg(getTypeName(_type)));
+    datasetTask.setName("Transforming");
+    datasetTask.setRunning();
+    datasetTask.setProgressDescription(QString("%1 transformation").arg(getTypeName(_type)));
 
-        switch (_type)
+    switch (_type)
+    {
+        // Transform points in place
+        case ExampleTransformationPlugin::Type::Abs:
         {
-            // Transform points in place
-            case ExampleTransformationPlugin::Type::Abs:
-            {
-                points->setLocked(true);
+            points->setLocked(true);
 
-                points->visitData([this, &points, &datasetTask](auto pointData) {
-                    std::uint32_t noPointsProcessed = 0;
+            points->visitData([this, &points, &datasetTask](auto pointData) {
+                std::uint32_t noPointsProcessed = 0;
 
-                    for (auto point : pointData) {
-                        for (std::uint32_t dimensionIndex = 0; dimensionIndex < points->getNumDimensions(); dimensionIndex++) {
-                            point[dimensionIndex] = std::abs(point[dimensionIndex]);
-                        }
-
-                        ++noPointsProcessed;
-
-                        if (noPointsProcessed % 1000 == 0) {
-                            datasetTask.setProgress(static_cast<float>(noPointsProcessed) / static_cast<float>(points->getNumPoints()));
-
-                            QApplication::processEvents();
-                        }
+                for (auto point : pointData) {
+                    for (std::uint32_t dimensionIndex = 0; dimensionIndex < points->getNumDimensions(); dimensionIndex++) {
+                        point[dimensionIndex] = std::abs(point[dimensionIndex]);
                     }
-                    });
 
-                points->setLocked(false);
+                    ++noPointsProcessed;
 
-                events().notifyDatasetDataChanged(points);
+                    if (noPointsProcessed % 1000 == 0) {
+                        datasetTask.setProgress(static_cast<float>(noPointsProcessed) / static_cast<float>(points->getNumPoints()));
 
-                break;
-            }
-            // Create new data set
-            case ExampleTransformationPlugin::Type::Pow2:
-            {
-                auto derivedData = mv::data().createDerivedDataset<Points>(points->getGuiName() + "(Pow2)", points);
-
-                std::vector<float> transformedData;
-                transformedData.resize(points->getNumPoints() * points->getNumDimensions());
-
-                points->constVisitFromBeginToEnd([&transformedData](auto begin, auto end) {
-                    std::uint32_t noItemsProcessed = 0;
-
-                    for (auto it = begin; it != end; ++it) {
-                        transformedData[noItemsProcessed] = std::pow(*it, 2.0f);
-                        noItemsProcessed++;
+                        QApplication::processEvents();
                     }
-                    });
+                }
+                });
 
+            points.setProperty("Last transformed by", getName());
+            points->setLocked(false);
 
-                derivedData->setData(transformedData.data(), points->getNumPoints(), points->getNumDimensions());
-                events().notifyDatasetDataChanged(derivedData);
+            events().notifyDatasetDataChanged(points);
 
-                break;
-            }
-            default:
-                break;
+            break;
         }
+        // Create new data set
+        case ExampleTransformationPlugin::Type::Pow2:
+        {
+            auto derivedData = mv::data().createDerivedDataset<Points>(points->getGuiName() + " (Pow2)", points);
 
-        datasetTask.setProgress(1.0f);
-        datasetTask.setFinished();
+            std::vector<float> transformedData;
+            transformedData.resize(points->getNumPoints() * points->getNumDimensions());
 
+            points->constVisitFromBeginToEnd([&transformedData](auto begin, auto end) {
+                std::uint32_t noItemsProcessed = 0;
+
+                for (auto it = begin; it != end; ++it) {
+                    transformedData[noItemsProcessed] = std::pow(*it, 2.0f);
+                    noItemsProcessed++;
+                }
+                });
+
+
+            derivedData->setData(transformedData.data(), points->getNumPoints(), points->getNumDimensions());
+            events().notifyDatasetDataChanged(derivedData);
+
+            break;
+        }
+        default:
+            break;
     }
+
+    datasetTask.setProgress(1.0f);
+    datasetTask.setFinished();
+
 }
 
 
@@ -140,9 +137,9 @@ mv::DataTypes ExampleTransformationPluginFactory::supportedDataTypes() const
     return supportedTypes;
 }
 
-PluginTriggerActions ExampleTransformationPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
+mv::gui::PluginTriggerActions ExampleTransformationPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
-    PluginTriggerActions pluginTriggerActions;
+    mv::gui::PluginTriggerActions pluginTriggerActions;
 
     const auto numberOfDatasets = datasets.count();
 
@@ -151,11 +148,11 @@ PluginTriggerActions ExampleTransformationPluginFactory::getPluginTriggerActions
             const auto addPluginTriggerAction = [this, &pluginTriggerActions, datasets](const ExampleTransformationPlugin::Type& type) -> void {
                 const auto typeName = ExampleTransformationPlugin::getTypeName(type);
 
-                auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleTransformationPluginFactory*>(this), this, QString("Example/%1").arg(typeName), QString("Perform %1 data transformation").arg(typeName), getIcon(), [this, datasets, type](PluginTriggerAction& pluginTriggerAction) -> void {
-                    for (auto dataset : datasets) {
+                auto pluginTriggerAction = new mv::gui::PluginTriggerAction(const_cast<ExampleTransformationPluginFactory*>(this), this, QString("Example/%1").arg(typeName), QString("Perform %1 data transformation").arg(typeName), getIcon(), [this, datasets, type](mv::gui::PluginTriggerAction& pluginTriggerAction) -> void {
+                    for (const auto& dataset : datasets) {
                         auto pluginInstance = dynamic_cast<ExampleTransformationPlugin*>(plugins().requestPlugin(getKind()));
 
-                        pluginInstance->setInputDatasets(datasets);
+                        pluginInstance->setInputDataset(dataset);
                         pluginInstance->setType(type);
                         pluginInstance->transform();
                     }

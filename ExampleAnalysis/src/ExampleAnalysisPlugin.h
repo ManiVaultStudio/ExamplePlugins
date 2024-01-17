@@ -9,17 +9,17 @@
 #include <QRandomGenerator>
 #include <QtMath>
 
-/** All plugin related classes are in the HDPS plugin namespace */
+/** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
 
-/** Vector classes used in this plugin are in the HDPS namespace */
+/** Vector classes used in this plugin are in the ManiVault namespace */
 using namespace mv;
 
 /**
  * Example analysis plugin class
  *
  * This analysis plugin class provides skeleton code that shows how to develop 
- * an analysis plugin in HDPS.
+ * an analysis plugin in ManiVault.
  * 
  * The plugin simulates the analysis of points, where point positions are randomly 
  * initialized. During simulation, the points are advanced along a random heading 

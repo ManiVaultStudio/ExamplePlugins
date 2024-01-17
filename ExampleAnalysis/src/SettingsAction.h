@@ -1,8 +1,12 @@
 #pragma once
 
-#include "actions/Actions.h"
+#include "actions/GroupAction.h"
+#include "actions/DecimalAction.h"
+#include "actions/IntegralAction.h"
+#include "actions/StringAction.h"
+#include "actions/TriggerAction.h"
 
-/** All GUI related classes are in the HDPS Graphical User Interface namespace */
+/** All GUI related classes are in the ManiVault Graphical User Interface namespace */
 using namespace mv::gui;
 
 /**
@@ -16,7 +20,7 @@ using namespace mv::gui;
  * actions in a form-like fashion. The order in which they appear corresponds with 
  * the order of declaration.
  *
- * Note: we strongly encourage you to use HDPS core actions to build the user
+ * Note: we strongly encourage you to use ManiVault core actions to build the user
  * interface. Actions separate the data and business logic from the user interface.
  * We have standard actions for editing of strings, decimals, integrals, options,
  * color and color maps. With these components, there is no need to write to create 

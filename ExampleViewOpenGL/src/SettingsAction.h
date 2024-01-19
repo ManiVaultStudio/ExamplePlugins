@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actions/WidgetAction.h>
+#include <actions/GroupAction.h>
 #include <actions/StringAction.h>
 #include <actions/DecimalAction.h>
 #include <PointData/DimensionPickerAction.h>
@@ -8,14 +8,16 @@
 using namespace mv::gui;
 
 class ExampleViewGLPlugin;
+
 /**
  * Settings action class
  *
  * Action class for configuring settings
  */
-class SettingsAction : public WidgetAction
+class SettingsAction : public GroupAction
 {
 public:
+
     /**
      * Construct with \p parent object and \p title
      * @param parent Pointer to parent object
@@ -30,17 +32,6 @@ public: // Action getters
     DimensionPickerAction& getYDimensionPickerAction() { return _yDimensionPickerAction; }
     DecimalAction& getPointSizeAction() { return _pointSizeAction; }
     DecimalAction& getPointOpacityAction() { return _pointOpacityAction; }
-
-protected:
-
-    class Widget : public WidgetActionWidget {
-    public:
-        Widget(QWidget* parent, SettingsAction* settingsAction);
-    };
-
-    QWidget* getWidget(QWidget* parent, const std::int32_t& widgetFlags) override {
-        return new SettingsAction::Widget(parent, this);
-    };
 
 private:
     ExampleViewGLPlugin*    _exampleViewGLPlugin;       /** Pointer to Example OpenGL Viewer Plugin */

@@ -68,7 +68,7 @@ protected:
     DropWidget*                 _dropWidget;            /** Widget for drag and drop behavior */
     ExampleGLWidget*            _exampleGLWidget;       /** The OpenGL widget */
     SettingsAction              _settingsAction;        /** Settings action */
-    mv::Dataset<Points>       _currentDataSet;        /** Points smart pointer */
+    mv::Dataset<Points>         _currentDataSet;        /** Points smart pointer */
     std::vector<unsigned int>   _currentDimensions;     /** Stores which dimensions of the current data are shown */
 };
 
@@ -91,7 +91,10 @@ public:
 
     /** Destructor */
     ~ExampleViewGLPluginFactory() override {}
-    
+
+    /** Perform post-construction initialization */
+    void initialize() override;
+
     /** Get plugin icon */
     QIcon getIcon(const QColor& color = Qt::black) const override;
 

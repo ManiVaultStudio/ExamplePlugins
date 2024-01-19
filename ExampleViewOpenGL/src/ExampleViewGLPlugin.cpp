@@ -1,6 +1,8 @@
 #include "ExampleViewGLPlugin.h"
 #include "ExampleGLWidget.h"
 
+#include "GlobalSettingsAction.h"
+
 #include <graphics/Vector2f.h>
 
 #include <DatasetsMimeData.h>
@@ -119,11 +121,12 @@ void ExampleViewGLPlugin::init()
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(_settingsAction.createWidget(&getWidget()));
     layout->addWidget(_exampleGLWidget, 100);
 
     // Apply the layout
     getWidget().setLayout(layout);
+
+    addDockingAction(&_settingsAction);
 
     // Update the data when the scatter plot widget is initialized
     connect(_exampleGLWidget, &ExampleGLWidget::initialized, this, []() { qDebug() << "ExampleGLWidget is initialized."; } );
@@ -225,6 +228,14 @@ void ExampleViewGLPlugin::createData()
 ViewPlugin* ExampleViewGLPluginFactory::produce()
 {
     return new ExampleViewGLPlugin(this);
+}
+
+void ExampleViewGLPluginFactory::initialize()
+{
+    ViewPluginFactory::initialize();
+
+    // Create an instance of our GlobalSettingsAction (derived from PluginGlobalSettingsGroupAction) and assign it to the factory
+    setGlobalSettingsGroupAction(new GlobalSettingsAction(this, this));
 }
 
 QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const

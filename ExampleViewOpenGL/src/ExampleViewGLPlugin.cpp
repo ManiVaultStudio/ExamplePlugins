@@ -197,7 +197,7 @@ void ExampleViewGLPlugin::createData()
     int numDimensions = 3;
     const std::vector<QString> dimNames {"Dim 1", "Dim 2", "Dim 3"};
 
-    qDebug() << "ExampleViewJSPlugin::createData: Create some example data. " << numPoints << " points, each with " << numDimensions << " dimensions";
+    qDebug() << "ExampleViewGLPlugin::createData: Create some example data. " << numPoints << " points, each with " << numDimensions << " dimensions";
 
     // Create random example data
     std::vector<float> exampleData;

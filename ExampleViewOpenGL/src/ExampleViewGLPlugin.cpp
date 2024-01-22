@@ -171,7 +171,7 @@ void ExampleViewGLPlugin::loadData(const mv::Datasets& datasets)
     if (datasets.isEmpty())
         return;
 
-    qDebug() << "ExampleViewJSPlugin::loadData: Load data set from ManiVault core";
+    qDebug() << "ExampleViewGLPlugin::loadData: Load data set from ManiVault core";
     _dropWidget->setShowDropIndicator(false);
 
     // Load the first dataset, changes to _currentDataSet are connected with convertDataAndUpdateChart

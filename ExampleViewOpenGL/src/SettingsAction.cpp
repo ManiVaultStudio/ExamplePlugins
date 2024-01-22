@@ -35,6 +35,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _datasetNameAction.setString(" (No data loaded yet)");
 
     _pointSizeAction.setValue(mv::settings().getPluginGlobalSettingsGroupAction<GlobalSettingsAction>(_exampleViewGLPlugin)->getDefaultPointSizeAction().getValue());
+    _pointOpacityAction.setValue(mv::settings().getPluginGlobalSettingsGroupAction<GlobalSettingsAction>(_exampleViewGLPlugin)->getDefaultPointOpacityAction().getValue());
 
     connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);
     connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);

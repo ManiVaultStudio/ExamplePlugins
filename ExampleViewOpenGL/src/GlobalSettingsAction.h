@@ -33,7 +33,9 @@ public:
 public: // Action getters
 
     mv::gui::DecimalAction& getDefaultPointSizeAction() { return _defaultPointSizeAction; }
+    mv::gui::DecimalAction& getDefaultPointOpacityAction() { return _defaultPointOpacityAction; }
 
 private:
-    mv::gui::DecimalAction   _defaultPointSizeAction;   /** Default point size action */
+    mv::gui::DecimalAction   _defaultPointSizeAction;       /** Default point size action */
+    mv::gui::DecimalAction   _defaultPointOpacityAction;    /** Default point opacity action */
 };

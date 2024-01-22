@@ -1,4 +1,5 @@
 #include "SettingsAction.h"
+#include "GlobalSettingsAction.h"
 
 #include "ExampleViewGLPlugin.h"
 
@@ -7,7 +8,7 @@
 using namespace mv::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
-    WidgetAction(parent, title),
+    GroupAction(parent, title),
     _exampleViewGLPlugin(dynamic_cast<ExampleViewGLPlugin*>(parent)),
     _datasetNameAction(this, "Dataset Name"),
     _xDimensionPickerAction(this, "X"),
@@ -16,6 +17,12 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _pointOpacityAction(this, "Opacity", 0.f, 1.f, 0.75f, 2)
 {
     setText("Settings");
+
+    addAction(&_datasetNameAction);
+    addAction(&_xDimensionPickerAction);
+    addAction(&_yDimensionPickerAction);
+    addAction(&_pointSizeAction);
+    addAction(&_pointOpacityAction);
 
     _datasetNameAction.setToolTip("Name of currently shown dataset");
     _xDimensionPickerAction.setToolTip("X dimension");
@@ -27,50 +34,12 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _datasetNameAction.setText("Dataset name");
     _datasetNameAction.setString(" (No data loaded yet)");
 
-    connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
-        _exampleViewGLPlugin->updatePlot();
-    });
+    _pointSizeAction.setValue(mv::settings().getPluginGlobalSettingsGroupAction<GlobalSettingsAction>(_exampleViewGLPlugin)->getDefaultPointSizeAction().getValue());
+    _pointOpacityAction.setValue(mv::settings().getPluginGlobalSettingsGroupAction<GlobalSettingsAction>(_exampleViewGLPlugin)->getDefaultPointOpacityAction().getValue());
 
-    connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this](const std::uint32_t& currentDimensionIndex) {
-        _exampleViewGLPlugin->updatePlot();
-    });
+    connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);
+    connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);
+    connect(&_pointSizeAction, &DecimalAction::valueChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);
+    connect(&_pointOpacityAction, &DecimalAction::valueChanged, _exampleViewGLPlugin, &ExampleViewGLPlugin::updatePlot);
 
-    connect(&_pointSizeAction, &DecimalAction::valueChanged, [this](float val) {
-        _exampleViewGLPlugin->updatePlot();
-    });
-
-    connect(&_pointOpacityAction, &DecimalAction::valueChanged, [this](float val) {
-        _exampleViewGLPlugin->updatePlot();
-    });
-
-}
-
-SettingsAction::Widget::Widget(QWidget* parent, SettingsAction* settingsAction) :
-    WidgetActionWidget(parent, settingsAction)
-{
-    setAutoFillBackground(true);
-    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-    auto layout = new QHBoxLayout();
-
-    const int margin = 5;
-    layout->setContentsMargins(margin, margin, margin, margin);
-    layout->setSpacing(2);
-
-    layout->addWidget(settingsAction->getDatasetNameAction().createLabelWidget(this));
-    layout->addWidget(settingsAction->getDatasetNameAction().createWidget(this));
-
-    layout->addWidget(settingsAction->getXDimensionPickerAction().createLabelWidget(this));
-    layout->addWidget(settingsAction->getXDimensionPickerAction().createWidget(this));
-
-    layout->addWidget(settingsAction->getYDimensionPickerAction().createLabelWidget(this));
-    layout->addWidget(settingsAction->getYDimensionPickerAction().createWidget(this));
-
-    layout->addWidget(settingsAction->getPointSizeAction().createLabelWidget(this));
-    layout->addWidget(settingsAction->getPointSizeAction().createWidget(this));
-
-    layout->addWidget(settingsAction->getPointOpacityAction().createLabelWidget(this));
-    layout->addWidget(settingsAction->getPointOpacityAction().createWidget(this));
-
-    setLayout(layout);
 }

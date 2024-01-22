@@ -57,6 +57,8 @@ set(EXAMPLEVIEWGL_WIDGET
 set(EXAMPLEVIEWGL_ACTIONS
     src/SettingsAction.h
     src/SettingsAction.cpp
+    src/GlobalSettingsAction.h
+    src/GlobalSettingsAction.cpp
 )
 
 source_group( Plugin FILES ${EXAMPLEVIEWGL_SOURCES})

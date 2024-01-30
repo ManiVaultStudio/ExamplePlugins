@@ -8,6 +8,25 @@
 - [Loader](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleLoader)/[Writer](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleWriter): load data into the system or write them to disk 
 - [View](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleView): visualize data and provide interaction, e.g., using [OpenGL](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewOpenGL) or [JavaScript](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleViewJS) backends
 
+## Installation & Building
+<details open>
+   
+<summary>Automated using DevBundle</summary>
+
+
+The preferred approach to building the example plugins is by using our [DevBundle](https://github.com/ManiVaultStudio/DevBundle) tool. This cross-platform tool creates self-contained development environments using build configurations in JSON format. Since the build environments are self-contained, multiple build environments can exist side-by-side. The major advantage of using DevBundle is that it will remove much of the configuration overhead by:
+- Cloning repositories from the build configuration (with the branch specified in the build configuration)
+- Downloading related binary dependencies from our Artifactory server (and adding/configuring paths in the `CMakeLists.txt`)
+- Setting up an umbrella CMakeLists.txt which consists of all projects from the build configuration
+
+Note: the `allmain` build config in the DevBundle [config.json](https://github.com/ManiVaultStudio/DevBundle/blob/master/config.json) contains an example of how to add the example plugins to a build configuration.
+
+</details>
+
+<details>
+
+<summary>Manual</summary>
+
 ## Requirements
 * ManiVault Studio (https://github.com/ManiVaultStudio/Core)
 * CMake 3.17+ (https://cmake.org/)
@@ -54,3 +73,5 @@ For Windows:
 3. In the Configuration Properties -> Debugging set the `Command` by browsing to your `ManiVault Studio.exe` file. Set the `Working Directory` field by browsing to the folder containing the `ManiVault Studio.exe` file.
 4. Press Apply and OK and right click the project in the Solution Explorer and press Build.
 5. If all is well the build should succeed and if you run the project with Ctrl+F5 it will launch `ManiVault Studio.exe` and load the Example project as an available plug-in.
+
+</details>

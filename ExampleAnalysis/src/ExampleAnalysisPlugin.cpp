@@ -44,20 +44,21 @@ void ExampleAnalysisPlugin::init()
     // Retrieve the output dataset for our specific data type (in our case points)
     auto outputPoints = getOutputDataset<Points>();
 
-    // Set the dimension names as visible in the GUI
-    outputPoints->setDimensionNames(Point::dimensionNames);
-
     // Assign the maximum velocity from the GUI
     Point::maximumVelocity = _settingsAction.getMaxVelocityAction().getValue();
 
     // Performs points update
-    const auto updatePoints = [this, &outputPoints]() {
+    const auto updatePoints = [this]() {
+        auto outputPoints = getOutputDataset<Points>();
 
         // Assign the output points to the output dataset
         outputPoints->setData(reinterpret_cast<float*>(_points.data()), _points.count(), Point::numberOfDimensions);
 
         // Inform the core (and thus others) that the data changed
         events().notifyDatasetDataChanged(outputPoints);
+
+        // Set the dimension names as visible in the GUI
+        outputPoints->setDimensionNames(Point::dimensionNames);
     };
 
     // Initializes the points

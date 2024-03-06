@@ -230,12 +230,51 @@ ViewPlugin* ExampleViewGLPluginFactory::produce()
     return new ExampleViewGLPlugin(this);
 }
 
+ExampleViewGLPluginFactory::ExampleViewGLPluginFactory() :
+    ViewPluginFactory(),
+    _statusBarAction(nullptr),
+    _statusBarPopupGroupAction(this, "Popup Group"),
+    _statusBarPopupAction(this, "Popup")
+{
+    
+}
+
 void ExampleViewGLPluginFactory::initialize()
 {
     ViewPluginFactory::initialize();
 
     // Create an instance of our GlobalSettingsAction (derived from PluginGlobalSettingsGroupAction) and assign it to the factory
     setGlobalSettingsGroupAction(new GlobalSettingsAction(this, this));
+
+    // Configure the status bar popup action
+    _statusBarPopupAction.setDefaultWidgetFlags(StringAction::Label);
+    _statusBarPopupAction.setString("<p><b>Example OpenGL View</b></p><p>This is an example of a plugin status bar item</p><p>A concrete example on how this status bar was created can be found <a href='https://github.com/ManiVaultStudio/ExamplePlugins/blob/master/ExampleViewOpenGL/src/ExampleViewGLPlugin.cpp'>here</a>.</p>");
+    _statusBarPopupAction.setPopupSizeHint(QSize(200, 10));
+
+    _statusBarPopupGroupAction.setShowLabels(false);
+    _statusBarPopupGroupAction.setConfigurationFlag(WidgetAction::ConfigurationFlag::NoGroupBoxInPopupLayout);
+    _statusBarPopupGroupAction.addAction(&_statusBarPopupAction);
+    _statusBarPopupGroupAction.setWidgetConfigurationFunction([](WidgetAction* action, QWidget* widget) -> void {
+        auto label = widget->findChild<QLabel*>("Label");
+
+        Q_ASSERT(label != nullptr);
+
+        if (label == nullptr)
+            return;
+
+        label->setOpenExternalLinks(true);
+    });
+
+    _statusBarAction = new PluginStatusBarAction(this, "Status Bar", getKind());
+
+    // Sets the action that is shown when the status bar is clicked
+    _statusBarAction->setPopupAction(&_statusBarPopupGroupAction);
+
+    // Position to the right of the status bar action
+    _statusBarAction->setIndex(-1);
+
+    // Assign the status bar action so that it will appear on the main window status bar
+    setStatusBarAction(_statusBarAction);
 }
 
 QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const

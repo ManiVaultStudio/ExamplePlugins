@@ -249,11 +249,21 @@ void ExampleViewGLPluginFactory::initialize()
     // Configure the status bar popup action
     _statusBarPopupAction.setDefaultWidgetFlags(StringAction::Label);
     _statusBarPopupAction.setString("<p><b>Example OpenGL View</b></p><p>This is an example of a plugin status bar item</p><p>A concrete example on how this status bar was created can be found <a href='https://github.com/ManiVaultStudio/ExamplePlugins/blob/master/ExampleViewOpenGL/src/ExampleViewGLPlugin.cpp'>here</a>.</p>");
-    _statusBarPopupAction.setPopupSizeHint(QSize(200, 100));
+    _statusBarPopupAction.setPopupSizeHint(QSize(200, 10));
 
     _statusBarPopupGroupAction.setShowLabels(false);
     _statusBarPopupGroupAction.setConfigurationFlag(WidgetAction::ConfigurationFlag::NoGroupBoxInPopupLayout);
     _statusBarPopupGroupAction.addAction(&_statusBarPopupAction);
+    _statusBarPopupGroupAction.setWidgetConfigurationFunction([](WidgetAction* action, QWidget* widget) -> void {
+        auto label = widget->findChild<QLabel*>("Label");
+
+        Q_ASSERT(label != nullptr);
+
+        if (label == nullptr)
+            return;
+
+        label->setOpenExternalLinks(true);
+    });
 
     _statusBarAction = new PluginStatusBarAction(this, "Status Bar", getKind());
 

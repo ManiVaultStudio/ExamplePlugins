@@ -5,6 +5,8 @@
 #include <widgets/DropWidget.h>
 #include <PointData/PointData.h>
 
+#include <actions/PluginStatusBarAction.h>
+
 #include "SettingsAction.h"
 
 #include <QWidget>
@@ -87,7 +89,7 @@ class ExampleViewGLPluginFactory : public ViewPluginFactory
 public:
 
     /** Default constructor */
-    ExampleViewGLPluginFactory() {}
+    ExampleViewGLPluginFactory();
 
     /** Destructor */
     ~ExampleViewGLPluginFactory() override {}
@@ -110,4 +112,9 @@ public:
      * @return Vector of plugin trigger actions
      */
     PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
+
+private:
+    PluginStatusBarAction*  _statusBarAction;               /** For global action in a status bar */
+    HorizontalGroupAction   _statusBarPopupGroupAction;     /** Popup group action for status bar action */
+    StringAction            _statusBarPopupAction;          /** Popup action for the status bar */
 };

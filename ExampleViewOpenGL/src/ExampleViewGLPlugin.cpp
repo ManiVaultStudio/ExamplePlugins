@@ -246,11 +246,9 @@ void ExampleViewGLPluginFactory::initialize()
     // Create an instance of our GlobalSettingsAction (derived from PluginGlobalSettingsGroupAction) and assign it to the factory
     setGlobalSettingsGroupAction(new GlobalSettingsAction(this, this));
 
-    QString popupString("<p><b>Example OpenGL View</b></p><p>This is an example of a plugin status bar item. A concrete example on how this status bar was created can be found <a href='https://github.com/ManiVaultStudio/ExamplePlugins/blob/master/ExampleViewOpenGL/src/ExampleViewGLPlugin.cpp'>here</a></p>.");
-
     // Configure the status bar popup action
     _statusBarPopupAction.setDefaultWidgetFlags(StringAction::Label);
-    _statusBarPopupAction.setString("<p><b>Example OpenGL View</b></p>");
+    _statusBarPopupAction.setString("<p><b>Example OpenGL View</b></p><p>This is an example of a plugin status bar item</p><p>A concrete example on how this status bar was created can be found <a href='https://github.com/ManiVaultStudio/ExamplePlugins/blob/master/ExampleViewOpenGL/src/ExampleViewGLPlugin.cpp'>here</a>.</p>");
     _statusBarPopupAction.setPopupSizeHint(QSize(200, 100));
 
     _statusBarPopupGroupAction.setShowLabels(false);

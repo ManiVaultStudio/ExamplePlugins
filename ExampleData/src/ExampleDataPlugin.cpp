@@ -6,7 +6,7 @@
 
 #include <set>
 
-Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleDataPlugin")
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleDataPlugin")
 
 using namespace mv;
 

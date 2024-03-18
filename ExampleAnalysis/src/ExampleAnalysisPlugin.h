@@ -149,7 +149,7 @@ class ExampleAnalysisPluginFactory : public AnalysisPluginFactory
 {
     Q_INTERFACES(mv::plugin::AnalysisPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleAnalysisPlugin"
+    Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleAnalysisPlugin"
                       FILE  "ExampleAnalysisPlugin.json")
 
 public:

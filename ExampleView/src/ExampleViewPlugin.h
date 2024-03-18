@@ -74,7 +74,7 @@ class ExampleViewPluginFactory : public ViewPluginFactory
 {
     Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleViewPlugin"
+    Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleViewPlugin"
                       FILE  "ExampleViewPlugin.json")
 
 public:

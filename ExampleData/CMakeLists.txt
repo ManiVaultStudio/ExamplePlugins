@@ -7,7 +7,7 @@ set(EXAMPLEDATA "ExampleDataPlugin")
 PROJECT(${EXAMPLEDATA})
 
 # -----------------------------------------------------------------------------
-# CMake Options
+# CMake Options and Setup
 # -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -19,6 +19,9 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
+
+# Include cmake tools
+include(GenerateExportHeader)
 
 # -----------------------------------------------------------------------------
 # Set install directory
@@ -57,8 +60,15 @@ source_group( Plugin FILES ${EXAMPLEDATA_SOURCES})
 # Create dynamic library for the plugin
 add_library(${EXAMPLEDATA} SHARED ${EXAMPLEDATA_SOURCES})
 
-qt_wrap_cpp(EXAMPLEDATA_MOC ${EXAMPLE_DATA_HEADERS} TARGET ${EXAMPLEDATA})
-target_sources(${EXAMPLEDATA} PRIVATE ${EXAMPLEDATA_MOC})
+target_sources(${EXAMPLEDATA} PRIVATE 
+    ${EXAMPLEDATA_SOURCES}
+)
+
+# Generate a header file that contains the EXPORT macro for this library.
+generate_export_header(${EXAMPLEDATA} EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLEDATA}_export.h)
+
+# Add the generated header to the plugin's header files
+list(APPEND EXAMPLE_DATA_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLEDATA}_export.h)
 
 # -----------------------------------------------------------------------------
 # Target include directories

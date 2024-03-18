@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QMimeData>
 
-Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewPlugin")
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleViewPlugin")
 
 using namespace mv;
 

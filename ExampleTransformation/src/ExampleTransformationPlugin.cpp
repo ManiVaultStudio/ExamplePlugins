@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleTransformationPlugin")
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleTransformationPlugin")
 
 using namespace mv;
 using namespace mv::util;

@@ -7,7 +7,7 @@
 #include <QtCore>
 #include <QDebug>
 
-Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleAnalysisPlugin")
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleAnalysisPlugin")
 
 using namespace mv;
 using namespace mv::plugin;

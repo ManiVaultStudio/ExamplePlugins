@@ -116,7 +116,7 @@ class ExampleDataPluginFactory : public RawDataFactory
 {
     Q_INTERFACES(mv::plugin::RawDataFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.BioVault.ExampleDataPlugin"
+    Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleDataPlugin"
                       FILE  "ExampleDataPlugin.json")
     
 public:

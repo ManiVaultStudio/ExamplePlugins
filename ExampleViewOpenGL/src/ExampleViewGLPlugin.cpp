@@ -13,7 +13,7 @@
 #include <random>
 #include <numeric>
 
-Q_PLUGIN_METADATA(IID "nl.BioVault.ExampleViewGLPlugin")
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleViewGLPlugin")
 
 using namespace mv;
 

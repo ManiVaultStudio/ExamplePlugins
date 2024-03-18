@@ -50,7 +50,7 @@ void ExampleTransformationPlugin::transform()
 
                 for (auto point : pointData) {
                     for (std::uint32_t dimensionIndex = 0; dimensionIndex < points->getNumDimensions(); dimensionIndex++) {
-                        point[dimensionIndex] = std::abs(point[dimensionIndex]);
+                        point[dimensionIndex] = std::abs(static_cast<double>(point[dimensionIndex]));
                     }
 
                     ++noPointsProcessed;

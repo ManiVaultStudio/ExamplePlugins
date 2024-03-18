@@ -1,4 +1,5 @@
 #include "ExampleDataPlugin.h"
+
 #include "Application.h"
 
 #include <QtCore>

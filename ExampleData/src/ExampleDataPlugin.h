@@ -1,8 +1,9 @@
 #pragma once
 
+#include "ExampleDataPlugin_export.h"
+
 #include "RawData.h"
 #include "Set.h"
-#include "CoreInterface.h"
 
 #include <QImage>
 #include <QString>
@@ -12,7 +13,11 @@ using namespace mv::plugin;
 
 const mv::DataType ExampleType = mv::DataType(QString("Example"));
 
-class ExampleDataPlugin : public RawData
+// =============================================================================
+// Raw Data
+// =============================================================================
+
+class EXAMPLEDATAPLUGIN_EXPORT ExampleDataPlugin : public RawData
 {
 public:
     ExampleDataPlugin(const PluginFactory* factory) : RawData(factory, ExampleType) { }
@@ -39,7 +44,7 @@ private:
 // Data Set
 // =============================================================================
 
-class PixelSet : public mv::DatasetImpl
+class EXAMPLEDATAPLUGIN_EXPORT PixelSet : public mv::DatasetImpl
 {
 public:
     PixelSet(QString dataName, const QString& guid = "");
@@ -102,6 +107,10 @@ public: // Selection
 protected:
     std::vector<unsigned int>   _indices;      /** Indices into the raw data, if this dataset is just a subset */
 };
+
+// =============================================================================
+// Factory
+// =============================================================================
 
 class ExampleDataPluginFactory : public RawDataFactory
 {

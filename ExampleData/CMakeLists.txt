@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.17)
 # -----------------------------------------------------------------------------
 # ExampleData Plugin
 # -----------------------------------------------------------------------------
-set(EXAMPLEDATA "ExampleDataPlugin")
-PROJECT(${EXAMPLEDATA})
+PROJECT("ExampleDataPlugin")
 
 # -----------------------------------------------------------------------------
 # CMake Options and Setup
@@ -15,9 +14,9 @@ set(CMAKE_AUTOMOC ON)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /MP /permissive- /Zc:__cplusplus")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
 # Include cmake tools
@@ -42,54 +41,54 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 # Source files
 # -----------------------------------------------------------------------------
 # Define the plugin sources
-set(EXAMPLEDATA_SOURCES
+set(PLUGIN_SOURCES
     src/ExampleDataPlugin.h
     src/ExampleDataPlugin.cpp
     src/ExampleDataPlugin.json
 )
 
-set(EXAMPLE_DATA_HEADERS
+set(PLUGIN_HEADERS
     src/ExampleDataPlugin.h
 )
 
-source_group( Plugin FILES ${EXAMPLEDATA_SOURCES})
+source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${EXAMPLEDATA} SHARED ${EXAMPLEDATA_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES})
 
-target_sources(${EXAMPLEDATA} PRIVATE 
-    ${EXAMPLEDATA_SOURCES}
+target_sources(${PROJECT_NAME} PRIVATE 
+    ${PLUGIN_SOURCES}
 )
 
 # Generate a header file that contains the EXPORT macro for this library.
-generate_export_header(${EXAMPLEDATA} EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLEDATA}_export.h)
+generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_export.h)
 
 # Add the generated header to the plugin's header files
-list(APPEND EXAMPLE_DATA_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/${EXAMPLEDATA}_export.h)
+list(APPEND PLUGIN_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_export.h)
 
 # -----------------------------------------------------------------------------
 # Target include directories
 # -----------------------------------------------------------------------------
 # Include ManiVault headers, including system data plugins
-target_include_directories(${EXAMPLEDATA} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${PROJECT_NAME} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 # -----------------------------------------------------------------------------
 # Target properties
 # -----------------------------------------------------------------------------
 # Request C++17
-target_compile_features(${EXAMPLEDATA} PRIVATE cxx_std_17)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
-set_target_properties(${EXAMPLEDATA} PROPERTIES PUBLIC_HEADER "${EXAMPLE_DATA_HEADERS}")
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PLUGIN_HEADERS}")
 
 # -----------------------------------------------------------------------------
 # Target library linking
 # -----------------------------------------------------------------------------
 # Link to Qt libraries
-target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::Widgets)
-target_link_libraries(${EXAMPLEDATA} PRIVATE Qt6::WebEngineWidgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
 
 # Link to ManiVault and data plugins
 # The link path in this repo assumes that the ManiVault core was built locally
@@ -102,8 +101,8 @@ set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${C
 set(MV_LINK_LIBRARY "${MV_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}MV_Public${MV_LINK_SUFFIX}")
 set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${MV_LINK_SUFFIX}") 
 
-target_link_libraries(${EXAMPLEDATA} PRIVATE "${MV_LINK_LIBRARY}")
-target_link_libraries(${EXAMPLEDATA} PRIVATE "${POINTDATA_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${MV_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
 # -----------------------------------------------------------------------------
 # Target installation
@@ -112,14 +111,14 @@ target_link_libraries(${EXAMPLEDATA} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 # (as well as the dynamic link library on Windows) 
 # in addition to the dynamic plugins libraries so that other plugins can link against this new data type
 # more info: https://cmake.org/cmake/help/book/mastering-cmake/chapter/Install.html
-install(TARGETS ${EXAMPLEDATA}
+install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
     ARCHIVE DESTINATION lib     COMPONENT LINKLIB # Windows .lib
-    PUBLIC_HEADER DESTINATION include/${EXAMPLEDATA} COMPONENT HEADERS
+    PUBLIC_HEADER DESTINATION include/${PROJECT_NAME} COMPONENT HEADERS
 )
 
-add_custom_command(TARGET ${EXAMPLEDATA} POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
@@ -131,6 +130,6 @@ add_custom_command(TARGET ${EXAMPLEDATA} POST_BUILD
 # -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${EXAMPLEDATA} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
-    set_property(TARGET ${EXAMPLEDATA} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${MV_INSTALL_DIR}/debug/ManiVault Studio.exe","${MV_INSTALL_DIR}/release/ManiVault Studio.exe">)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug/ManiVault\ Studio.exe,${MV_INSTALL_DIR}/release/ManiVault\ Studio.exe>)
 endif()

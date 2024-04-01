@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.17)
 # -----------------------------------------------------------------------------
 # ExampleViewJS Plugin
 # -----------------------------------------------------------------------------
-set(EXAMPLEVIEWJS "ExampleViewJSPlugin")
-PROJECT(${EXAMPLEVIEWJS})
+PROJECT("ExampleViewJSPlugin")
 
 # -----------------------------------------------------------------------------
 # CMake Options
@@ -15,9 +14,9 @@ set(CMAKE_AUTOMOC ON)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /MP /permissive- /Zc:__cplusplus")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
 # -----------------------------------------------------------------------------
@@ -39,7 +38,7 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 # Source files
 # -----------------------------------------------------------------------------
 # Define the plugin sources
-set(EXAMPLEVIEWJS_SOURCES
+set(PLUGIN_SOURCES
     src/ExampleViewJSPlugin.h
     src/ExampleViewJSPlugin.cpp
     src/ChartWidget.h
@@ -48,7 +47,7 @@ set(EXAMPLEVIEWJS_SOURCES
 )
 
 set(PLUGIN_MOC_HEADERS
-	src/ExampleViewJSPlugin.h
+    src/ExampleViewJSPlugin.h
 )
 
 set(WEB
@@ -66,7 +65,7 @@ set(AUX
 
 qt6_add_resources(RESOURCE_FILES res/example_chart.qrc)
 
-source_group( Plugin FILES ${EXAMPLEVIEWJS_SOURCES})
+source_group( Plugin FILES ${PLUGIN_SOURCES})
 source_group( Web FILES ${WEB})
 source_group( Aux FILES ${AUX})
 
@@ -74,29 +73,29 @@ source_group( Aux FILES ${AUX})
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${EXAMPLEVIEWJS} SHARED ${EXAMPLEVIEWJS_SOURCES} ${AUX} ${WEB} ${RESOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${AUX} ${WEB} ${RESOURCE_FILES})
 
-qt_wrap_cpp(EXAMPLEVIEWJS_MOC ${PLUGIN_MOC_HEADERS} TARGET ${EXAMPLEVIEWJS})
-target_sources(${EXAMPLEVIEWJS} PRIVATE ${EXAMPLEVIEWJS_MOC})
+qt_wrap_cpp(PLUGIN_MOC ${PLUGIN_MOC_HEADERS} TARGET ${PROJECT_NAME})
+target_sources(${PROJECT_NAME} PRIVATE ${PLUGIN_MOC})
 
 # -----------------------------------------------------------------------------
 # Target include directories
 # -----------------------------------------------------------------------------
 # Include ManiVault headers, including system data plugins
-target_include_directories(${EXAMPLEVIEWJS} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${PROJECT_NAME} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 # -----------------------------------------------------------------------------
 # Target properties
 # -----------------------------------------------------------------------------
 # Request C++17
-target_compile_features(${EXAMPLEVIEWJS} PRIVATE cxx_std_17)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 # -----------------------------------------------------------------------------
 # Target library linking
 # -----------------------------------------------------------------------------
 # Link to Qt libraries
-target_link_libraries(${EXAMPLEVIEWJS} PRIVATE Qt6::Widgets)
-target_link_libraries(${EXAMPLEVIEWJS} PRIVATE Qt6::WebEngineWidgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
 
 # Link to ManiVault and data plugins
 # The link path in this repo assumes that the ManiVault core was built locally
@@ -109,19 +108,19 @@ set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${C
 set(MV_LINK_LIBRARY "${MV_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}MV_Public${MV_LINK_SUFFIX}")
 set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${MV_LINK_SUFFIX}") 
 
-target_link_libraries(${EXAMPLEVIEWJS} PRIVATE "${MV_LINK_LIBRARY}")
-target_link_libraries(${EXAMPLEVIEWJS} PRIVATE "${POINTDATA_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${MV_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 
 # -----------------------------------------------------------------------------
 # Target installation
 # -----------------------------------------------------------------------------
 # Install the shared plugin libary to the "Plugins" folder in the ManiVault install directory
-install(TARGETS ${EXAMPLEVIEWJS}
+install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
 )
 
-add_custom_command(TARGET ${EXAMPLEVIEWJS} POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
@@ -133,6 +132,6 @@ add_custom_command(TARGET ${EXAMPLEVIEWJS} POST_BUILD
 # -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${EXAMPLEVIEWJS} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
-    set_property(TARGET ${EXAMPLEVIEWJS} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${MV_INSTALL_DIR}/debug/ManiVault Studio.exe","${MV_INSTALL_DIR}/release/ManiVault Studio.exe">)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug/ManiVault\ Studio.exe,${MV_INSTALL_DIR}/release/ManiVault\ Studio.exe>)
 endif()

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 
+option(MV_UNITY_BUILD "Combine target source files into batches for faster compilation" OFF)
+
 # -----------------------------------------------------------------------------
 # ExampleAnalysis Plugin
 # -----------------------------------------------------------------------------
@@ -58,9 +60,6 @@ source_group( Plugin FILES ${PLUGIN_SOURCES})
 # Create dynamic library for the plugin
 add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES})
 
-qt_wrap_cpp(PLUGIN_MOC ${PLUGIN_MOC_HEADERS} TARGET ${PROJECT_NAME})
-target_sources(${PROJECT_NAME} PRIVATE ${PLUGIN_MOC})
-
 # -----------------------------------------------------------------------------
 # Target include directories
 # -----------------------------------------------------------------------------
@@ -73,13 +72,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGUR
 # Request C++17
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
-# Link to Qt libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
+# Enable unity build
+if(MV_UNITY_BUILD)
+    set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
+endif()
 
 # -----------------------------------------------------------------------------
 # Target library linking
 # -----------------------------------------------------------------------------
+# Link to Qt libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
+
 # Link to ManiVault and data plugins
 # The link path in this repo assumes that the ManiVault core was built locally
 # in contrast to having been installed with an installer. In the latter case you'll have

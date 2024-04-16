@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 
+option(MV_UNITY_BUILD "Combine target source files into batches for faster compilation" OFF)
+
 # -----------------------------------------------------------------------------
 # ExampleData Plugin
 # -----------------------------------------------------------------------------
@@ -82,6 +84,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGUR
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PLUGIN_HEADERS}")
+
+# Enable unity build
+if(MV_UNITY_BUILD)
+    set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
+endif()
 
 # -----------------------------------------------------------------------------
 # Target library linking

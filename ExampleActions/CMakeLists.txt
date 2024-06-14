@@ -5,7 +5,7 @@ option(MV_UNITY_BUILD "Combine target source files into batches for faster compi
 # -----------------------------------------------------------------------------
 # ExampleView Plugin
 # -----------------------------------------------------------------------------
-PROJECT("ExampleViewPlugin")
+PROJECT("ExampleActionsPlugin")
 
 # -----------------------------------------------------------------------------
 # CMake Options
@@ -41,13 +41,13 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 # -----------------------------------------------------------------------------
 # Define the plugin sources
 set(PLUGIN_SOURCES
-    src/ExampleViewPlugin.h
-    src/ExampleViewPlugin.cpp
-    src/ExampleViewPlugin.json
+    src/ExampleActionsPlugin.h
+    src/ExampleActionsPlugin.cpp
+    src/ExampleActionsPlugin.json
 )
 
 set(PLUGIN_MOC_HEADERS
-    src/ExampleViewPlugin.h
+    src/ExampleActionsPlugin.h
 )
 
 source_group( Plugin FILES ${PLUGIN_SOURCES})

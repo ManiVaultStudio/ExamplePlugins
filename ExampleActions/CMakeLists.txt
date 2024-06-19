@@ -46,17 +46,34 @@ set(PLUGIN_SOURCES
     src/ExampleActionsPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleActionsPlugin.h
+set(MODEL
+	src/AbstractExampleActionsModel.h
+	src/AbstractExampleActionsModel.cpp
+	src/ExampleActionsTreeModel.h
+	src/ExampleActionsTreeModel.cpp
+	src/ExampleActionsFilterModel.h
+	src/ExampleActionsFilterModel.cpp
 )
 
-source_group( Plugin FILES ${PLUGIN_SOURCES})
+set(ACTIONS
+	src/ExampleProxyAction.h
+	src/ExampleProxyAction.cpp
+)
+
+set(PLUGIN_MOC_HEADERS
+    src/ExampleActionsPlugin.h
+	src/ExampleActionsTreeModel.h
+)
+
+source_group(Plugin FILES ${PLUGIN_SOURCES})
+source_group(Model FILES ${MODEL})
+source_group(Actions FILES ${ACTIONS})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${MODEL} ${ACTIONS})
 
 # -----------------------------------------------------------------------------
 # Target include directories

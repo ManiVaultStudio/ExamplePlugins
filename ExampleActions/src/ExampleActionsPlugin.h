@@ -2,7 +2,14 @@
 
 #include <ViewPlugin.h>
 
+#include <actions/TreeAction.h>
+#include <actions/GroupsAction.h>
+
+#include "ExampleActionsTreeModel.h"
+#include "ExampleActionsFilterModel.h"
+
 #include <QWidget>
+#include <QListView>
 
 /** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
@@ -43,6 +50,14 @@ public:
     
     /** This function is called by the core after the view plugin has been created */
     void init() override;
+
+protected:
+    ExampleActionsTreeModel     _exampleActionsTreeModel;       /** Standard item model which stores example actions grouped by category */
+    ExampleActionsFilterModel   _exampleActionsFilterModel;     /** Sort/filter proxy model for ExampleActionsPlugin#_exampleActionsTreeModel */
+    mv::gui::TreeAction         _examplesTreeAction;            /** For displaying the ExampleActionsPlugin#_exampleActionsFilterModel */
+    mv::gui::GroupsAction       _examplesGroupsAction;          /** For displaying the ExampleActionsPlugin#_exampleActionsListModel */
+
+    friend class ExampleActionStyledItemDelegate;
 };
 
 /**

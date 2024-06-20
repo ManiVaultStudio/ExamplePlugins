@@ -54,7 +54,7 @@ ExampleActionsPlugin::ExampleActionsPlugin(const PluginFactory* factory) :
 
                 verticalGroupAction->setDefaultWidgetFlag(VerticalGroupAction::WidgetFlag::NoMargins);
                 verticalGroupAction->setShowLabels(false);
-                verticalGroupAction->addAction(new ExampleProxyAction(this, "", action));
+                verticalGroupAction->addAction(new ExampleProxyAction(verticalGroupAction, "", action));
 
                 _examplesGroupsAction.addGroupAction(verticalGroupAction);
             }
@@ -76,6 +76,9 @@ void ExampleActionsPlugin::init()
 
     splitter->addWidget(_examplesTreeAction.createWidget(&getWidget()));
     splitter->addWidget(_examplesGroupsAction.createWidget(&getWidget()));
+
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 3);
 
     layout->addWidget(splitter);
 

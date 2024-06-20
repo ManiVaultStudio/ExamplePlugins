@@ -5,6 +5,7 @@
 #include "ExampleProxyAction.h"
 
 #include <QHBoxLayout>
+#include <QLabel>
 
 using namespace mv::gui;
 
@@ -19,10 +20,16 @@ QWidget* ExampleProxyAction::getWidget(QWidget* parent, const std::int32_t& widg
     auto widget = new WidgetActionWidget(parent, this);
     auto layout = new QHBoxLayout();
 
-    layout->setContentsMargins(0, 0, 0, 0);
+    //layout->setContentsMargins(0, 0, 0, 0);
 
-    if (_action)
-        layout->addWidget(_action->createExampleWidget(widget));
+    if (_action) {
+        auto exampleActionWidget = _action->createExampleWidget(widget);
+
+        if (exampleActionWidget)
+            layout->addWidget(exampleActionWidget);
+        else
+            layout->addWidget(new QLabel("Coming soon..."));
+    }
 
     widget->setLayout(layout);
 

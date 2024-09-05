@@ -23,6 +23,11 @@ ExampleViewPlugin::ExampleViewPlugin(const PluginFactory* factory) :
 
     // Align text in the center
     _currentDatasetNameLabel->setAlignment(Qt::AlignCenter);
+
+    getLearningCenterAction().setShortDescription("Example view plugin");
+    getLearningCenterAction().setLongDescription("This plugin shows how to implement a basic view plugin in <b>ManiVault</b>.");
+
+    getLearningCenterAction().addVideos(QStringList({ "Practitioner", "Developer" }));
 }
 
 void ExampleViewPlugin::init()

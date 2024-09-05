@@ -25,6 +25,10 @@ ExampleViewJSPlugin::ExampleViewJSPlugin(const PluginFactory* factory) :
     _dropWidget(nullptr),
     _currentDataSet(nullptr)
 {
+    getLearningCenterAction().setShortDescription("Example Javascript view plugin");
+    getLearningCenterAction().setLongDescription("This plugin shows how to implement a basic Javascript-based view plugin in <b>ManiVault</b>.");
+
+    getLearningCenterAction().addVideos(QStringList({ "Practitioner", "Developer" }));
 }
 
 void ExampleViewJSPlugin::init()

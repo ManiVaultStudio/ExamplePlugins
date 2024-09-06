@@ -112,6 +112,8 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     // Create data so that we do not need to load any in this example
     createData();
 
+    getLearningCenterAction().setPluginTitle("Example OpenGL view");
+
     getLearningCenterAction().setShortDescription("Example OpenGL view plugin");
     getLearningCenterAction().setLongDescription("This plugin shows how to implement a basic OpenGL-based view plugin in <b>ManiVault</b>.");
 

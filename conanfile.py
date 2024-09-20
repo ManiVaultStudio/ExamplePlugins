@@ -91,25 +91,22 @@ class ExamplePluginsConan(ConanFile):
             generator = "Xcode"
         if self.settings.os == "Linux":
             generator = "Ninja Multi-Config"
+
+        tc = CMakeToolchain(self, generator=generator)
+
+        tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
+
         # Use the Qt provided .cmake files
         qtpath = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_root = str(list(qtpath.glob("**/Qt6Config.cmake"))[0].parents[3].as_posix())
-
-        tc = CMakeToolchain(self, generator=generator)
-        if self.settings.os == "Windows" and self.options.shared:
-            tc.variables["CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS"] = True
-        if self.settings.os == "Linux" or self.settings.os == "Macos":
-            tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
         tc.variables["CMAKE_PREFIX_PATH"] = qt_root
-        
+
         # Set the installation directory for ManiVault based on the MV_INSTALL_DIR environment variable
         # or if none is specified, set it to the build/install dir.
         if not os.environ.get("MV_INSTALL_DIR", None):
             os.environ["MV_INSTALL_DIR"] = os.path.join(self.build_folder, "install")
         print("MV_INSTALL_DIR: ", os.environ["MV_INSTALL_DIR"])
         self.install_dir = pathlib.Path(os.environ["MV_INSTALL_DIR"]).as_posix()
-        # Give the installation directory to CMake
-        tc.variables["MV_INSTALL_DIR"] = self.install_dir
         
         # Find ManiVault with find_package
         self.manivault_dir = self.install_dir + '/cmake/mv/'
@@ -117,6 +114,9 @@ class ExamplePluginsConan(ConanFile):
 
         # Set some build options
         tc.variables["MV_UNITY_BUILD"] = "ON"
+        
+        tc.variables["CMAKE_TOOLCHAIN_FILE"] = os.environ.get("VCPKG_ROOT", None) + '/scripts/buildsystems/vcpkg.cmake/'
+        tc.variables["CMAKE_PROJECT_INCLUDE"] = "build/conan_toolchain.cmake"
         
         tc.generate()
 

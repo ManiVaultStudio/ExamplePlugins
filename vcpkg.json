@@ -3,11 +3,14 @@
     "version": "0.0.1",
     "dependencies": [
         "blake3",
-        "faiss"
+        {
+            "name": "faiss",
+            "platform": "!osx"
+        }
     ],
     "builtin-baseline":"73964f854d0d6424f335e9515b61b3a2dad5e15b",
     "overrides": [
         { "name": "blake3", "version": "1.5.1" },
-        { "name": "blake3", "version": "1.7.4#1" }
+        { "name": "faiss", "version": "1.7.4" }
     ]
 }

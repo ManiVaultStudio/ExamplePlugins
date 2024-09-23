@@ -31,7 +31,10 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 find_package(ManiVault COMPONENTS Core PointData CONFIG)
 
 find_package(blake3 CONFIG REQUIRED)
-find_package(faiss CONFIG REQUIRED)
+
+if(NOT APPLE)
+    find_package(faiss CONFIG REQUIRED)
+endif()
 
 CPMAddPackage(
   NAME highway
@@ -91,7 +94,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
 target_link_libraries(${PROJECT_NAME} PRIVATE hwy hwy_contrib)
-target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
+
+if(NOT APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
+endif()
 
 # -----------------------------------------------------------------------------
 # Target installation

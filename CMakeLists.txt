@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.17)
 
 set(VCPKG_LIBRARY_LINKAGE "dynamic" CACHE STRING "Link vcpkg libraries dynamically")
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    message(FATAL_ERROR "Define CMAKE_TOOLCHAIN_FILE poiting to vcpkg: PATH/vcpkg/scripts/buildsystems/vcpkg.cmake")
-endif()
-
 # -----------------------------------------------------------------------------
 # ExamplePlugins
 # -----------------------------------------------------------------------------

@@ -14,10 +14,10 @@
 
 #include <blake3.h>
 
+#if !defined(__APPLE__)
 #include <faiss/IndexFlat.h>
-
-// 64-bit int
 using idx_t = faiss::idx_t;
+#endif
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleDependenciesPlugin")
 
@@ -110,6 +110,7 @@ void ExampleDependenciesPlugin::compute()
     }
     printf("\n");
 
+#if !defined(__APPLE__)
     // find knn
     faiss::IndexFlatL2 index(numDims); // call constructor
     index.add(numPoints, data.data()); // add vectors to the index
@@ -126,6 +127,7 @@ void ExampleDependenciesPlugin::compute()
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }
+#endif
 
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;
 }

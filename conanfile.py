@@ -99,8 +99,8 @@ class ExamplePluginsConan(ConanFile):
         # Use the Qt provided .cmake files
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]
-        qt_root = str(qt_cfg.parents[0].as_posix()) 
-        qt_dir = str(qt_cfg.parents[3].as_posix())
+        qt_root = qt_cfg.parents[0].as_posix()
+        qt_dir = qt_cfg.parents[3].as_posix()
 
         # for Qt >= 6.4.2
         #print("Qt6_DIR: ", qt_root)
@@ -124,9 +124,9 @@ class ExamplePluginsConan(ConanFile):
         tc.variables["MV_UNITY_BUILD"] = "ON"
 
         # Install vcpkg dependencies
-        vcpkg_dir = os.environ["VCPKG_ROOT"]
-        vcpkg_exe = os.path.join(vcpkg_dir, "vcpkg.exe") if self.settings.os == "Windows" else os.path.join(vcpkg_dir, "vcpkg")
-        vcpkg_tc  = os.path.join(vcpkg_dir, "scripts", "buildsystems", "vcpkg.cmake")
+        vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
+        vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
+        vcpkg_tc  = vcpkg_dir / "scripts" / "buildsystems" / "vcpkg.cmake"
 
         vcpkg_triplet = "x64-windows"
         if self.settings.os == "Macos":
@@ -142,9 +142,9 @@ class ExamplePluginsConan(ConanFile):
         tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
         tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
         tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
-        tc.variables["VCPKG_ROOT"]              = vcpkg_dir
+        tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
-        tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc
+        tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
 
         tc.generate()
 

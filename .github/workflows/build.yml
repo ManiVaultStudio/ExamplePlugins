@@ -91,7 +91,9 @@ jobs:
         shell: pwsh
         run:  |
           ${{ github.workspace }}\vcpkg\bootstrap-vcpkg.bat
-          $env:VCPKG_ROOT = '${{ github.workspace }}\vcpkg'
+          echo "VCPKG_ROOT=${{ github.workspace }}\vcpkg" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "VCPKG_EXE=${{ github.workspace }}\vcpkg\vcpkg.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "VCPKG_LIBRARY_LINKAGE=dynamic" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Bootstrap vcpkg
         if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
@@ -99,6 +101,33 @@ jobs:
         run: |
           ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh 
           echo "VCPKG_ROOT=${{ github.workspace }}/vcpkg" >> $GITHUB_ENV
+          echo "VCPKG_EXE=${{ github.workspace }}/vcpkg/vcpkg" >> $GITHUB_ENV
+          echo "VCPKG_LIBRARY_LINKAGE=dynamic" >> $GITHUB_ENV
+
+      # Install vcpkg dependencies
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} --version
+          ${{ env.VCPKG_EXE }} install --triplet x64-windows
+
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} --version
+          ${{ env.VCPKG_EXE }} install --triplet x64-linux
+
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'macos')
+        shell: bash
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} --version
+          ${{ env.VCPKG_EXE }} install --triplet x64-osx --allow-unsupported
 
       # Build the package
       - name: Windows build

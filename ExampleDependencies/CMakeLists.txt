@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.21)
 
 option(MV_UNITY_BUILD "Combine target source files into batches for faster compilation" OFF)
 
@@ -112,7 +112,7 @@ install(TARGETS ${PROJECT_NAME}
 install(CODE [[
     if(WIN32)
         set(PRE_EXCLUDE ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
-        set(POST_EXCLUDE ".*[\\/]WINDOWS[\\/]system32[\\/].*\\.dll")
+        set(POST_EXCLUDE ".*[\\/]system32[\\/].*\\.dll")
     elseif(APPLE)
         set(PRE_EXCLUDE "/usr/lib" "/System/")
         set(POST_EXCLUDE "")

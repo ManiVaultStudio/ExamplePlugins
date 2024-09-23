@@ -109,69 +109,67 @@ install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
 )
 
-if(WIN32)
-  set(PRE_EXCLUDE ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
-  set(POST_EXCLUDE ".*[\\/]WINDOWS[\\/]system32[\\/].*\\.dll")
-elseif(APPLE)
-  set(PRE_EXCLUDE "/usr/lib" "/System/")
-  set(POST_EXCLUDE "")
-else()
-  set(PRE_EXCLUDE ".*/ld-linux-.*" ".*/linux-vdso.*" ".*/libm\\..*" ".*/libc\\..*" ".*/libpthread\\..*" ".*/libdl\\..*")
-  set(POST_EXCLUDE "")
-endif()
-
-set(deps_folder "bin/${PROJECT_NAME}")
-
-message(STATUS "Install deps:: ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>/${deps_folder}")
-
 install(CODE [[
+    if(WIN32)
+        set(PRE_EXCLUDE ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
+        set(POST_EXCLUDE ".*[\\/]WINDOWS[\\/]system32[\\/].*\\.dll")
+    elseif(APPLE)
+        set(PRE_EXCLUDE "/usr/lib" "/System/")
+        set(POST_EXCLUDE "")
+    else()
+        set(PRE_EXCLUDE ".*/ld-linux-.*" ".*/linux-vdso.*" ".*/libm\\..*" ".*/libc\\..*" ".*/libpthread\\..*" ".*/libdl\\..*")
+        set(POST_EXCLUDE "")
+    endif()
+
     function(install_deps LIBRARY)
-    file(INSTALL
-      DESTINATION "${CMAKE_INSTALL_PREFIX}/PluginDependencies/ExampleDependenciesPlugin"
-      TYPE SHARED_LIBRARY
-      FOLLOW_SYMLINK_CHAIN
-      FILES "${LIBRARY}"
-    )
+        file(INSTALL
+            DESTINATION "${CMAKE_INSTALL_PREFIX}/PluginDependencies/ExampleDependenciesPlugin"
+            TYPE SHARED_LIBRARY
+            FOLLOW_SYMLINK_CHAIN
+            FILES "${LIBRARY}"
+        )
     endfunction()
-  file(GET_RUNTIME_DEPENDENCIES
-    EXECUTABLES "$<TARGET_FILE:ExampleDependenciesPlugin>"
-    RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
-    UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
-    CONFLICTING_DEPENDENCIES_PREFIX CONFLICTING_DEPS
-    DIRECTORIES "$<TARGET_FILE_DIR:ExampleDependenciesPlugin>" "$<TARGET_FILE_DIR:hwy>" "$<TARGET_FILE_DIR:hwy_contrib>"
-    PRE_EXCLUDE_REGEXES ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*"
-    POST_EXCLUDE_REGEXES ".*[\\/]WINDOWS[\\/]system32[\\/].*\\.dll"
-  )
+    file(GET_RUNTIME_DEPENDENCIES
+        EXECUTABLES "$<TARGET_FILE:ExampleDependenciesPlugin>"
+        RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
+        UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
+        CONFLICTING_DEPENDENCIES_PREFIX CONFLICTING_DEPS
+        DIRECTORIES "$<TARGET_FILE_DIR:ExampleDependenciesPlugin>" "$<TARGET_FILE_DIR:hwy>" "$<TARGET_FILE_DIR:hwy_contrib>"
+        PRE_EXCLUDE_REGEXES "${PRE_EXCLUDE}"
+        POST_EXCLUDE_REGEXES "${POST_EXCLUDE}"
+    )
 
-  foreach(FILE ${RESOLVED_DEPS})
-    message(STATUS "Resolved: ${FILE}")
-    install_deps(${FILE})
-  endforeach()
-
-  foreach(FILE ${UNRESOLVED_DEPS})
-    message(STATUS "Unresolved: ${FILE}")
-  endforeach()
-
-  if(CONFLICTING_DEPS)
-    message(WARNING "Conflicting dependencies!")
-    foreach(FILE ${CONFLICTING_DEPS})
-      message(STATUS "Conflicting: ${FILE}")
+    message(STATUS "${PRE_EXCLUDE}")
+    message(STATUS "${POST_EXCLUDE}")
+    foreach(FILE ${RESOLVED_DEPS})
+        message(STATUS "Resolved: ${FILE}")
+        install_deps(${FILE})
     endforeach()
-  endif()
+
+    foreach(FILE ${UNRESOLVED_DEPS})
+        message(STATUS "Unresolved: ${FILE}")
+    endforeach()
+
+    if(CONFLICTING_DEPS)
+        message(WARNING "Conflicting dependencies!")
+        foreach(FILE ${CONFLICTING_DEPS})
+            message(STATUS "Conflicting: ${FILE}")
+        endforeach()
+    endif()
   
-  ]]
-  COMPONENT DEP_PLUGIN_PRINT
+    ]]
+    COMPONENT DEP_PLUGIN_PRINT
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "Installing: Create dir"
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>/${deps_folder}
+    COMMAND ${CMAKE_COMMAND} -E echo "Installing: Plugin files"
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
         --component PLUGINS
         --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
         --verbose
+    COMMAND ${CMAKE_COMMAND} -E echo "Installing: Plugin dependencies"
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>

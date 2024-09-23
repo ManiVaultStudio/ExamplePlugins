@@ -1,0 +1,55 @@
+install(CODE [[
+
+    if(WIN32)
+        set(PRE_EXCLUDE ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
+        set(POST_EXCLUDE ".*[\\/]system32[\\/].*\\.dll")
+    elseif(APPLE)
+        set(PRE_EXCLUDE "/usr/lib" "/System/")
+        set(POST_EXCLUDE "")
+    else()
+        set(PRE_EXCLUDE ".*/ld-linux-.*" ".*/linux-vdso.*" ".*/libm\\..*" ".*/libc\\..*" ".*/libpthread\\..*" ".*/libdl\\..*")
+        set(POST_EXCLUDE "")
+    endif()
+
+    message(STATUS "PRE_EXCLUDE: ${PRE_EXCLUDE}")
+    message(STATUS "POST_EXCLUDE: ${POST_EXCLUDE}")
+    message(STATUS "DEPENDENCIES_FOLDERS: @DEPENDENCIES_FOLDERS@")
+
+    function(install_deps LIBRARY)
+        file(INSTALL
+            DESTINATION "${CMAKE_INSTALL_PREFIX}/PluginDependencies/@MAIN_PROJECT_TARGET@"
+            TYPE SHARED_LIBRARY
+            FOLLOW_SYMLINK_CHAIN
+            FILES "${LIBRARY}"
+        )
+    endfunction()
+
+    file(GET_RUNTIME_DEPENDENCIES
+        EXECUTABLES "$<TARGET_FILE:@MAIN_PROJECT_TARGET@>"
+        RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
+        UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
+        CONFLICTING_DEPENDENCIES_PREFIX CONFLICTING_DEPS
+        DIRECTORIES @DEPENDENCIES_FOLDERS@
+        PRE_EXCLUDE_REGEXES "${PRE_EXCLUDE}"
+        POST_EXCLUDE_REGEXES "${POST_EXCLUDE}"
+    )
+
+    foreach(FILE ${RESOLVED_DEPS})
+        message(STATUS "Resolved: ${FILE}")
+        install_deps(${FILE})
+    endforeach()
+
+    foreach(FILE ${UNRESOLVED_DEPS})
+        message(STATUS "Unresolved: ${FILE}")
+    endforeach()
+
+    if(CONFLICTING_DEPS)
+        message(WARNING "Conflicting dependencies!")
+        foreach(FILE ${CONFLICTING_DEPS})
+            message(STATUS "Conflicting: ${FILE}")
+        endforeach()
+    endif()
+  
+    ]]
+    COMPONENT DEP_PLUGIN_PRINT
+)

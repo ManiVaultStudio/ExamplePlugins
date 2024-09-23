@@ -33,6 +33,7 @@ find_package(ManiVault COMPONENTS Core PointData CONFIG)
 find_package(blake3 CONFIG REQUIRED)
 
 if(NOT APPLE)
+    include(cmake/ci_fixes.cmake)
     find_package(faiss CONFIG REQUIRED)
 endif()
 

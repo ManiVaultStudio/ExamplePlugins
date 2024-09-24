@@ -109,9 +109,6 @@ install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
 )
 
-include(cmake/install_dependencies_utils.cmake)
-install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
-
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Installing: Plugin files"
     COMMAND "${CMAKE_COMMAND}"
@@ -120,14 +117,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         --component PLUGINS
         --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
         --verbose
-    COMMAND ${CMAKE_COMMAND} -E echo "Installing: Plugin dependencies"
-    COMMAND "${CMAKE_COMMAND}"
-        --install ${CMAKE_CURRENT_BINARY_DIR}
-        --config $<CONFIGURATION>
-        --component DEP_PLUGIN_PRINT
-        --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
-        --verbose
 )
+
+include(cmake/install_dependencies_utils.cmake)
+install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 
 # -----------------------------------------------------------------------------
 # Miscellaneous

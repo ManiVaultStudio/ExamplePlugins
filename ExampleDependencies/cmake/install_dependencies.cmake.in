@@ -1,7 +1,7 @@
 install(CODE [[
 
     if(WIN32)
-        set(PRE_EXCLUDE ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
+        set(PRE_EXCLUDE ".*[\\/]qt.*" ".*[\\/]api-ms.*" ".*[\\/]ext-ms.*" ".*[\\/]hvsi.*" ".*[\\/]pdmutilities.*" ".*[\\/]wpaxholder.*" ".*[\\/]dxgi.*" ".*[\\/]uxtheme.*" ".*[\\/]d3d11.*" ".*[\\/]winmm.*" ".*[\\/]wldp.*")
         set(POST_EXCLUDE ".*[\\/]system32[\\/].*\\.dll")
     elseif(APPLE)
         set(PRE_EXCLUDE "/usr/lib" "/System/")
@@ -36,6 +36,9 @@ install(CODE [[
 
     foreach(FILE ${RESOLVED_DEPS})
         message(STATUS "Resolved: ${FILE}")
+    endforeach()
+
+    foreach(FILE ${RESOLVED_DEPS})
         install_deps(${FILE})
     endforeach()
 
@@ -51,5 +54,5 @@ install(CODE [[
     endif()
   
     ]]
-    COMPONENT DEP_PLUGIN_PRINT
+    COMPONENT PLUGIN_DEPENDENCIES
 )

@@ -100,6 +100,10 @@ if(NOT APPLE)
     target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
 endif()
 
+# Not used here, but you can use this in your plugin
+# automatically available when using find_package(ManiVault)
+mv_check_and_set_AVX(${PROJECT_NAME} OFF)
+
 # -----------------------------------------------------------------------------
 # Target installation
 # -----------------------------------------------------------------------------
@@ -119,8 +123,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         --verbose
 )
 
-include(cmake/install_dependencies_utils.cmake)
-install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
+# Automatically available when using find_package(ManiVault)
+mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 
 # -----------------------------------------------------------------------------
 # Miscellaneous

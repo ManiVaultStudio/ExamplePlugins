@@ -1,10 +1,19 @@
 from conans import ConanFile
-from conan.tools.cmake import CMake, CMakeToolchain
+from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
 from conans.tools import save, load
-from rules_support import PluginBranchInfo
 import os
+import shutil
 import pathlib
 import subprocess
+from rules_support import PluginBranchInfo
+import re
+
+def compatibility(os, compiler, compiler_version):
+    # On macos fallback to zlib apple-clang 13
+    if os == "Macos" and compiler == "apple-clang" and bool(re.match("14.*", compiler_version)):  
+        print("Compatibility match")
+        return ["zlib/1.3:compiler.version=13"]
+    return None
 
 class ExamplePluginsConan(ConanFile):
     """Class to package ExamplePlugins using conan
@@ -23,6 +32,9 @@ class ExamplePluginsConan(ConanFile):
     url = "https://github.com/ManiVaultStudio/ExamplePlugins"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
+
+    short_paths = True
+    generators = "CMakeDeps"
 
     # Options may need to change depending on the packaged library
     settings = {"os": None, "build_type": None, "compiler": None, "arch": None}
@@ -44,6 +56,7 @@ class ExamplePluginsConan(ConanFile):
         return path
 
     def export(self):
+        print("In export")
         # save the original source path to the directory used to build the package
         save(
             pathlib.Path(self.export_folder, "__gitpath.txt"),
@@ -99,7 +112,7 @@ class ExamplePluginsConan(ConanFile):
         # Use the ManiVault .cmake files
         mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
         self.manivault_dir = os.path.join(mv_core_root, "cmake", "mv")
-
+        
         # Find ManiVault with find_package
         tc.variables["ManiVault_DIR"] = self.manivault_dir
         print("ManiVault_DIR: ", self.manivault_dir)

@@ -38,10 +38,6 @@ set(PLUGIN_SOURCES
     src/ExampleViewGLPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleViewGLPlugin.h
-)
-
 set(PLUGIN_WIDGETS
     src/ExampleGLWidget.h
     src/ExampleGLWidget.cpp

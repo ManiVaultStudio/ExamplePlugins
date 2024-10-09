@@ -40,10 +40,6 @@ set(PLUGIN_SOURCES
     src/ExampleAnalysisPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleAnalysisPlugin.h
-)
-
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------

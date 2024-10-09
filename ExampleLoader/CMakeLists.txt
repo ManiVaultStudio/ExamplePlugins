@@ -38,10 +38,6 @@ set(PLUGIN_SOURCES
     src/ExampleLoaderPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleLoaderPlugin.h
-)
-
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------

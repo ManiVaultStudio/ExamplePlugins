@@ -38,10 +38,6 @@ set(PLUGIN_SOURCES
     src/ExampleTransformationPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleTransformationPlugin.h
-)
-
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------

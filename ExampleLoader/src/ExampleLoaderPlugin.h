@@ -32,7 +32,7 @@ class ExampleLoaderPluginFactory : public LoaderPluginFactory
 {
     Q_INTERFACES(mv::plugin::LoaderPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleLoaderPlugin"
+    Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleLoaderPlugin"
                       FILE  "ExampleLoaderPlugin.json")
     
 public:

@@ -5,6 +5,7 @@ from rules_support import PluginBranchInfo
 import os
 import pathlib
 import subprocess
+import shutil
 
 class ExamplePluginsConan(ConanFile):
     """Class to package ExamplePlugins using conan
@@ -87,28 +88,45 @@ class ExamplePluginsConan(ConanFile):
             tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
 
         # Use the Qt provided .cmake files
-        qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
-        qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]
-        qt_root = qt_cfg.parents[0].as_posix()
-        qt_dir = qt_cfg.parents[3].as_posix()
+        #qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
+        #qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]
+        #qt_root = qt_cfg.parents[0].as_posix()
+        #qt_dir = qt_cfg.parents[3].as_posix()
 
+        qtpath = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
+        qt_root = str(list(qtpath.glob("**/Qt6Config.cmake"))[0].parents[3].as_posix())
+        tc.variables["CMAKE_PREFIX_PATH"] = qt_root
+        
         # for Qt >= 6.4.2
         #print("Qt6_DIR: ", qt_root)
         #tc.variables["Qt6_DIR"] = qt_root
 
         # for Qt < 6.4.2
-        tc.variables["CMAKE_PREFIX_PATH"] = qt_dir
+        #tc.variables["CMAKE_PREFIX_PATH"] = qt_dir
 
         # Use the ManiVault .cmake files
-        mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
-        self.manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
+        #mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
+        #self.manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
 
         # Find ManiVault with find_package
-        tc.variables["ManiVault_DIR"] = self.manivault_dir
-        print("ManiVault_DIR: ", self.manivault_dir)
+        #tc.variables["ManiVault_DIR"] = self.manivault_dir
+        #print("ManiVault_DIR: ", self.manivault_dir)
 
         # Set some build options
         #tc.variables["MV_UNITY_BUILD"] = "ON"
+
+        # Set the installation directory for ManiVault based on the MV_INSTALL_DIR environment variable
+        # or if none is specified, set it to the build/install dir.
+        if not os.environ.get("MV_INSTALL_DIR", None):
+            os.environ["MV_INSTALL_DIR"] = os.path.join(self.build_folder, "install")
+        print("MV_INSTALL_DIR: ", os.environ["MV_INSTALL_DIR"])
+        self.install_dir = pathlib.Path(os.environ["MV_INSTALL_DIR"]).as_posix()
+        # Give the installation directory to CMake
+        tc.variables["MV_INSTALL_DIR"] = self.install_dir
+        
+        # Find ManiVault with find_package
+        self.manivault_dir = self.install_dir + '/cmake/mv/'
+        tc.variables["ManiVault_DIR"] = self.manivault_dir
 
         # Install vcpkg dependencies
         if os.environ.get("VCPKG_ROOT", None):
@@ -144,6 +162,11 @@ class ExamplePluginsConan(ConanFile):
 
     def build(self):
         print("Build OS is: ", self.settings.os)
+
+        # The ExamplePlugins build expects the ManiVaultStudio package to be in this install dir
+        hdps_pkg_root = self.deps_cpp_info["hdps-core"].rootpath
+        print("Install dir type: ", self.install_dir)
+        shutil.copytree(hdps_pkg_root, self.install_dir)
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")

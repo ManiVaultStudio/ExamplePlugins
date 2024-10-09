@@ -91,15 +91,14 @@ class ExamplePluginsConan(ConanFile):
         # Use the Qt provided .cmake files
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]
-        qt_root = qt_cfg.parents[0].as_posix()
-        qt_dir = qt_cfg.parents[3].as_posix()
+        qt_dir = qt_cfg.parents[0].as_posix()
+        qt_root = qt_cfg.parents[3].as_posix()
 
         # for Qt >= 6.4.2
-        #print("Qt6_DIR: ", qt_root)
-        #tc.variables["Qt6_DIR"] = qt_root
+        #tc.variables["Qt6_DIR"] = qt_dir
 
         # for Qt < 6.4.2
-        tc.variables["CMAKE_PREFIX_PATH"] = qt_dir
+        tc.variables["CMAKE_PREFIX_PATH"] = qt_root
 
         # Use the ManiVault .cmake files
         mv_core_root = self.deps_cpp_info["hdps-core"].rootpath

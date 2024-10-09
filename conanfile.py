@@ -156,11 +156,7 @@ class ExamplePluginsConan(ConanFile):
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")
-        cmake.install(build_type="Debug")
-
-        # cmake_release = self._configure_cmake()
         cmake.build(build_type="Release")
-        cmake.install(build_type="Release")
 
     def package(self):
         package_dir = os.path.join(self.build_folder, "package")

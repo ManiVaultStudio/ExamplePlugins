@@ -98,7 +98,7 @@ class ExamplePluginsConan(ConanFile):
 
         # Use the ManiVault .cmake files
         mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
-        self.manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
+        self.manivault_dir = os.path.join(mv_core_root, "cmake", "mv")
 
         # Find ManiVault with find_package
         tc.variables["ManiVault_DIR"] = self.manivault_dir
@@ -147,7 +147,7 @@ class ExamplePluginsConan(ConanFile):
         cmake.build(build_type="Release")
 
     def package(self):
-        package_dir = pathlib.Path(self.build_folder, "package").as_posix()
+        package_dir = os.path.join(self.build_folder, "package")
         print("Packaging install dir: ", package_dir)
         subprocess.run(
             [
@@ -157,7 +157,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Debug",
                 "--prefix",
-                pathlib.Path(package_dir, "Debug").as_posix(),
+                os.path.join(package_dir, "Debug"),
             ]
         )
         subprocess.run(
@@ -168,7 +168,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Release",
                 "--prefix",
-                pathlib.Path(package_dir, "Release").as_posix(),
+                os.path.join(package_dir, "Release"),
             ]
         )
         self.copy(pattern="*", src=package_dir)

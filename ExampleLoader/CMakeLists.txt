@@ -38,6 +38,10 @@ set(PLUGIN_SOURCES
     src/ExampleLoaderPlugin.json
 )
 
+set(PLUGIN_MOC_HEADERS
+    src/ExampleLoaderPlugin.h
+)
+
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------
@@ -93,6 +97,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # -----------------------------------------------------------------------------
 # Miscellaneous
 # -----------------------------------------------------------------------------
+# Automatically set the debug environment (command + working directory) for MSVC
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
     set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)

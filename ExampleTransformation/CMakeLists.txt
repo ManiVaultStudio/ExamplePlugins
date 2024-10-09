@@ -38,6 +38,10 @@ set(PLUGIN_SOURCES
     src/ExampleTransformationPlugin.json
 )
 
+set(PLUGIN_MOC_HEADERS
+    src/ExampleTransformationPlugin.h
+)
+
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------
@@ -95,6 +99,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug/ManiVault\ Studio.exe,${ManiVault_INSTALL_DIR}/release/ManiVault\ Studio.exe>)
+    set_property(TARGET ${EXAMPLETRANSFORMATION} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)
+    set_property(TARGET ${EXAMPLETRANSFORMATION} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug/ManiVault\ Studio.exe,${ManiVault_INSTALL_DIR}/release/ManiVault\ Studio.exe>)
 endif()

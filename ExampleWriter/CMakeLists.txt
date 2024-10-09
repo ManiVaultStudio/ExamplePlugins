@@ -38,6 +38,10 @@ set(PLUGIN_SOURCES
     src/ExampleWriterPlugin.json
 )
 
+set(PLUGIN_MOC_HEADERS
+    src/ExampleWriterPlugin.h
+)
+
 source_group( Plugin FILES ${PLUGIN_SOURCES})
 
 # -----------------------------------------------------------------------------

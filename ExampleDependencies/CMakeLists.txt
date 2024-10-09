@@ -21,7 +21,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
-# include(cmake/get_cpm.cmake)
+include(cmake/get_cpm.cmake)
 
 # -----------------------------------------------------------------------------
 # Dependencies
@@ -30,20 +30,20 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
 find_package(ManiVault COMPONENTS Core PointData CONFIG)
 
-# find_package(blake3 CONFIG REQUIRED)
+find_package(blake3 CONFIG REQUIRED)
 
 if(NOT APPLE)
     include(cmake/ci_fixes.cmake)
     find_package(faiss CONFIG REQUIRED)
 endif()
 
-# CPMAddPackage(
-  # NAME highway
-  # URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
-  # URL_HASH SHA256=7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343
-  # PATCHES "cmake/highway.patch" # see https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
-  # OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
-# )
+CPMAddPackage(
+  NAME highway
+  URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
+  URL_HASH SHA256=7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343
+  PATCHES "cmake/highway.patch" # see https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
+  OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
+)
 
 # -----------------------------------------------------------------------------
 # Source files
@@ -93,8 +93,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 
-# target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
-# target_link_libraries(${PROJECT_NAME} PRIVATE hwy hwy_contrib)
+target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
+target_link_libraries(${PROJECT_NAME} PRIVATE hwy hwy_contrib)
 
 if(NOT APPLE)
     target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
@@ -124,8 +124,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 # Automatically available when using find_package(ManiVault)
-#mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
-mv_install_dependencies(${PROJECT_NAME})
+mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 
 # -----------------------------------------------------------------------------
 # Miscellaneous

@@ -52,12 +52,12 @@ public:
     /** Destructor */
     ~ExampleDependenciesPluginFactory() override {}
 
-    /** Creates an instance of the example dependencies plugin */
+    /** Creates an instance of the example analysis plugin */
     AnalysisPlugin* produce() override;
 
-    /** Returns the data types that are supported by the example dependencies plugin */
+    /** Returns the data types that are supported by the example analysis plugin */
     mv::DataTypes supportedDataTypes() const override;
 
-    /** Enable right-click on data set to open dependencies */
+    /** Enable right-click on data set to open analysis */
     PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 };

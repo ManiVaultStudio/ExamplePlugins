@@ -6,7 +6,7 @@
 #include <fstream>
 #include <filesystem>
 
-Q_PLUGIN_METADATA(IID "studio.manivault.ExampleWriterPlugin")
+Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleWriterPlugin")
 
 using namespace mv;
 

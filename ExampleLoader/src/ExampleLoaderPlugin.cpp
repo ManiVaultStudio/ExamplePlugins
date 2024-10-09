@@ -8,7 +8,7 @@
 
 #include <random>
 
-Q_PLUGIN_METADATA(IID "studio.manivault.ExampleLoaderPlugin")
+Q_PLUGIN_METADATA(IID "nl.tudelft.ExampleLoaderPlugin")
 
 using namespace mv;
 

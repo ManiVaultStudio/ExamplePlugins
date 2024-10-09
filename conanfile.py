@@ -1,19 +1,10 @@
 from conans import ConanFile
 from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
 from conans.tools import save, load
+from rules_support import PluginBranchInfo
 import os
-import shutil
 import pathlib
 import subprocess
-from rules_support import PluginBranchInfo
-import re
-
-def compatibility(os, compiler, compiler_version):
-    # On macos fallback to zlib apple-clang 13
-    if os == "Macos" and compiler == "apple-clang" and bool(re.match("14.*", compiler_version)):  
-        print("Compatibility match")
-        return ["zlib/1.3:compiler.version=13"]
-    return None
 
 class ExamplePluginsConan(ConanFile):
     """Class to package ExamplePlugins using conan
@@ -26,15 +17,12 @@ class ExamplePluginsConan(ConanFile):
 
     name = "ExamplePlugins"
     description = (
-        "A collection of examples including analys, data, loader and view plugins."
+        "A collection of examples including analysis, data, loader and view plugins."
     )
     topics = ("hdps", "plugin", "examples", "various")
     url = "https://github.com/ManiVaultStudio/ExamplePlugins"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
-
-    short_paths = True
-    generators = "CMakeDeps"
 
     # Options may need to change depending on the packaged library
     settings = {"os": None, "build_type": None, "compiler": None, "arch": None}
@@ -56,7 +44,6 @@ class ExamplePluginsConan(ConanFile):
         return path
 
     def export(self):
-        print("In export")
         # save the original source path to the directory used to build the package
         save(
             pathlib.Path(self.export_folder, "__gitpath.txt"),
@@ -109,42 +96,40 @@ class ExamplePluginsConan(ConanFile):
         # for Qt < 6.4.2
         tc.variables["CMAKE_PREFIX_PATH"] = qt_dir
 
-        # Set the installation directory for ManiVault based on the MV_INSTALL_DIR environment variable
-        # or if none is specified, set it to the build/install dir.
-        if not os.environ.get("MV_INSTALL_DIR", None):
-            os.environ["MV_INSTALL_DIR"] = os.path.join(self.build_folder, "install")
-        print("MV_INSTALL_DIR: ", os.environ["MV_INSTALL_DIR"])
-        self.install_dir = pathlib.Path(os.environ["MV_INSTALL_DIR"]).as_posix()
-        
+        # Use the ManiVault .cmake files
+        mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
+        self.manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
+
         # Find ManiVault with find_package
-        self.manivault_dir = self.install_dir + '/cmake/mv/'
         tc.variables["ManiVault_DIR"] = self.manivault_dir
+        print("ManiVault_DIR: ", self.manivault_dir)
 
         # Set some build options
         tc.variables["MV_UNITY_BUILD"] = "ON"
 
         # Install vcpkg dependencies
-        vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
-        vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
-        vcpkg_tc  = vcpkg_dir / "scripts" / "buildsystems" / "vcpkg.cmake"
+        if os.environ.get("VCPKG_ROOT", None):
+            vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
+            vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
+            vcpkg_tc  = vcpkg_dir / "scripts" / "buildsystems" / "vcpkg.cmake"
 
-        vcpkg_triplet = "x64-windows"
-        if self.settings.os == "Macos":
-            vcpkg_triplet = "x64-osx"
-        if self.settings.os == "Linux":
-            vcpkg_triplet = "x64-linux"
+            vcpkg_triplet = "x64-windows"
+            if self.settings.os == "Macos":
+                vcpkg_triplet = "x64-osx"
+            if self.settings.os == "Linux":
+                vcpkg_triplet = "x64-linux"
 
-        print("vcpkg_dir: ", vcpkg_dir)
-        print("vcpkg_exe: ", vcpkg_exe)
-        print("vcpkg_tc: ", vcpkg_tc)
-        print("vcpkg_triplet: ", vcpkg_triplet)
+            print("vcpkg_dir: ", vcpkg_dir)
+            print("vcpkg_exe: ", vcpkg_exe)
+            print("vcpkg_tc: ", vcpkg_tc)
+            print("vcpkg_triplet: ", vcpkg_triplet)
 
-        tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
-        tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
-        tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
-        tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
+            tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
+            tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
+            tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
+            tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
-        tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
+            tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
 
         tc.generate()
 
@@ -155,23 +140,16 @@ class ExamplePluginsConan(ConanFile):
         return cmake
 
     def build(self):
-        print("Build OS is : ", self.settings.os)
-
-        # The ExamplePlugins build expects the ManiVaultStudio package to be in this install dir
-        hdps_pkg_root = self.deps_cpp_info["hdps-core"].rootpath
-        print("Install dir type: ", self.install_dir)
-        shutil.copytree(hdps_pkg_root, self.install_dir)
+        print("Build OS is: ", self.settings.os)
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")
-        cmake.install(build_type="Debug")
 
         # cmake_release = self._configure_cmake()
         cmake.build(build_type="Release")
-        cmake.install(build_type="Release")
 
     def package(self):
-        package_dir = os.path.join(self.build_folder, "package")
+        package_dir = pathlib.Path(self.build_folder, "package").as_posix()
         print("Packaging install dir: ", package_dir)
         subprocess.run(
             [
@@ -181,7 +159,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Debug",
                 "--prefix",
-                os.path.join(package_dir, "Debug"),
+                pathlib.Path(package_dir, "Debug").as_posix(),
             ]
         )
         subprocess.run(
@@ -192,7 +170,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Release",
                 "--prefix",
-                os.path.join(package_dir, "Release"),
+                pathlib.Path(package_dir, "Release").as_posix(),
             ]
         )
         self.copy(pattern="*", src=package_dir)

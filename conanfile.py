@@ -81,7 +81,10 @@ class ExamplePluginsConan(ConanFile):
 
         tc = CMakeToolchain(self, generator=generator)
 
-        tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
+        if self.settings.os == "Windows" and self.options.shared:
+            tc.variables["CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS"] = True
+        if self.settings.os == "Linux" or self.settings.os == "Macos":
+            tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
 
         # Use the Qt provided .cmake files
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
@@ -105,7 +108,7 @@ class ExamplePluginsConan(ConanFile):
         print("ManiVault_DIR: ", self.manivault_dir)
 
         # Set some build options
-        tc.variables["MV_UNITY_BUILD"] = "ON"
+        #tc.variables["MV_UNITY_BUILD"] = "ON"
 
         # Install vcpkg dependencies
         if os.environ.get("VCPKG_ROOT", None):

@@ -11,6 +11,7 @@ using namespace mv::plugin;
 class ExampleLoaderPlugin : public LoaderPlugin
 {
     Q_OBJECT
+    
 public:
     ExampleLoaderPlugin(const PluginFactory* factory);
     ~ExampleLoaderPlugin(void) override;
@@ -32,7 +33,7 @@ class ExampleLoaderPluginFactory : public LoaderPluginFactory
 {
     Q_INTERFACES(mv::plugin::LoaderPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.tudelft.ExampleLoaderPlugin"
+    Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleLoaderPlugin"
                       FILE  "ExampleLoaderPlugin.json")
     
 public:

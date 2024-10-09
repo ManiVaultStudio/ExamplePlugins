@@ -27,13 +27,13 @@ using namespace mv::plugin;
  */
 class ExampleTransformationPlugin : public TransformationPlugin
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
     /** Define the transformation options */
     enum class Type {
-        Abs,       /** abosulte value */
+        Abs,       /** absolute value */
         Pow2       /** value squared */
     };
 

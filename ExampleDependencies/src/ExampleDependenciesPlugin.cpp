@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include <vector>
 
-#include <hwy/contrib/sort/order.h>
-#include <hwy/contrib/sort/vqsort.h>
-
-#include <blake3.h>
+//#include <hwy/contrib/sort/order.h>
+//#include <hwy/contrib/sort/vqsort.h>
+//
+//#include <blake3.h>
 
 #if !defined(__APPLE__)
 #include <faiss/IndexFlat.h>
@@ -53,9 +53,9 @@ void ExampleDependenciesPlugin::init()
 
 void ExampleDependenciesPlugin::compute()
 {
-    std::cout << "ExampleDependenciesPlugin: Startin..." << std::endl;
+    std::cout << "ExampleDependenciesPlugin: Starting..." << std::endl;
 
-    std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
+    //std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
 
     auto printData = [](const std::vector<float>& vec, size_t dims, size_t points) {
         for (size_t dim = 0; dim < dims; dim++)
@@ -81,11 +81,11 @@ void ExampleDependenciesPlugin::compute()
     std::cout << "ExampleDependenciesPlugin: Data before sorting" << std::endl;
     printData(data, numDims, numPoints);
 
-    for (size_t dim = 0; dim < numDims; dim++)
-    {
-        size_t offset = numPoints * dim;
-        hwy::VQSort(data.data() + offset, numPoints, hwy::SortAscending{});
-    }
+    //for (size_t dim = 0; dim < numDims; dim++)
+    //{
+    //    size_t offset = numPoints * dim;
+    //    hwy::VQSort(data.data() + offset, numPoints, hwy::SortAscending{});
+    //}
 
     std::cout << "ExampleDependenciesPlugin: Data after sorting" << std::endl;
     printData(data, numDims, numPoints);
@@ -96,19 +96,19 @@ void ExampleDependenciesPlugin::compute()
     events().notifyDatasetDataChanged(outputPoints);
 
     // Create hash
-    blake3_hasher hasher;
-    blake3_hasher_init(&hasher);
+    //blake3_hasher hasher;
+    //blake3_hasher_init(&hasher);
 
-    blake3_hasher_update(&hasher, data.data(), data.size());
+    //blake3_hasher_update(&hasher, data.data(), data.size());
 
-    uint8_t output[BLAKE3_OUT_LEN];
-    blake3_hasher_finalize(&hasher, output, BLAKE3_OUT_LEN);
+    //uint8_t output[BLAKE3_OUT_LEN];
+    //blake3_hasher_finalize(&hasher, output, BLAKE3_OUT_LEN);
 
     // Print the hash as hexadecimal
-    for (size_t i = 0; i < BLAKE3_OUT_LEN; i++) {
-        printf("%02x", output[i]);
-    }
-    printf("\n");
+    //for (size_t i = 0; i < BLAKE3_OUT_LEN; i++) {
+    //    printf("%02x", output[i]);
+    //}
+    //printf("\n");
 
 #if !defined(__APPLE__)
     // find knn

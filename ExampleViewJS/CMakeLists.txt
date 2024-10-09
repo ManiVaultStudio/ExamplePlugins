@@ -40,10 +40,6 @@ set(PLUGIN_SOURCES
     src/ExampleViewJSPlugin.json
 )
 
-set(PLUGIN_MOC_HEADERS
-    src/ExampleViewJSPlugin.h
-)
-
 set(WEB
     res/example_chart/radar_chart.html
     res/example_chart/radar_chart.tools.js

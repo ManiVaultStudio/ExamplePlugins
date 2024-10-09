@@ -152,7 +152,9 @@ class ExamplePluginsConan(ConanFile):
         cmake.build(build_type="Release")
 
     def package(self):
-        package_dir = os.path.join(self.build_folder, "package")
+        package_dir = pathlib.Path(self.build_folder, "package")
+        debug_dir = package_dir / "Debug"
+        release_dir = package_dir / "Release"
         print("Packaging install dir: ", package_dir)
         subprocess.run(
             [
@@ -162,7 +164,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Debug",
                 "--prefix",
-                os.path.join(package_dir, "Debug"),
+                debug_dir,
             ]
         )
         subprocess.run(
@@ -173,7 +175,7 @@ class ExamplePluginsConan(ConanFile):
                 "--config",
                 "Release",
                 "--prefix",
-                os.path.join(package_dir, "Release"),
+                release_dir,
             ]
         )
         self.copy(pattern="*", src=package_dir)

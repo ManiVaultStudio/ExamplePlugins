@@ -2,7 +2,6 @@ from conans import ConanFile
 from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
 from conans.tools import save, load
 import os
-import shutil
 import pathlib
 import subprocess
 from rules_support import PluginBranchInfo
@@ -154,12 +153,6 @@ class ExamplePluginsConan(ConanFile):
 
     def build(self):
         print("Build OS is : ", self.settings.os)
-
-        # The ExamplePlugins build expects the ManiVaultStudio package to be in this install dir
-        hdps_pkg_root = self.deps_cpp_info["hdps-core"].rootpath
-        self.install_dir = pathlib.Path(self.build_folder, "install").as_posix()
-        print("Install dir type: ", self.install_dir)
-        shutil.copytree(hdps_pkg_root, self.install_dir)
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")

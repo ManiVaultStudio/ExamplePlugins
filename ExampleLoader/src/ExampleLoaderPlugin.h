@@ -2,8 +2,6 @@
 
 #include <LoaderPlugin.h>
 
-#include <QString>
-
 using namespace mv::plugin;
 
 // =============================================================================

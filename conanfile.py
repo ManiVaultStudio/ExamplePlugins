@@ -109,42 +109,40 @@ class ExamplePluginsConan(ConanFile):
         # for Qt < 6.4.2
         tc.variables["CMAKE_PREFIX_PATH"] = qt_dir
 
-        # Set the installation directory for ManiVault based on the MV_INSTALL_DIR environment variable
-        # or if none is specified, set it to the build/install dir.
-        if not os.environ.get("MV_INSTALL_DIR", None):
-            os.environ["MV_INSTALL_DIR"] = os.path.join(self.build_folder, "install")
-        print("MV_INSTALL_DIR: ", os.environ["MV_INSTALL_DIR"])
-        self.install_dir = pathlib.Path(os.environ["MV_INSTALL_DIR"]).as_posix()
+        # Use the ManiVault .cmake files
+        mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
+        self.manivault_dir = os.path.join(mv_core_root, "cmake", "mv")
         
         # Find ManiVault with find_package
-        self.manivault_dir = self.install_dir + '/cmake/mv/'
         tc.variables["ManiVault_DIR"] = self.manivault_dir
+        print("ManiVault_DIR: ", self.manivault_dir)
 
         # Set some build options
         tc.variables["MV_UNITY_BUILD"] = "ON"
 
         # Install vcpkg dependencies
-        vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
-        vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
-        vcpkg_tc  = vcpkg_dir / "scripts" / "buildsystems" / "vcpkg.cmake"
+        if os.environ.get("VCPKG_ROOT", None):
+            vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
+            vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
+            vcpkg_tc  = vcpkg_dir / "scripts" / "buildsystems" / "vcpkg.cmake"
 
-        vcpkg_triplet = "x64-windows"
-        if self.settings.os == "Macos":
-            vcpkg_triplet = "x64-osx"
-        if self.settings.os == "Linux":
-            vcpkg_triplet = "x64-linux"
+            vcpkg_triplet = "x64-windows"
+            if self.settings.os == "Macos":
+                vcpkg_triplet = "x64-osx"
+            if self.settings.os == "Linux":
+                vcpkg_triplet = "x64-linux"
 
-        print("vcpkg_dir: ", vcpkg_dir)
-        print("vcpkg_exe: ", vcpkg_exe)
-        print("vcpkg_tc: ", vcpkg_tc)
-        print("vcpkg_triplet: ", vcpkg_triplet)
+            print("vcpkg_dir: ", vcpkg_dir)
+            print("vcpkg_exe: ", vcpkg_exe)
+            print("vcpkg_tc: ", vcpkg_tc)
+            print("vcpkg_triplet: ", vcpkg_triplet)
 
-        tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
-        tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
-        tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
-        tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
+            tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
+            tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
+            tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
+            tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
-        tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
+            tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
 
         tc.generate()
 
@@ -155,20 +153,11 @@ class ExamplePluginsConan(ConanFile):
         return cmake
 
     def build(self):
-        print("Build OS is : ", self.settings.os)
-
-        # The ExamplePlugins build expects the ManiVaultStudio package to be in this install dir
-        hdps_pkg_root = self.deps_cpp_info["hdps-core"].rootpath
-        print("Install dir type: ", self.install_dir)
-        shutil.copytree(hdps_pkg_root, self.install_dir)
+        print("Build OS is: ", self.settings.os)
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")
-        cmake.install(build_type="Debug")
-
-        # cmake_release = self._configure_cmake()
         cmake.build(build_type="Release")
-        cmake.install(build_type="Release")
 
     def package(self):
         package_dir = os.path.join(self.build_folder, "package")

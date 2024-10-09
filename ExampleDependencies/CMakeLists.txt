@@ -71,8 +71,6 @@ add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES})
 # Include ManiVault headers, including system data plugins
 target_include_directories(${PROJECT_NAME} PRIVATE "${ManiVault_INCLUDE_DIR}")
 
-message(STATUS "ManiVault_INCLUDE_DIR: ${ManiVault_INCLUDE_DIR}")
-
 # -----------------------------------------------------------------------------
 # Target properties
 # -----------------------------------------------------------------------------

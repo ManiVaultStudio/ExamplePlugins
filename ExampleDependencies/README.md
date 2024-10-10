@@ -11,6 +11,13 @@ Otherwise, we need to pass all targets that we build in our project but do not s
 
 The `mv_install_dependencies` is automatically available when using `find_package(ManiVault ... CONFIG)`. The important bit here is **CONFIG**.
 
+There might be cases in which not all dependencies are automatically resolved, i.e. some libraries are located in folders that `mv_install_dependencies` does not search in. We can provide additional search paths like this:
+```cmake
+set(DEPENDENCIES_FOLDERS "${FREEIMAGE_ROOT_DIR}/bin")
+mv_install_dependencies(${PROJECT_NAME})
+```
+All paths listed in `DEPENDENCIES_FOLDERS` will now also be searched for runtime dependencies.
+
 All installed dependencies are listed like this (current CI output on windows):
 ```bash
 -- Resolved: D:/.conan/bab46b/1/ExampleDependencies/Release/blake3.dll

@@ -1,5 +1,5 @@
 from conans import ConanFile
-from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
+from conan.tools.cmake import CMake, CMakeToolchain
 from conans.tools import save, load
 import os
 import pathlib
@@ -24,9 +24,6 @@ class ExamplePluginsConan(ConanFile):
     url = "https://github.com/ManiVaultStudio/ExamplePlugins"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
-
-    short_paths = True
-    generators = "CMakeDeps"
 
     # Options may need to change depending on the packaged library
     settings = {"os": None, "build_type": None, "compiler": None, "arch": None}

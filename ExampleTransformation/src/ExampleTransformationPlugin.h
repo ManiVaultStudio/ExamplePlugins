@@ -33,7 +33,7 @@ public:
 
     /** Define the transformation options */
     enum class Type {
-        Abs,       /** abosulte value */
+        Abs,       /** absolute value */
         Pow2       /** value squared */
     };
 

@@ -16,7 +16,7 @@
 ## Requirements
 * ManiVault Studio (https://github.com/ManiVaultStudio/Core)
 * CMake 3.17+ (https://cmake.org/)
-* Qt 6.3.1+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
+* Qt 6.3.2+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
 * A C++17 compatible compiler
     * For Windows: Visual Studio 2019 or 2022 (https://visualstudio.microsoft.com/downloads/)
 * Optionally: Git (https://git-scm.com/)

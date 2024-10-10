@@ -30,13 +30,6 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
 find_package(ManiVault COMPONENTS Core PointData CONFIG)
 
-find_package(blake3 CONFIG REQUIRED)
-
-if(NOT APPLE)
-    include(cmake/ci_fixes.cmake)
-    find_package(faiss CONFIG REQUIRED)
-endif()
-
 CPMAddPackage(
   NAME highway
   URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
@@ -44,6 +37,15 @@ CPMAddPackage(
   PATCHES "cmake/highway.patch" # see https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
   OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
 )
+
+if(${MV_EXAMPLES_USE_VCPKG})
+    find_package(blake3 CONFIG REQUIRED)
+
+    if(NOT APPLE)
+        include(cmake/ci_fixes.cmake)
+        find_package(faiss CONFIG REQUIRED)
+    endif()
+endif()
 
 # -----------------------------------------------------------------------------
 # Source files
@@ -93,11 +95,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
 target_link_libraries(${PROJECT_NAME} PRIVATE hwy hwy_contrib)
 
-if(NOT APPLE)
+if(${MV_EXAMPLES_USE_VCPKG})
+    target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
+
+    if(NOT APPLE)
     target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
+    endif()
+    
+    target_compile_definitions (${PROJECT_NAME} PRIVATE __USE_VCPKG__)
 endif()
 
 # Not used here, but you can use this in your plugin

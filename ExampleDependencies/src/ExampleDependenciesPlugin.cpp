@@ -12,11 +12,13 @@
 #include <hwy/contrib/sort/order.h>
 #include <hwy/contrib/sort/vqsort.h>
 
+#if defined __USE_VCPKG__
 #include <blake3.h>
 
 #if !defined(__APPLE__)
 #include <faiss/IndexFlat.h>
 using idx_t = faiss::idx_t;
+#endif
 #endif
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleDependenciesPlugin")
@@ -53,9 +55,7 @@ void ExampleDependenciesPlugin::init()
 
 void ExampleDependenciesPlugin::compute()
 {
-    std::cout << "ExampleDependenciesPlugin: Startin..." << std::endl;
-
-    std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
+    std::cout << "ExampleDependenciesPlugin: Starting..." << std::endl;
 
     auto printData = [](const std::vector<float>& vec, size_t dims, size_t points) {
         for (size_t dim = 0; dim < dims; dim++)
@@ -95,6 +95,9 @@ void ExampleDependenciesPlugin::compute()
     outputPoints->setData(data.data(), numPoints, numDims);
     events().notifyDatasetDataChanged(outputPoints);
 
+#if defined __USE_VCPKG__
+    std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
+
     // Create hash
     blake3_hasher hasher;
     blake3_hasher_init(&hasher);
@@ -127,7 +130,8 @@ void ExampleDependenciesPlugin::compute()
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }
-#endif
+#endif // __APPLE__
+#endif // __USE_VCPKG__
 
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;
 }

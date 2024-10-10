@@ -12,6 +12,11 @@ endif()
 set(PROJECT "ExamplePlugins")
 PROJECT(${PROJECT})
 
+# vcpkg is used together with conan on ci
+if(DEFINED VCPKG_TARGET_TRIPLET)
+    set(MV_EXAMPLES_USE_VCPKG ON)
+endif()
+
 add_subdirectory(ExampleView)
 add_subdirectory(ExampleViewJS)
 add_subdirectory(ExampleViewOpenGL)

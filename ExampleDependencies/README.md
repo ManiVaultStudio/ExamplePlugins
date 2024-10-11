@@ -45,12 +45,12 @@ All installed dependencies are listed like this (current CI output on windows):
 ## Managing dependencies with vcpkg
 [vcpkg](https://github.com/microsoft/vcpkg/) will be used in this project if `CMAKE_TOOLCHAIN_FILE` is set to `YOUR_LOCAL_PATH_TO/vcpkg/scripts/buildsystems/vcpkg.cmake`. It is used to install [faiss](https://github.com/facebookresearch/faiss) and [blake3](https://github.com/BLAKE3-team/BLAKE3). If not set, this repository will only build [highway](https://github.com/google/highway).
 
-This plugin also illustrates how you can set up vcpkg on CI runs, see the main `conanfile.py`.
+This plugin also illustrates how you can set up vcpkg on CI runs, see the main `conanfile.py` and `build.yml`. Caching vcpkg dependencies on the CI requires setting up a secret as shown [here](https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages), in our example referred to as `secrets.GH_VCPKG_PACKAGES`.
 
 > Important: when building a project using `add_subdirectory` all vcpkg dependencies defined in the manifest file `vcpkg.json` must be uplifted to the main project. vcpkg is not recursively scanning for `vcpkg.json`. In CMake, vcpkg only uses the toplevel `vcpkg.json` since all dependencies need to be installed before the very first project() call.
 
 ## ManiVault's runtime dependency handling
-ManiVault will load all dynamic libraries located in `PluginDependencies/plugin_a` before loading `plugin_a`. The folder structure has to look like this:
+When starting ManiVault, the application will load all dynamic libraries located in `PluginDependencies/plugin_a` before loading `plugin_a`. The folder structure of your ManiVault installation should look look like this:
 ```
 ManiVault Studio/
 ├─ ManiVault Studio.exe
@@ -67,3 +67,4 @@ ManiVault Studio/
 │  │  ├─ plugin_b_dependency_2.dll
 │  │  ├─ dependency_of_plugin_b_dependency_2.dll
 ````
+You can always manually copy runtime dependencies into the specific `PluginDependencies/YourPlugin` subfolder (or next to the ManiVault executable on Windows), but we recommend doing so during the installation step of your build (as done with `mv_install_dependencies`).

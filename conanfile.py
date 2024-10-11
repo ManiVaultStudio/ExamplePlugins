@@ -100,18 +100,16 @@ class ExamplePluginsConan(ConanFile):
         # for Qt < 6.4.2
         tc.variables["CMAKE_PREFIX_PATH"] = qt_root
 
-        # Use the ManiVault .cmake files
+        # Use the ManiVault .cmake file to find ManiVault with find_package
         mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
-        self.manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
-
-        # Find ManiVault with find_package
-        tc.variables["ManiVault_DIR"] = self.manivault_dir
-        print("ManiVault_DIR: ", self.manivault_dir)
+        manivault_dir = pathlib.Path(mv_core_root, "cmake", "mv").as_posix()
+        print("ManiVault_DIR: ", manivault_dir)
+        tc.variables["ManiVault_DIR"] = manivault_dir
 
         # Set some build options
         tc.variables["MV_UNITY_BUILD"] = "ON"
 
-        # Install vcpkg dependencies
+        # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):
             vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
             vcpkg_exe = vcpkg_dir / "vcpkg.exe" if self.settings.os == "Windows" else vcpkg_dir / "vcpkg" 
@@ -144,7 +142,7 @@ class ExamplePluginsConan(ConanFile):
         return cmake
 
     def build(self):
-        print("Build OS is : ", self.settings.os)
+        print("Build OS is: ", self.settings.os)
 
         cmake = self._configure_cmake()
         cmake.build(build_type="Debug")

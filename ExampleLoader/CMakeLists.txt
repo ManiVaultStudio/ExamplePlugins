@@ -26,7 +26,7 @@ endif(MSVC)
 # -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
-find_package(ManiVault COMPONENTS Core PointData CONFIG)
+find_package(ManiVault COMPONENTS Core PointData CONFIG QUIET)
 
 # -----------------------------------------------------------------------------
 # Source files
@@ -36,10 +36,6 @@ set(PLUGIN_SOURCES
     src/ExampleLoaderPlugin.h
     src/ExampleLoaderPlugin.cpp
     src/ExampleLoaderPlugin.json
-)
-
-set(PLUGIN_MOC_HEADERS
-    src/ExampleLoaderPlugin.h
 )
 
 source_group( Plugin FILES ${PLUGIN_SOURCES})
@@ -81,7 +77,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 # -----------------------------------------------------------------------------
 # Target installation
 # -----------------------------------------------------------------------------
-# Install the shared plugin libary to the "Plugins" folder in the ManiVault install directory
+# Install the shared plugin library to the "Plugins" folder in the ManiVault install directory
 install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
@@ -97,7 +93,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # -----------------------------------------------------------------------------
 # Miscellaneous
 # -----------------------------------------------------------------------------
-# Automatically set the debug environment (command + working directory) for MSVC
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
     set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)

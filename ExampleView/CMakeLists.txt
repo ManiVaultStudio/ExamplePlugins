@@ -26,7 +26,7 @@ endif(MSVC)
 # -----------------------------------------------------------------------------
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
-find_package(ManiVault COMPONENTS Core PointData CONFIG)
+find_package(ManiVault COMPONENTS Core PointData CONFIG QUIET)
 
 # -----------------------------------------------------------------------------
 # Source files
@@ -81,7 +81,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 # -----------------------------------------------------------------------------
 # Target installation
 # -----------------------------------------------------------------------------
-# Install the shared plugin libary to the "Plugins" folder in the ManiVault install directory
+# Install the shared plugin library to the "Plugins" folder in the ManiVault install directory
 install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so

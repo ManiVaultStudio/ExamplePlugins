@@ -14,6 +14,9 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
   MACENABLED: ${{ inputs.forceMacBuild }}
+  USERNAME: ManiVaultStudio
+  FEED_URL: https://nuget.pkg.github.com/ManiVaultStudio/index.json
+  VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/ManiVaultStudio/index.json,readwrite"
 
 # for matrix check https://docs.github.com/en/actions/reference/specifications-for-github-hosted-runners
 jobs:
@@ -42,14 +45,14 @@ jobs:
 
       - name: Checkout the source
         if: github.event_name != 'pull_request'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Checkout the source - pull request
         if: github.event_name == 'pull_request'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
@@ -76,6 +79,85 @@ jobs:
           key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
           known_hosts: github.com AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
 
+      # Install vcpkg
+      - name: Clone vcpkg
+        run: |
+          cd ${{ github.workspace }}
+          git clone --branch 2024.08.23 --single-branch https://github.com/microsoft/vcpkg.git
+
+      # Bootstrap vcpkg
+      - name: Bootstrap vcpkg 
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run:  |
+          ${{ github.workspace }}\vcpkg\bootstrap-vcpkg.bat
+          echo "VCPKG_ROOT=${{ github.workspace }}\vcpkg" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "VCPKG_EXE=${{ github.workspace }}\vcpkg\vcpkg.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "VCPKG_LIBRARY_LINKAGE=dynamic" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Bootstrap vcpkg
+        if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
+        shell: bash
+        run: |
+          ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh 
+          echo "VCPKG_ROOT=${{ github.workspace }}/vcpkg" >> $GITHUB_ENV
+          echo "VCPKG_EXE=${{ github.workspace }}/vcpkg/vcpkg" >> $GITHUB_ENV
+          echo "VCPKG_LIBRARY_LINKAGE=dynamic" >> $GITHUB_ENV
+
+      # Use cached vcpkg packges if possible
+      - name: Add NuGet sources
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          .$(${{ env.VCPKG_EXE }} fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_VCPKG_PACKAGES }}"
+          .$(${{ env.VCPKG_EXE }} fetch nuget) `
+            setapikey "${{ secrets.GH_VCPKG_PACKAGES }}" `
+            -Source "${{ env.FEED_URL }}"
+
+      - name: Add NuGet sources
+        if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
+        shell: bash
+        run: |
+          mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+            sources add \
+            -Source "${{ env.FEED_URL }}" \
+            -StorePasswordInClearText \
+            -Name GitHubPackages \
+            -UserName "${{ env.USERNAME }}" \
+            -Password "${{ secrets.GH_VCPKG_PACKAGES }}"
+          mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.GH_VCPKG_PACKAGES }}" \
+            -Source "${{ env.FEED_URL }}"
+
+      # Install vcpkg dependencies
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} install --triplet x64-windows
+
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} install --triplet x64-linux
+
+      - name: Install vcpkg dependencies 
+        if: startsWith(matrix.os, 'macos')
+        shell: bash
+        run:  |
+          cd ${{ github.workspace }}
+          ${{ env.VCPKG_EXE }} install --triplet x64-osx --allow-unsupported
+
+      # Build the package
       - name: Windows build
         if: startsWith(matrix.os, 'windows')
         uses: ManiVaultStudio/github-actions/conan_windows_build@main

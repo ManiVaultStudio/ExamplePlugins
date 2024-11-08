@@ -4,7 +4,7 @@ Exemplary setup for automatically installing runtime dependencies.
 
 A plugin developer can use `mv_install_dependencies` to set up automatic plugin runtime dependency gathering and installation with this command:
 ```cmake
-cmake_minimum_required(VERSION 3.21.0)
+cmake_minimum_required(VERSION 3.21)
 
 [...] // projet setup
 

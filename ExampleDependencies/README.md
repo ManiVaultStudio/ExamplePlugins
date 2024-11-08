@@ -4,6 +4,10 @@ Exemplary setup for automatically installing runtime dependencies.
 
 A plugin developer can use `mv_install_dependencies` to set up automatic plugin runtime dependency gathering and installation with this command:
 ```cmake
+cmake_minimum_required(VERSION 3.21.0)
+
+[...] // projet setup
+
 mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 ```
 Dependencies that are linked to our plugin `${PROJECT_NAME}` and found with `find_package` are automatically resolve (given that their respective cmake export files are nicely setup). This even works with dependency chains, as shown in this example: we link to Faiss, which in turn depends on Lapack and OpenBlas which in turn depends on other libraries.

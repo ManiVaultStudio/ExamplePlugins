@@ -148,14 +148,14 @@ jobs:
         shell: bash
         run:  |
           cd ${{ github.workspace }}
-          ${{ env.VCPKG_EXE }} install --triplet x64-linux
+          ${{ env.VCPKG_EXE }} install --triplet x64-linux-dynamic
 
       - name: Install vcpkg dependencies 
         if: startsWith(matrix.os, 'macos')
         shell: bash
         run:  |
           cd ${{ github.workspace }}
-          ${{ env.VCPKG_EXE }} install --triplet x64-osx --allow-unsupported
+          ${{ env.VCPKG_EXE }} install --triplet x64-osx-dynamic
 
       # Build the package
       - name: Windows build

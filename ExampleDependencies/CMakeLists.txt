@@ -130,6 +130,11 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         --verbose
 )
 
+set_target_properties(hwy hwy_contrib hwy_list_targets hwy_test
+    PROPERTIES
+    FOLDER ExamplePlugins/Dependencies
+)
+
 # Automatically available when using find_package(ManiVault)
 mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 

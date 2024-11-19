@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.17)
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE AND CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg")
-    set(MV_EXAMPLES_USE_VCPKG ON)
-    set(VCPKG_LIBRARY_LINKAGE "dynamic" CACHE STRING "Link vcpkg libraries dynamically")
+if(NOT DEFINED MV_EXAMPLES_USE_VCPKG)
+    set(MV_EXAMPLES_USE_VCPKG OFF)
+elseif(MV_EXAMPLES_USE_VCPKG)
+    message(STATUS "ExamplePlugins: Using vcpkg to install dependencies")
 endif()
 
 # -----------------------------------------------------------------------------
@@ -10,17 +11,6 @@ endif()
 # -----------------------------------------------------------------------------
 set(PROJECT "ExamplePlugins")
 PROJECT(${PROJECT})
-
-if(DEFINED MV_EXAMPLES_USE_VCPKG AND NOT MV_EXAMPLES_USE_VCPKG)
-    # vcpkg is used together with conan on ci
-    if(DEFINED VCPKG_TARGET_TRIPLET)
-        set(MV_EXAMPLES_USE_VCPKG ON)
-    else()
-        set(MV_EXAMPLES_USE_VCPKG OFF)
-    endif()
-else()
-    set(MV_EXAMPLES_USE_VCPKG OFF)
-endif()
 
 add_subdirectory(ExampleView)
 add_subdirectory(ExampleViewJS)

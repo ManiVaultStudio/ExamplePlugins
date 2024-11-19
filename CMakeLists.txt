@@ -31,3 +31,8 @@ add_subdirectory(ExampleLoader)
 add_subdirectory(ExampleWriter)
 add_subdirectory(ExampleData)
 add_subdirectory(ExampleDependencies)
+
+set_target_properties(ExampleViewPlugin ExampleViewJSPlugin ExampleViewOpenGLPlugin ExampleAnalysisPlugin ExampleTransformationPlugin ExampleLoaderPlugin ExampleWriterPlugin ExampleDataPlugin ExampleDependenciesPlugin
+    PROPERTIES
+    FOLDER ExamplePlugins
+)

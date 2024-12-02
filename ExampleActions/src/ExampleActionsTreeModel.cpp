@@ -43,6 +43,13 @@ ExampleActionsTreeModel::ExampleActionsTreeModel(QObject* parent /*= nullptr*/) 
     appendRow(CategoryRow("Miscellaneous", {
         { "Dataset picker", "For picking datasets", "mv::gui::DatasetPickerAction" }
     }));
+
+    appendRow(CategoryRow("Numerical", {
+        { "Integral", "For configuring an integral value", "mv::gui::IntegralAction" },
+        { "IntegralRange", "For configuring an integral range", "mv::gui::IntegralRangeAction" },
+        { "Decimal", "For configuring a decimal value", "mv::gui::DecimalAction" },
+        { "DecimalRange", "For configuring a decimal range", "mv::gui::DecimalRangeAction" },
+    }));
 }
 
 QVariant ExampleActionsTreeModel::headerData(int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole*/) const

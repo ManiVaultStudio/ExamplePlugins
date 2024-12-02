@@ -5,6 +5,7 @@
 
 #include <QDebug>
 #include <QSplitter>
+#include <QHeaderView>
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleActionsPlugin")
 
@@ -26,6 +27,18 @@ ExampleActionsPlugin::ExampleActionsPlugin(const PluginFactory* factory) :
 
         if (!hierarchyWidget)
             return;
+
+        auto& treeView = hierarchyWidget->getTreeView();
+
+        //treeView.setRootIsDecorated(false);
+        treeView.setTextElideMode(Qt::ElideMiddle);
+
+        treeView.setColumnHidden(static_cast<int>(ExampleActionsTreeModel::Column::ClassName), true);
+
+        auto treeViewHeader = treeView.header();
+
+        treeViewHeader->setSectionResizeMode(static_cast<int>(ExampleActionsTreeModel::Column::Name), QHeaderView::Stretch);
+        treeViewHeader->setSectionResizeMode(static_cast<int>(ExampleActionsTreeModel::Column::Description), QHeaderView::Stretch);
 
         auto selectionModel = hierarchyWidget->getTreeView().selectionModel();
 
@@ -54,7 +67,7 @@ ExampleActionsPlugin::ExampleActionsPlugin(const PluginFactory* factory) :
 
                 verticalGroupAction->setDefaultWidgetFlag(VerticalGroupAction::WidgetFlag::NoMargins);
                 verticalGroupAction->setShowLabels(false);
-                verticalGroupAction->addAction(new ExampleProxyAction(verticalGroupAction, "", action));
+                verticalGroupAction->addAction(new ExampleProxyAction(verticalGroupAction, "ExampleProxy", action));
 
                 _examplesGroupsAction.addGroupAction(verticalGroupAction);
             }

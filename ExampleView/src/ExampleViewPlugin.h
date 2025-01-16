@@ -60,7 +60,7 @@ public:
 
 protected:
     DropWidget*             _dropWidget;                /** Widget for drag and drop behavior */
-    mv::Dataset<Points>   _points;                    /** Points smart pointer */
+    mv::Dataset<Points>     _points;                    /** Points smart pointer */
     QString                 _currentDatasetName;        /** Name of the current dataset */
     QLabel*                 _currentDatasetNameLabel;   /** Label that show the current dataset name */
 };
@@ -83,8 +83,8 @@ public:
     ExampleViewPluginFactory() {}
 
     /** Destructor */
-    ~ExampleViewPluginFactory() override {}
-    
+    ~ExampleViewPluginFactory() override;
+
     /** Creates an instance of the example view plugin */
     ViewPlugin* produce() override;
 

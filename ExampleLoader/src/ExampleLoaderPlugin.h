@@ -36,8 +36,7 @@ class ExampleLoaderPluginFactory : public LoaderPluginFactory
                       FILE  "ExampleLoaderPlugin.json")
     
 public:
-    ExampleLoaderPluginFactory(void) {}
-    ~ExampleLoaderPluginFactory(void) override {}
+    ExampleLoaderPluginFactory();
 
     ExampleLoaderPlugin* produce() override;
 

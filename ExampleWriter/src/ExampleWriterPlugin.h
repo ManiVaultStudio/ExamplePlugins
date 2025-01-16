@@ -37,7 +37,7 @@ class ExampleWriterPluginFactory : public WriterPluginFactory
                       FILE  "ExampleWriterPlugin.json")
     
 public:
-    ExampleWriterPluginFactory() {}
+    ExampleWriterPluginFactory();
 
     /** Creates an instance of the example writer plugin */
     ExampleWriterPlugin* produce() override;

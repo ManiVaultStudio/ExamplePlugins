@@ -141,7 +141,7 @@ ExampleDependenciesPluginFactory::ExampleDependenciesPluginFactory()
     getPluginMetadata().setSummary("This example shows how to work with plugin dependencies in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
     getPluginMetadata().setAuthors({
-        { "A. Vieth", "Plugin developer & maintainer", "", { "LUMC", "TU Delft" } }
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } }
 	});
     getPluginMetadata().setOrganizations({
         { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },

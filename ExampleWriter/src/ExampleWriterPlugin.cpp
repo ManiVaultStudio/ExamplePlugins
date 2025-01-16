@@ -72,9 +72,9 @@ ExampleWriterPluginFactory::ExampleWriterPluginFactory()
     getPluginMetadata().setSummary("This example shows how to implement a basic data writer plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
     getPluginMetadata().setAuthors({
-        { "A. Vieth", "Plugin developer & maintainer", "", { "LUMC", "TU Delft" } },
-        { "J. Thijssen", "Software architect", "", { "LUMC", "TU Delft" } },
-        { "T. Kroes", "Lead software architect", "", { "LUMC" } }
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } },
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } }
 	});
     getPluginMetadata().setOrganizations({
         { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },

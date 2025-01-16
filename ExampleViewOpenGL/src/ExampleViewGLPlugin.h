@@ -91,9 +91,6 @@ public:
     /** Default constructor */
     ExampleViewGLPluginFactory();
 
-    /** Destructor */
-    ~ExampleViewGLPluginFactory() override;
-
     /** Perform post-construction initialization */
     void initialize() override;
 

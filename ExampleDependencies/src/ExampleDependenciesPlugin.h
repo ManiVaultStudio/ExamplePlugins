@@ -47,10 +47,7 @@ class ExampleDependenciesPluginFactory : public AnalysisPluginFactory
 public:
 
     /** Default constructor */
-    ExampleDependenciesPluginFactory() {}
-
-    /** Destructor */
-    ~ExampleDependenciesPluginFactory() override {}
+    ExampleDependenciesPluginFactory();
 
     /** Creates an instance of the example analysis plugin */
     AnalysisPlugin* produce() override;

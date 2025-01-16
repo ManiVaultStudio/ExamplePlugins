@@ -27,8 +27,7 @@ using namespace mv;
 using namespace mv::plugin;
 
 ExampleDependenciesPlugin::ExampleDependenciesPlugin(const PluginFactory* factory) :
-    AnalysisPlugin(factory),
-    _settingsAction()
+    AnalysisPlugin(factory)
 {
 }
 
@@ -136,9 +135,24 @@ void ExampleDependenciesPlugin::compute()
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;
 }
 
+ExampleDependenciesPluginFactory::ExampleDependenciesPluginFactory()
+{
+    getPluginMetadata().setDescription("Example dependencies plugin");
+    getPluginMetadata().setSummary("This example shows how to work with plugin dependencies in ManiVault Studio.");
+    getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
+    getPluginMetadata().setAuthors({
+        { "A. Vieth", "Plugin developer & maintainer", "", { "LUMC", "TU Delft" } }
+	});
+    getPluginMetadata().setOrganizations({
+        { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
+        { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
+    });
+    getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
+}
+
 AnalysisPlugin* ExampleDependenciesPluginFactory::produce()
 {
-    // Return a new instance of the example analysis plugin
+    // Return a new instance of the example dependencies plugin
     return new ExampleDependenciesPlugin(this);
 }
 
@@ -146,7 +160,7 @@ mv::DataTypes ExampleDependenciesPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
 
-    // This example analysis plugin is compatible with points datasets
+    // This example dependencies plugin is compatible with points datasets
     supportedTypes.append(PointType);
 
     return supportedTypes;

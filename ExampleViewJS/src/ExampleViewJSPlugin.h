@@ -92,8 +92,8 @@ public:
     ExampleViewJSPluginFactory() {}
 
     /** Destructor */
-    ~ExampleViewJSPluginFactory() override {}
-    
+    ~ExampleViewJSPluginFactory() override;
+
     /** Get plugin icon */
     QIcon getIcon(const QColor& color = Qt::black) const override;
 

@@ -155,10 +155,7 @@ class ExampleAnalysisPluginFactory : public AnalysisPluginFactory
 public:
 
     /** Default constructor */
-    ExampleAnalysisPluginFactory() {}
-
-    /** Destructor */
-    ~ExampleAnalysisPluginFactory() override {}
+    ExampleAnalysisPluginFactory();
 
     /** Creates an instance of the example analysis plugin */
     AnalysisPlugin* produce() override;

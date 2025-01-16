@@ -229,7 +229,7 @@ void ExampleViewJSPlugin::createData()
 // Plugin Factory 
 // =============================================================================
 
-ExampleViewJSPluginFactory::~ExampleViewJSPluginFactory()
+ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
 {
     getPluginMetadata().setDescription("Example Javascript view plugin");
     getPluginMetadata().setSummary("This plugin shows how to implement a basic Javascript-based view plugin in <b>ManiVault</b>.");
@@ -238,7 +238,7 @@ ExampleViewJSPluginFactory::~ExampleViewJSPluginFactory()
         { "A. Vieth", "Plugin developer & maintainer", "", { "LUMC", "TU Delft" } },
         { "J.Thijssen", "Software architect", "", { "LUMC", "TU Delft" } },
         { "T. Kroes", "Lead software architect", "", { "LUMC" } }
-	});
+        });
     getPluginMetadata().setOrganizations({
         { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
         { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }

@@ -92,7 +92,7 @@ public:
     ExampleViewGLPluginFactory();
 
     /** Destructor */
-    ~ExampleViewGLPluginFactory() override {}
+    ~ExampleViewGLPluginFactory() override;
 
     /** Perform post-construction initialization */
     void initialize() override;

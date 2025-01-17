@@ -237,13 +237,13 @@ ExampleViewGLPluginFactory::ExampleViewGLPluginFactory() :
     _statusBarPopupAction(this, "Popup")
 {
     getPluginMetadata().setDescription("Example OpenGL view");
-    getPluginMetadata().setSummary("This example plugin shows how to implement a basic OpenGL-based view plugin in <b>ManiVault</b>.");
+    getPluginMetadata().setSummary("This example shows how to implement a basic OpenGL-based view plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
     getPluginMetadata().setAuthors({
         { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
         { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } },
         { "T. Kroes", { "Lead software architect" }, { "LUMC" } }
-        });
+	});
     getPluginMetadata().setOrganizations({
         { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
         { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }

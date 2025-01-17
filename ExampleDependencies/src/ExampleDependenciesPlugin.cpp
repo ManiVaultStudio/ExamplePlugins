@@ -135,6 +135,10 @@ void ExampleDependenciesPlugin::compute()
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;
 }
 
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
 ExampleDependenciesPluginFactory::ExampleDependenciesPluginFactory()
 {
     getPluginMetadata().setDescription("Example dependencies plugin");

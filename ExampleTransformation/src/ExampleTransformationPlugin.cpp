@@ -121,6 +121,10 @@ QString ExampleTransformationPlugin::getTypeName(const Type& type)
     return types[type];
 }
 
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
 ExampleTransformationPluginFactory::ExampleTransformationPluginFactory()
 {
     getPluginMetadata().setDescription("Example transformation plugin");

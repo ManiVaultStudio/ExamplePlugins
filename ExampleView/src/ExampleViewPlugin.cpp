@@ -183,15 +183,19 @@ void ExampleViewPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
     }
 }
 
-ExampleViewPluginFactory::~ExampleViewPluginFactory()
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
+ExampleViewPluginFactory::ExampleViewPluginFactory()
 {
     getPluginMetadata().setDescription("Example view plugin");
     getPluginMetadata().setSummary("This example plugin shows how to implement a basic view plugin in <b>ManiVault</b>.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
     getPluginMetadata().setAuthors({
-        { "T. Kroes", "Lead software architect", "", { "LUMC" } },
-        { "A. Vieth", "Plugin developer & maintainer", "", { "LUMC", "TU Delft" } },
-        { "J.Thijssen", "Software architect", "", { "LUMC", "TU Delft" } }
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } },
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } },
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } }
         });
     getPluginMetadata().setOrganizations({
         { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },

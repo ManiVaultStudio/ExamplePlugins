@@ -66,6 +66,10 @@ void ExampleWriterPlugin::writeData()
     }
 }
 
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
 ExampleWriterPluginFactory::ExampleWriterPluginFactory()
 {
     getPluginMetadata().setDescription("Example writer plugin");

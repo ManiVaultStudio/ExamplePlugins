@@ -226,6 +226,10 @@ void ExampleAnalysisPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
     }
 }
 
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
 ExampleAnalysisPluginFactory::ExampleAnalysisPluginFactory()
 {
     getPluginMetadata().setDescription("Example analysis plugin");

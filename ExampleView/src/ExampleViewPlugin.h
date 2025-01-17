@@ -80,10 +80,7 @@ class ExampleViewPluginFactory : public ViewPluginFactory
 public:
 
     /** Default constructor */
-    ExampleViewPluginFactory() {}
-
-    /** Destructor */
-    ~ExampleViewPluginFactory() override;
+    ExampleViewPluginFactory();
 
     /** Creates an instance of the example view plugin */
     ViewPlugin* produce() override;

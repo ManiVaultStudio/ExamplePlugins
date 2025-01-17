@@ -112,11 +112,6 @@ ExampleViewGLPlugin::ExampleViewGLPlugin(const PluginFactory* factory) :
     // Create data so that we do not need to load any in this example
     createData();
 
-    getLearningCenterAction().setPluginTitle("Example OpenGL view");
-
-    getLearningCenterAction().setShortDescription("Example OpenGL view plugin");
-    getLearningCenterAction().setLongDescription("This plugin shows how to implement a basic OpenGL-based view plugin in <b>ManiVault</b>.");
-
     getLearningCenterAction().addVideos(QStringList({ "Practitioner", "Developer" }));
 }
 
@@ -237,12 +232,23 @@ ViewPlugin* ExampleViewGLPluginFactory::produce()
 }
 
 ExampleViewGLPluginFactory::ExampleViewGLPluginFactory() :
-    ViewPluginFactory(),
     _statusBarAction(nullptr),
     _statusBarPopupGroupAction(this, "Popup Group"),
     _statusBarPopupAction(this, "Popup")
 {
-    
+    getPluginMetadata().setDescription("Example OpenGL view");
+    getPluginMetadata().setSummary("This example shows how to implement a basic OpenGL-based view plugin in ManiVault Studio.");
+    getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
+    getPluginMetadata().setAuthors({
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } },
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } }
+	});
+    getPluginMetadata().setOrganizations({
+        { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
+        { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
+    });
+    getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
 }
 
 void ExampleViewGLPluginFactory::initialize()

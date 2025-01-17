@@ -25,11 +25,6 @@ ExampleViewJSPlugin::ExampleViewJSPlugin(const PluginFactory* factory) :
     _dropWidget(nullptr),
     _currentDataSet(nullptr)
 {
-    getLearningCenterAction().setPluginTitle("Example Javascript view");
-
-    getLearningCenterAction().setShortDescription("Example Javascript view plugin");
-    getLearningCenterAction().setLongDescription("This plugin shows how to implement a basic Javascript-based view plugin in <b>ManiVault</b>.");
-
     getLearningCenterAction().addVideos(QStringList({ "Practitioner", "Developer" }));
 }
 
@@ -233,6 +228,23 @@ void ExampleViewJSPlugin::createData()
 // =============================================================================
 // Plugin Factory 
 // =============================================================================
+
+ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
+{
+    getPluginMetadata().setDescription("Example Javascript view plugin");
+    getPluginMetadata().setSummary("This plugin shows how to implement a basic Javascript-based view plugin in ManiVault Studio.");
+    getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
+    getPluginMetadata().setAuthors({
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } },
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } }
+        });
+    getPluginMetadata().setOrganizations({
+        { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
+        { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
+        });
+    getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
+}
 
 QIcon ExampleViewJSPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {

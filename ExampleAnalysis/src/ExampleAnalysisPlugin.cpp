@@ -25,10 +25,7 @@ std::uint32_t ExampleAnalysisPlugin::Point::numberOfDimensions = 7;
 float ExampleAnalysisPlugin::Point::maximumVelocity = 1.0f;
 
 ExampleAnalysisPlugin::ExampleAnalysisPlugin(const PluginFactory* factory) :
-    AnalysisPlugin(factory),
-    _settingsAction(),
-    _points(),
-    _pointHeadings()
+    AnalysisPlugin(factory)
 {
 }
 
@@ -227,6 +224,27 @@ void ExampleAnalysisPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
         default:
             break;
     }
+}
+
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
+ExampleAnalysisPluginFactory::ExampleAnalysisPluginFactory()
+{
+    getPluginMetadata().setDescription("Example analysis plugin");
+    getPluginMetadata().setSummary("This example shows how to implement a basic analysis plugin in ManiVault Studio.");
+    getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
+    getPluginMetadata().setAuthors({
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } },
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } }
+	});
+    getPluginMetadata().setOrganizations({
+        { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
+        { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
+	});
+    getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
 }
 
 AnalysisPlugin* ExampleAnalysisPluginFactory::produce()

@@ -120,8 +120,7 @@ class ExampleDataPluginFactory : public RawDataFactory
                       FILE  "ExampleDataPlugin.json")
     
 public:
-    ExampleDataPluginFactory() {}
-    ~ExampleDataPluginFactory() override {}
+    ExampleDataPluginFactory();
 
     /**
      * Get plugin icon

@@ -71,7 +71,7 @@ private:
 private:
     ChartWidget*            _chartWidget;       // WebWidget that sets up the HTML page
     DropWidget*             _dropWidget;        // Widget for drag and drop behavior
-    mv::Dataset<Points>   _currentDataSet;    // Reference to currently shown data set
+    mv::Dataset<Points>     _currentDataSet;    // Reference to currently shown data set
 };
 
 /**
@@ -89,11 +89,8 @@ class ExampleViewJSPluginFactory : public ViewPluginFactory
 public:
 
     /** Default constructor */
-    ExampleViewJSPluginFactory() {}
+    ExampleViewJSPluginFactory();
 
-    /** Destructor */
-    ~ExampleViewJSPluginFactory() override {}
-    
     /** Get plugin icon */
     QIcon getIcon(const QColor& color = Qt::black) const override;
 

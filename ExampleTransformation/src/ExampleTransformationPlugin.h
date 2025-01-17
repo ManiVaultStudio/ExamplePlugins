@@ -95,10 +95,7 @@ class ExampleTransformationPluginFactory : public TransformationPluginFactory
 public:
 
     /** Default constructor */
-    ExampleTransformationPluginFactory() {}
-
-    /** Destructor */
-    ~ExampleTransformationPluginFactory() override {}
+    ExampleTransformationPluginFactory();
 
     /** Creates an instance of the example transform plugin */
     ExampleTransformationPlugin* produce() override;

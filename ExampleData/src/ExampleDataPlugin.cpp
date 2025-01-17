@@ -153,6 +153,27 @@ void PixelSet::selectInvert()
     events().notifyDatasetDataSelectionChanged(this);
 }
 
+// =============================================================================
+// Plugin Factory 
+// =============================================================================
+
+ExampleDataPluginFactory::ExampleDataPluginFactory()
+{
+    getPluginMetadata().setDescription("Example data plugin");
+    getPluginMetadata().setSummary("This example shows how to implement a basic data plugin in ManiVault Studio.");
+    getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
+    getPluginMetadata().setAuthors({
+        { "J. Thijssen", { "Software architect" }, { "LUMC", "TU Delft" } },
+        { "T. Kroes", { "Lead software architect" }, { "LUMC" } },
+        { "A. Vieth", { "Plugin developer", "Maintainer" }, { "LUMC", "TU Delft" } }
+	});
+    getPluginMetadata().setOrganizations({
+        { "LUMC", "Leiden University Medical Center", "https://www.lumc.nl/en/" },
+        { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
+	});
+    getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
+}
+
 QIcon ExampleDataPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
     return Application::getIconFont("FontAwesome").getIcon("database", color);

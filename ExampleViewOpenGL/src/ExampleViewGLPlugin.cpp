@@ -276,8 +276,12 @@ void ExampleViewGLPluginFactory::initialize()
 
         label->setOpenExternalLinks(true);
     });
+    
 
     _statusBarAction = new PluginStatusBarAction(this, "Example View OpenGL", getKind());
+
+    _statusBarAction->getConditionallyVisibleAction().setChecked(false);    // The status bar is shown, regardless of the number of instances
+    //_statusBarAction->getConditionallyVisibleAction().setChecked(true);   // The status bar is shown when there is at least one instance of the plugin
 
     // Sets the action that is shown when the status bar is clicked
     _statusBarAction->setPopupAction(&_statusBarPopupGroupAction);

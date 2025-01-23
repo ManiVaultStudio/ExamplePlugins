@@ -291,7 +291,7 @@ void ExampleViewGLPluginFactory::initialize()
 
 QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return mv::Application::getIconFont("FontAwesome").getIcon("exclamation-circle", color);
+    return mv::Application::getIconFont("FontAwesome").getIcon("cube", color);
 }
 
 mv::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const

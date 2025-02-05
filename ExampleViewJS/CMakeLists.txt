@@ -29,6 +29,11 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 find_package(ManiVault COMPONENTS Core PointData CONFIG QUIET)
 
 # -----------------------------------------------------------------------------
+# Include Common directory
+# -----------------------------------------------------------------------------
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Common ${CMAKE_CURRENT_BINARY_DIR}/Common)
+
+# -----------------------------------------------------------------------------
 # Source files
 # -----------------------------------------------------------------------------
 # Define the plugin sources
@@ -55,15 +60,16 @@ set(AUX
 
 qt6_add_resources(RESOURCE_FILES res/example_chart.qrc)
 
-source_group( Plugin FILES ${PLUGIN_SOURCES})
-source_group( Web FILES ${WEB})
-source_group( Aux FILES ${AUX})
+source_group(Plugin FILES ${PLUGIN_SOURCES})
+source_group(Web FILES ${WEB})
+source_group(Aux FILES ${AUX})
+source_group(Common FILES ${COMMON_FILES})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${AUX} ${WEB} ${RESOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${AUX} ${WEB} ${RESOURCE_FILES} ${COMMON_FILES})
 
 # -----------------------------------------------------------------------------
 # Target include directories

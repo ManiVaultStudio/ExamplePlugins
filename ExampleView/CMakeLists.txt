@@ -42,13 +42,14 @@ set(PLUGIN_MOC_HEADERS
     src/ExampleViewPlugin.h
 )
 
-source_group( Plugin FILES ${PLUGIN_SOURCES})
+source_group(Plugin FILES ${PLUGIN_SOURCES})
+source_group(Common FILES ${COMMON_FILES})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${COMMON_FILES})
 
 # -----------------------------------------------------------------------------
 # Target include directories

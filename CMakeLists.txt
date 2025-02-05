@@ -12,6 +12,8 @@ endif()
 set(PROJECT "ExamplePlugins")
 PROJECT(${PROJECT})
 
+add_subdirectory(Common)
+
 add_subdirectory(ExampleView)
 add_subdirectory(ExampleViewJS)
 add_subdirectory(ExampleViewOpenGL)

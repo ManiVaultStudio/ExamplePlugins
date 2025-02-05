@@ -1,0 +1,17 @@
+set(DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(COMMON_HEADERS
+    ${DIR}/common.h
+	PARENT_SCOPE
+)
+
+set(COMMON_SOURCES
+    ${DIR}/common.cpp
+	PARENT_SCOPE
+)
+
+set(COMMON_FILES
+    ${COMMON_HEADERS}
+    ${COMMON_SOURCES}
+	PARENT_SCOPE
+)

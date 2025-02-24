@@ -108,7 +108,7 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         shell: bash
         run:  |
-          brew update
+          brew update && brew upgrade
           brew install mono
 
       # Use cached vcpkg packages if possible

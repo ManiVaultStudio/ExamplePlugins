@@ -92,12 +92,8 @@ class ExamplePluginsConan(ConanFile):
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]
         qt_dir = qt_cfg.parents[0].as_posix()
-        #qt_root = qt_cfg.parents[2].as_posix()
 
         tc.variables["Qt6_DIR"] = qt_dir
-
-        # for Qt < 6.4.2
-        #tc.variables["Qt6_ROOT"] = qt_root
 
         # Use the ManiVault .cmake file to find ManiVault with find_package
         mv_core_root = self.deps_cpp_info["hdps-core"].rootpath
@@ -130,7 +126,7 @@ class ExamplePluginsConan(ConanFile):
             tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
             tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
-            tc.variables["CMAKE_PROJECT_INCLUDE"] = vcpkg_tc.as_posix()
+            tc.variables["CMAKE_PROJECT_INCLUDE"]   = vcpkg_tc.as_posix()
 
         tc.generate()
 

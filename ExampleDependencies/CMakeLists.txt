@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.22)
 
 option(MV_UNITY_BUILD "Combine target source files into batches for faster compilation" OFF)
 
 # -----------------------------------------------------------------------------
 # ExampleAnalysis Plugin
 # -----------------------------------------------------------------------------
-PROJECT("ExampleDependenciesPlugin")
+PROJECT("ExampleDependenciesPlugin" C CXX)
 
 # -----------------------------------------------------------------------------
 # CMake Options
@@ -48,7 +48,11 @@ set(atomic_code
        return 0;
      }")
 
+message(STATUS "Test start.")
+
 check_cxx_source_compiles("${atomic_code}" ATOMICS_LOCK_FREE_INSTRUCTIONS)
+
+message(STATUS "Test end.")
 
 if(ATOMICS_LOCK_FREE_INSTRUCTIONS)
   set(ATOMICS_FOUND TRUE)

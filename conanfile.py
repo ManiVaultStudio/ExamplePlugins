@@ -88,6 +88,9 @@ class ExamplePluginsConan(ConanFile):
 
         tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
 
+        if self.settings.os == "Windows":
+            tc.variables["CMAKE_GENERATOR_PLATFORM"] = "x64"
+
         # Use the Qt provided .cmake files
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]

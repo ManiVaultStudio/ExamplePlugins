@@ -5,7 +5,7 @@ option(MV_UNITY_BUILD "Combine target source files into batches for faster compi
 # -----------------------------------------------------------------------------
 # ExampleAnalysis Plugin
 # -----------------------------------------------------------------------------
-PROJECT("ExampleDependenciesPlugin" C CXX)
+PROJECT("ExampleDependenciesPlugin")
 
 # -----------------------------------------------------------------------------
 # CMake Options

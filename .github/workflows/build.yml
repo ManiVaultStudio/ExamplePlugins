@@ -77,7 +77,7 @@ jobs:
       - name: Clone vcpkg
         run: |
           cd ${{ github.workspace }}
-          git clone --branch 2024.08.23 --single-branch https://github.com/microsoft/vcpkg.git
+          git clone --branch 2025.02.14 --single-branch https://github.com/microsoft/vcpkg.git
 
       # Bootstrap vcpkg
       - name: Bootstrap vcpkg 
@@ -98,7 +98,20 @@ jobs:
           echo "VCPKG_EXE=${{ github.workspace }}/vcpkg/vcpkg" >> $GITHUB_ENV
           echo "VCPKG_LIBRARY_LINKAGE=dynamic" >> $GITHUB_ENV
 
-      # Use cached vcpkg packges if possible
+      - name: NuGet dependencies (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+        run:  |
+          sudo apt update && sudo apt install -y mono-complete
+
+      - name: NuGet dependencies (MacOS)
+        if: startsWith(matrix.os, 'macos')
+        shell: bash
+        run:  |
+          brew update
+          brew install mono
+
+      # Use cached vcpkg packages if possible
       - name: Add NuGet sources
         if: startsWith(matrix.os, 'windows')
         shell: pwsh

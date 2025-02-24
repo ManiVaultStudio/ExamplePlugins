@@ -1,6 +1,6 @@
 #include "ExampleWriterPlugin.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include "PointData/PointData.h"
 

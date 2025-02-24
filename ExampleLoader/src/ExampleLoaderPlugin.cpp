@@ -1,6 +1,6 @@
 #include "ExampleLoaderPlugin.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include "PointData/PointData.h"
 #include "Set.h"

@@ -1,6 +1,6 @@
 #include "ExampleDataPlugin.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include "Application.h"
 

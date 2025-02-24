@@ -1,12 +1,12 @@
 set(DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(COMMON_HEADERS
-    ${DIR}/Common.h
+    ${DIR}/common.h
 	PARENT_SCOPE
 )
 
 set(COMMON_SOURCES
-    ${DIR}/Common.cpp
+    ${DIR}/common.cpp
 	PARENT_SCOPE
 )
 

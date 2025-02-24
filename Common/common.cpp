@@ -1,4 +1,4 @@
-#include "Common.h"
+#include "common.h"
 
 QString getExampleNotificationMessage()
 {

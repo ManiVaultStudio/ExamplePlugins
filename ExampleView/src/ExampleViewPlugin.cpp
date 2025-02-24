@@ -1,6 +1,6 @@
 #include "ExampleViewPlugin.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include <event/Event.h>
 

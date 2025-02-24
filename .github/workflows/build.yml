@@ -4,16 +4,10 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      forceMacBuild:
-        description: 'If set true override the ENABLE_MACOS_BUILD to force a build'
-        type: boolean
-        default: false
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  MACENABLED: ${{ inputs.forceMacBuild }}
   USERNAME: ManiVaultStudio
   FEED_URL: https://nuget.pkg.github.com/ManiVaultStudio/index.json
   VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/ManiVaultStudio/index.json,readwrite"
@@ -186,7 +180,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
 
       - name: Mac build
-        if: startsWith(matrix.os, 'macos') &&  (env.MACENABLED == 'true' || vars.ENABLE_MACOS_BUILD == 'True')
+        if: startsWith(matrix.os, 'macos')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.22)
 
 if(NOT DEFINED MV_EXAMPLES_USE_VCPKG)
     set(MV_EXAMPLES_USE_VCPKG OFF)

@@ -39,8 +39,6 @@ CPMAddPackage(
 )
 
 if (MSVC)
-    target_compile_options(hwy PRIVATE "$<IF:$<CONFIG:DEBUG>,/MDd,/MD>")
-    target_compile_options(hwy_contrib PRIVATE "$<IF:$<CONFIG:DEBUG>,/MDd,/MD>")
     set_target_properties(hwy_test PROPERTIES EXCLUDE_FROM_ALL True)
     set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
 endif()

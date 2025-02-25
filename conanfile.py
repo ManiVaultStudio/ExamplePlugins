@@ -86,8 +86,6 @@ class ExamplePluginsConan(ConanFile):
 
         tc = CMakeToolchain(self, generator=generator)
 
-        tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "ON"
-
         # Use the Qt provided .cmake files
         qt_path = pathlib.Path(self.deps_cpp_info["qt"].rootpath)
         qt_cfg = list(qt_path.glob("**/Qt6Config.cmake"))[0]

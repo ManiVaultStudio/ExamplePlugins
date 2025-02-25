@@ -43,6 +43,11 @@ if (MSVC)
     set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
 endif()
 
+if (APPLE)
+    target_compile_definitions(hwy PRIVATE HWY_DISABLED_TARGETS=HWY_ALL_SVE)
+    target_compile_definitions(hwy_contrib PRIVATE HWY_DISABLED_TARGETS=HWY_ALL_SVE)
+endif()
+
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)
 

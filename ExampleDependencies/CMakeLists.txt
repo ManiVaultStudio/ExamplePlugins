@@ -34,7 +34,9 @@ CPMAddPackage(
   NAME highway
   URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
   URL_HASH SHA256=7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343
-  PATCHES "cmake/highway.patch" # see https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
+  PATCHES 
+    "cmake/highway-win.patch" # from https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
+    "cmake/highway-apple-arm.patch" # from https://github.com/Homebrew/homebrew-core/blob/d55553b062fab1ddfc3ea0c8f41725f0b2584f10/Formula/h/highway.rb, fixes https://github.com/google/highway/issues/2317
   OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
 )
 

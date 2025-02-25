@@ -87,6 +87,13 @@ CPMAddPackage(
   OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
 )
 
+if (MSVC)
+    target_compile_options(hwy PRIVATE "$<IF:$<CONFIG:DEBUG>,/MDd,/MD>")
+    target_compile_options(hwy_contrib PRIVATE "$<IF:$<CONFIG:DEBUG>,/MDd,/MD>")
+    set_target_properties(hwy_test PROPERTIES EXCLUDE_FROM_ALL True)
+    set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
+endif()
+
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)
 

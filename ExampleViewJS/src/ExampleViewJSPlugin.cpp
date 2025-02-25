@@ -1,6 +1,6 @@
 #include "ExampleViewJSPlugin.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include "ChartWidget.h"
 

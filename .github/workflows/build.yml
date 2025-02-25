@@ -4,16 +4,10 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      forceMacBuild:
-        description: 'If set true override the ENABLE_MACOS_BUILD to force a build'
-        type: boolean
-        default: false
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  MACENABLED: ${{ inputs.forceMacBuild }}
   USERNAME: ManiVaultStudio
   FEED_URL: https://nuget.pkg.github.com/ManiVaultStudio/index.json
   VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/ManiVaultStudio/index.json,readwrite"
@@ -28,7 +22,7 @@ jobs:
     - name: Get matrix from file
       id: matrix_setup
       uses: ManiVaultStudio/github-actions/matrix_setup@main
-      
+        
   cross-platform-build:
     name: Cross platform build
     needs: prepare_matrix
@@ -83,7 +77,7 @@ jobs:
       - name: Clone vcpkg
         run: |
           cd ${{ github.workspace }}
-          git clone --branch 2024.08.23 --single-branch https://github.com/microsoft/vcpkg.git
+          git clone --branch 2025.02.14 --single-branch https://github.com/microsoft/vcpkg.git
 
       # Bootstrap vcpkg
       - name: Bootstrap vcpkg 
@@ -104,7 +98,20 @@ jobs:
           echo "VCPKG_EXE=${{ github.workspace }}/vcpkg/vcpkg" >> $GITHUB_ENV
           echo "VCPKG_LIBRARY_LINKAGE=dynamic" >> $GITHUB_ENV
 
-      # Use cached vcpkg packges if possible
+      - name: NuGet dependencies (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        shell: bash
+        run:  |
+          sudo apt update && sudo apt install -y mono-complete
+
+      - name: NuGet dependencies (MacOS)
+        if: startsWith(matrix.os, 'macos') && !endsWith(matrix.os, '13')
+        shell: bash
+        run:  |
+          brew update && brew upgrade
+          brew install mono
+
+      # Use cached vcpkg packages if possible
       - name: Add NuGet sources
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
@@ -179,6 +186,7 @@ jobs:
           conan-libcxx-version: ${{matrix.build-libcxx}}
           conan-build-type: ${{matrix.build-config}}
           conan-build-os: ${{matrix.build-os}}
+          build-arch: ${{matrix.build-arch}}
           conan-user: ${{secrets.LKEB_UPLOAD_USER}}
           conan-password: ${{secrets.LKEB_UPLOAD_USER_PASSWORD}}
           conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}
@@ -186,7 +194,7 @@ jobs:
           conan-cxx: g++-${{matrix.build-cversion}}
 
       - name: Mac build
-        if: startsWith(matrix.os, 'macos') &&  (env.MACENABLED == 'true' || vars.ENABLE_MACOS_BUILD == 'True')
+        if: startsWith(matrix.os, 'macos')
         uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}
@@ -194,6 +202,7 @@ jobs:
           conan-libcxx-version: ${{matrix.build-libcxx}}
           conan-build-type: ${{matrix.build-config}}
           conan-build-os: ${{matrix.build-os}}
+          build-arch: ${{matrix.build-arch}}
           conan-user: ${{secrets.LKEB_UPLOAD_USER}}
           conan-password: ${{secrets.LKEB_UPLOAD_USER_PASSWORD}}
           conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}

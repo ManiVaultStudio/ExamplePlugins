@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.22)
 
 option(MV_UNITY_BUILD "Combine target source files into batches for faster compilation" OFF)
 
@@ -16,8 +16,8 @@ set(CMAKE_AUTOMOC ON)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /MP /permissive- /Zc:__cplusplus")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MD")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
@@ -34,9 +34,16 @@ CPMAddPackage(
   NAME highway
   URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
   URL_HASH SHA256=7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343
-  PATCHES "cmake/highway.patch" # see https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
+  PATCHES 
+    "cmake/highway-win.patch" # from https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
+    "cmake/highway-apple-arm.patch" # from https://github.com/Homebrew/homebrew-core/blob/d55553b062fab1ddfc3ea0c8f41725f0b2584f10/Formula/h/highway.rb, fixes https://github.com/google/highway/issues/2317
   OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
 )
+
+if (MSVC)
+    set_target_properties(hwy_test PROPERTIES EXCLUDE_FROM_ALL True)
+    set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
+endif()
 
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)
@@ -82,8 +89,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${ManiVault_INCLUDE_DIR}")
 # -----------------------------------------------------------------------------
 # Target properties
 # -----------------------------------------------------------------------------
-# Request C++17
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+# Request C++20
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 # Enable unity build
 if(MV_UNITY_BUILD)
@@ -149,6 +156,6 @@ mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 # -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug/ManiVault\ Studio.exe,${ManiVault_INSTALL_DIR}/release/ManiVault\ Studio.exe>)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/Debug,$<IF:$<CONFIG:RELWITHDEBINFO>,${ManiVault_INSTALL_DIR}/RelWithDebInfo,${ManiVault_INSTALL_DIR}/Release>>)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${ManiVault_INSTALL_DIR}/Debug/ManiVault Studio.exe",$<IF:$<CONFIG:RELWITHDEBINFO>,"${ManiVault_INSTALL_DIR}/RelWithDebInfo/ManiVault Studio.exe","${ManiVault_INSTALL_DIR}/Release/ManiVault Studio.exe">>)
 endif()

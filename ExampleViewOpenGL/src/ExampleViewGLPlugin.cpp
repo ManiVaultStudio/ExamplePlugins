@@ -1,7 +1,7 @@
 #include "ExampleViewGLPlugin.h"
 #include "ExampleGLWidget.h"
 
-#include "../Common/Common.h"
+#include "../Common/common.h"
 
 #include "GlobalSettingsAction.h"
 

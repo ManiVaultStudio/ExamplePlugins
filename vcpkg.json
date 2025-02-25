@@ -8,9 +8,9 @@
             "platform": "!osx"
         }
     ],
-    "builtin-baseline":"73964f854d0d6424f335e9515b61b3a2dad5e15b",
+    "builtin-baseline":"d5ec528843d29e3a52d745a64b469f810b2cedbf",
     "overrides": [
-        { "name": "blake3", "version": "1.5.1" },
-        { "name": "faiss", "version": "1.7.4" }
+        { "name": "blake3", "version": "1.5.4" },
+        { "name": "faiss", "version": "1.8.0" }
     ]
 }

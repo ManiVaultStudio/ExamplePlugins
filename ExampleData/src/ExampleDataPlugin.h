@@ -62,13 +62,6 @@ public:
     /** Mandatory override for copying of data sets */
     mv::Dataset<mv::DatasetImpl> copy() const override;
 
-    /**
-     * Get set icon
-     * @param color Icon color for flat (font) icons
-     * @return Icon
-     */
-    QIcon getIcon(const QColor& color = Qt::black) const override;
-
 public: // Selection
 
     /**
@@ -121,13 +114,6 @@ class ExampleDataPluginFactory : public RawDataFactory
     
 public:
     ExampleDataPluginFactory();
-
-    /**
-     * Get plugin icon
-     * @param color Icon color for flat (font) icons
-     * @return Icon
-     */
-    QIcon getIcon(const QColor& color = Qt::black) const override;
 
     mv::plugin::RawData* produce() override;
 };

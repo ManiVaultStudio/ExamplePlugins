@@ -250,11 +250,6 @@ ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
     getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
 }
 
-QIcon ExampleViewJSPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return mv::Application::getIconFont("FontAwesome").getIcon("bullseye", color);
-}
-
 ViewPlugin* ExampleViewJSPluginFactory::produce()
 {
     return new ExampleViewJSPlugin(this);

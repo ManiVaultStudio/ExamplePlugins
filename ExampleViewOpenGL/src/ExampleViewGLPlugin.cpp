@@ -239,6 +239,8 @@ ExampleViewGLPluginFactory::ExampleViewGLPluginFactory() :
     _statusBarPopupGroupAction(this, "Popup Group"),
     _statusBarPopupAction(this, "Popup")
 {
+    setIconByName("cube");
+
     getPluginMetadata().setDescription("Example OpenGL view");
     getPluginMetadata().setSummary("This example shows how to implement a basic OpenGL-based view plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });

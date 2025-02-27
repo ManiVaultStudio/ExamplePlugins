@@ -185,7 +185,7 @@ mv::gui::PluginTriggerActions ExampleDependenciesPluginFactory::getPluginTrigger
     const auto numberOfDatasets = datasets.count();
 
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
-        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleDependenciesPluginFactory*>(this), this, "Example dependencies", "Perform an Example Analysis", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleDependenciesPluginFactory*>(this), this, "Example dependencies", "Perform an Example Analysis", icon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
             for (auto& dataset : datasets)
                 getPluginInstance(dataset);
             });

@@ -296,11 +296,6 @@ void ExampleViewGLPluginFactory::initialize()
     setStatusBarAction(_statusBarAction);
 }
 
-QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return mv::Application::getIconFont("FontAwesome").getIcon("cube", color);
-}
-
 mv::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;

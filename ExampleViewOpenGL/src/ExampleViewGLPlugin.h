@@ -94,9 +94,6 @@ public:
     /** Perform post-construction initialization */
     void initialize() override;
 
-    /** Get plugin icon */
-    QIcon getIcon(const QColor& color = Qt::black) const override;
-
     /** Creates an instance of the example view plugin */
     ViewPlugin* produce() override;
 

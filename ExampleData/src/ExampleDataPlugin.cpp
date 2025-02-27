@@ -157,6 +157,8 @@ void PixelSet::selectInvert()
 
 ExampleDataPluginFactory::ExampleDataPluginFactory()
 {
+    setIconByName("database");
+
     getPluginMetadata().setDescription("Example data plugin");
     getPluginMetadata().setSummary("This example shows how to implement a basic data plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });

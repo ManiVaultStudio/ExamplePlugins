@@ -235,6 +235,8 @@ void ExampleViewJSPlugin::createData()
 
 ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
 {
+    setIconByName("bullseye");
+
     getPluginMetadata().setDescription("Example Javascript view plugin");
     getPluginMetadata().setSummary("This plugin shows how to implement a basic Javascript-based view plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });

@@ -172,7 +172,7 @@ mv::gui::PluginTriggerActions ExampleTransformationPluginFactory::getPluginTrigg
             const auto addPluginTriggerAction = [this, &pluginTriggerActions, datasets](const ExampleTransformationPlugin::Type& type) -> void {
                 const auto typeName = ExampleTransformationPlugin::getTypeName(type);
 
-                auto pluginTriggerAction = new mv::gui::PluginTriggerAction(const_cast<ExampleTransformationPluginFactory*>(this), this, QString("Example/%1").arg(typeName), QString("Perform %1 data transformation").arg(typeName), getIcon(), [this, datasets, type](mv::gui::PluginTriggerAction& pluginTriggerAction) -> void {
+                auto pluginTriggerAction = new mv::gui::PluginTriggerAction(const_cast<ExampleTransformationPluginFactory*>(this), this, QString("Example/%1").arg(typeName), QString("Perform %1 data transformation").arg(typeName), icon(), [this, datasets, type](mv::gui::PluginTriggerAction& pluginTriggerAction) -> void {
                     for (const auto& dataset : datasets) {
                         auto pluginInstance = dynamic_cast<ExampleTransformationPlugin*>(plugins().requestPlugin(getKind()));
 

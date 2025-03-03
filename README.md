@@ -1,5 +1,4 @@
 # ManiVault Example Plugins
-<sub>(ManiVault version 0.9)</sub>
 
 [ManiVault](https://github.com/ManiVaultStudio/Core) can currently be extended by six types of plugins, each dedicated to a specific functionality. Here, you can find exemplary implementations for each plugins type that can be used as a starting point for new plugins:
 - [Analysis](https://github.com/ManiVaultStudio/ExamplePlugins/tree/master/ExampleAnalysis): general analytics methods, e.g., dimensionality reduction
@@ -15,10 +14,10 @@
 
 ## Requirements
 * ManiVault Studio (https://github.com/ManiVaultStudio/Core)
-* CMake 3.17+ (https://cmake.org/)
-* Qt 6.3.2+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
-* A C++17 compatible compiler
-    * For Windows: Visual Studio 2019 or 2022 (https://visualstudio.microsoft.com/downloads/)
+* CMake 3.22+ (https://cmake.org/)
+* Qt 6.8+ (https://www.qt.io/download), additional libraries: Qt WebEngine, Qt WebChannel, Qt Positioning and the Qt5 Compatibility Module
+* A C++20 compatible compiler
+    * For Windows: Visual Studio 2022 (https://visualstudio.microsoft.com/downloads/)
 * Optionally: Git (https://git-scm.com/)
 
 ## Download
@@ -45,7 +44,7 @@ For Windows, using the CMake GUI:
    `Source: C:/YourOwnFolder/ExamplePlugins-master`  
    `Build:  C:/YourOwnFolder/ExamplePlugins-master/build`
    
-4. Press `Configure` and select the `Visual Studio 15 2019` (or 17 2022) generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio. Press Finish to configure the project.
+4. Press `Configure` and select the `Visual Studio 17 2022` generator with the optional platform of `x64`. If it is not available, be sure to install Visual Studio. Press Finish to configure the project.
 ![Example_cmake](https://github.com/user-attachments/assets/b86e6e19-0fc1-40ec-8397-04e5ee8a7f87)
 5. A lot of red paths should now appear. Set the `ManiVault_DIR` to the subfolder of your ManiVault install directory (which should hold `Debug`, `Release` and a `cmake` folder) that contains a `ManiVaultConfig.cmake` file. That should be `YOUR_MANIVAULT_INSTALL_DIR/cmake/mv`. Check that the entries relating to Qt seem correct and then press `Generate` to generate the Visual Studio solution. If cmake is asking you for a Qt6_DIR please refer to [CMake cannot find my Qt Installation](https://github.com/ManiVaultStudio/PublicWiki/wiki/FAQ#cmake-cannot-find-my-qt-installation).
 6. Press `Open Project` to launch Visual Studio and the example project.

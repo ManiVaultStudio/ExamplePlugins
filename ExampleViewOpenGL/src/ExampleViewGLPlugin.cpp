@@ -239,6 +239,8 @@ ExampleViewGLPluginFactory::ExampleViewGLPluginFactory() :
     _statusBarPopupGroupAction(this, "Popup Group"),
     _statusBarPopupAction(this, "Popup")
 {
+    setIconByName("cube");
+
     getPluginMetadata().setDescription("Example OpenGL view");
     getPluginMetadata().setSummary("This example shows how to implement a basic OpenGL-based view plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
@@ -296,11 +298,6 @@ void ExampleViewGLPluginFactory::initialize()
     setStatusBarAction(_statusBarAction);
 }
 
-QIcon ExampleViewGLPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return mv::Application::getIconFont("FontAwesome").getIcon("cube", color);
-}
-
 mv::DataTypes ExampleViewGLPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
@@ -322,7 +319,7 @@ mv::gui::PluginTriggerActions ExampleViewGLPluginFactory::getPluginTriggerAction
     const auto numberOfDatasets = datasets.count();
 
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
-        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewGLPluginFactory*>(this), this, "Example GL", "OpenGL view example data", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewGLPluginFactory*>(this), this, "Example GL", "OpenGL view example data", icon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
             for (auto& dataset : datasets)
                 getPluginInstance()->loadData(Datasets({ dataset }));
         });

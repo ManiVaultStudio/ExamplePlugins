@@ -71,11 +71,6 @@ Dataset<DatasetImpl> PixelSet::copy() const
     return copySet;
 }
 
-QIcon PixelSet::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return QIcon();
-}
-
 std::vector<std::uint32_t>& PixelSet::getSelectionIndices()
 {
     return _indices;
@@ -162,6 +157,8 @@ void PixelSet::selectInvert()
 
 ExampleDataPluginFactory::ExampleDataPluginFactory()
 {
+    setIconByName("database");
+
     getPluginMetadata().setDescription("Example data plugin");
     getPluginMetadata().setSummary("This example shows how to implement a basic data plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
@@ -175,11 +172,6 @@ ExampleDataPluginFactory::ExampleDataPluginFactory()
         { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
 	});
     getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
-}
-
-QIcon ExampleDataPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return Application::getIconFont("FontAwesome").getIcon("database", color);
 }
 
 plugin::RawData* ExampleDataPluginFactory::produce()

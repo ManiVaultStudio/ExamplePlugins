@@ -91,9 +91,6 @@ public:
     /** Default constructor */
     ExampleViewJSPluginFactory();
 
-    /** Get plugin icon */
-    QIcon getIcon(const QColor& color = Qt::black) const override;
-
     /** Creates an instance of the example view plugin */
     ViewPlugin* produce() override;
 

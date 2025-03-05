@@ -111,7 +111,7 @@ PluginTriggerActions ExampleWriterPluginFactory::getPluginTriggerActions(const m
 
     if (PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
         if (datasets.count() >= 1) {
-            auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleWriterPluginFactory*>(this), this, "Example Writer", "Export random data to disk (not the selected data set)", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+            auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleWriterPluginFactory*>(this), this, "Example Writer", "Export random data to disk (not the selected data set)", icon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
                 for (auto dataset : datasets)
                     getPluginInstance(dataset);
                 });

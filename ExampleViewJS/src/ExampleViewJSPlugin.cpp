@@ -235,6 +235,8 @@ void ExampleViewJSPlugin::createData()
 
 ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
 {
+    setIconByName("bullseye");
+
     getPluginMetadata().setDescription("Example Javascript view plugin");
     getPluginMetadata().setSummary("This plugin shows how to implement a basic Javascript-based view plugin in ManiVault Studio.");
     getPluginMetadata().setCopyrightHolder({ "BioVault (Biomedical Visual Analytics Unit LUMC - TU Delft)" });
@@ -248,11 +250,6 @@ ExampleViewJSPluginFactory::ExampleViewJSPluginFactory()
         { "TU Delft", "Delft university of technology", "https://www.tudelft.nl/" }
         });
     getPluginMetadata().setLicenseText("This plugin is distributed under the [LGPL v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) license.");
-}
-
-QIcon ExampleViewJSPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
-{
-    return mv::Application::getIconFont("FontAwesome").getIcon("bullseye", color);
 }
 
 ViewPlugin* ExampleViewJSPluginFactory::produce()
@@ -279,7 +276,7 @@ mv::gui::PluginTriggerActions ExampleViewJSPluginFactory::getPluginTriggerAction
     const auto numberOfDatasets = datasets.count();
 
     if (numberOfDatasets >= 1 && PluginFactory::areAllDatasetsOfTheSameType(datasets, PointType)) {
-        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewJSPluginFactory*>(this), this, "Example JS", "View JavaScript visualization", getIcon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
+        auto pluginTriggerAction = new PluginTriggerAction(const_cast<ExampleViewJSPluginFactory*>(this), this, "Example JS", "View JavaScript visualization", icon(), [this, getPluginInstance, datasets](PluginTriggerAction& pluginTriggerAction) -> void {
             for (auto dataset : datasets)
                 getPluginInstance()->loadData(Datasets({ dataset }));
 

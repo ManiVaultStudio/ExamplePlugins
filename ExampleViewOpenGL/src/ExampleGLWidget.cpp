@@ -40,6 +40,7 @@ ExampleGLWidget::ExampleGLWidget() :
 
     setFormat(surfaceFormat);
 
+    _pointRenderer.getNavigator().initialize(this);
 }
 
 ExampleGLWidget::~ExampleGLWidget()
@@ -82,7 +83,7 @@ void ExampleGLWidget::setData(const std::vector<mv::Vector2f>& points, float poi
     _pointRenderer.setPointSize(pointSize);
     _pointRenderer.setAlpha(pointOpacity);
 
-    _pointRenderer.getNavigator().resetView();
+    _pointRenderer.getNavigator().resetView(true);
 
     // Calls paintGL()
     update();

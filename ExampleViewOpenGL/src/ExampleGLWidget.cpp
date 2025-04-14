@@ -9,7 +9,7 @@ ExampleGLWidget::ExampleGLWidget() :
     QOpenGLWidget(),
     _isInitialized(false),
     _backgroundColor(235, 235, 235, 255),
-    _pointRenderer(),
+    _pointRenderer(this),
     _pixelRatio(1.0f),
     _points(),
     _colors()
@@ -39,8 +39,6 @@ ExampleGLWidget::ExampleGLWidget() :
     surfaceFormat.setSamples(16);
 
     setFormat(surfaceFormat);
-
-    _pointRenderer.getNavigator().initialize(this);
 }
 
 ExampleGLWidget::~ExampleGLWidget()
@@ -83,7 +81,7 @@ void ExampleGLWidget::setData(const std::vector<mv::Vector2f>& points, float poi
     _pointRenderer.setPointSize(pointSize);
     _pointRenderer.setAlpha(pointOpacity);
 
-    _pointRenderer.getNavigator().resetView(true);
+    _pointRenderer.initView();
 
     // Calls paintGL()
     update();

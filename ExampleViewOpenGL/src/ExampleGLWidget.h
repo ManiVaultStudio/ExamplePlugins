@@ -3,7 +3,6 @@
 #include <renderers/PointRenderer.h>
 #include <graphics/Vector2f.h>
 #include <graphics/Vector3f.h>
-#include <graphics/Bounds.h>
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -42,7 +41,6 @@ private:
     float                   _pixelRatio;        /* device pixel ratio */
     std::vector<Vector2f>   _points;            /* 2D coordinates of points */
     std::vector<Vector3f>   _colors;            /* Color of points - here we use a constant color for simplicity */
-    Bounds                  _bounds;            /* Min and max point coordinates for camera placement */
     QColor                  _backgroundColor;   /* Background color */
     bool                    _isInitialized;     /* Whether OpenGL is initialized */
 };

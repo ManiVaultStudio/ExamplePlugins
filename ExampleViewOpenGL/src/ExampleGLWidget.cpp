@@ -82,6 +82,8 @@ void ExampleGLWidget::setData(const std::vector<mv::Vector2f>& points, float poi
     _pointRenderer.setPointSize(pointSize);
     _pointRenderer.setAlpha(pointOpacity);
 
+    _pointRenderer.getNavigator().resetView();
+
     // Calls paintGL()
     update();
 }

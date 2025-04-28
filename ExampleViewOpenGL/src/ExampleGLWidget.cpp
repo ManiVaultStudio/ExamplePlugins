@@ -3,16 +3,16 @@
 #include <util/Exception.h>
 
 #include <QPainter>
+#include <QRectF>
 
 ExampleGLWidget::ExampleGLWidget() : 
     QOpenGLWidget(),
     _isInitialized(false),
     _backgroundColor(235, 235, 235, 255),
-    _pointRenderer(),
+    _pointRenderer(this),
     _pixelRatio(1.0f),
     _points(),
-    _colors(),
-    _bounds()
+    _colors()
 {
     setAcceptDrops(true);
 
@@ -39,7 +39,6 @@ ExampleGLWidget::ExampleGLWidget() :
     surfaceFormat.setSamples(16);
 
     setFormat(surfaceFormat);
-
 }
 
 ExampleGLWidget::~ExampleGLWidget()
@@ -59,28 +58,30 @@ void ExampleGLWidget::setData(const std::vector<mv::Vector2f>& points, float poi
     constexpr mv::Vector3f pointColor = {0.f, 0.f, 0.f};
 
     for(unsigned long i = 0; i < numPoints; i++)
-        _colors.emplace_back(pointColor);
+        _colors.push_back(pointColor);
 
-    _bounds = Bounds::Max;
+    Bounds bounds = Bounds::Max;
 
-    for (const Vector2f& point : _points)
+    for (const Vector2f& point : points)
     {
-        _bounds.setLeft(std::min(point.x, _bounds.getLeft()));
-        _bounds.setRight(std::max(point.x, _bounds.getRight()));
-        _bounds.setBottom(std::min(point.y, _bounds.getBottom()));
-        _bounds.setTop(std::max(point.y, _bounds.getTop()));
+        bounds.setLeft(std::min(point.x, bounds.getLeft()));
+        bounds.setRight(std::max(point.x, bounds.getRight()));
+        bounds.setBottom(std::min(point.y, bounds.getBottom()));
+        bounds.setTop(std::max(point.y, bounds.getTop()));
     }
 
-    _bounds.makeSquare();
-    _bounds.expand(0.1f);
+    bounds.makeSquare();
+    bounds.expand(0.1f);
 
     // Send the data to the renderer
-    _pointRenderer.setBounds(_bounds);
+    _pointRenderer.setDataBounds(QRectF(QPointF(bounds.getLeft(), bounds.getBottom()), QSizeF(bounds.getWidth(), bounds.getHeight())));
     _pointRenderer.setData(_points);
     _pointRenderer.setColors(_colors);
 
     _pointRenderer.setPointSize(pointSize);
     _pointRenderer.setAlpha(pointOpacity);
+
+    _pointRenderer.initView();
 
     // Calls paintGL()
     update();

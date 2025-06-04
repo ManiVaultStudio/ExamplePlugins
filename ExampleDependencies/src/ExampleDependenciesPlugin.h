@@ -42,7 +42,7 @@ class ExampleDependenciesPluginFactory : public AnalysisPluginFactory
     Q_INTERFACES(mv::plugin::AnalysisPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleDependenciesPlugin"
-                      FILE  "ExampleDependenciesPlugin.json")
+                      FILE  "PluginInfo.json")
 
 public:
 

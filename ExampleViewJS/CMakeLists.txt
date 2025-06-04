@@ -42,7 +42,7 @@ set(PLUGIN_SOURCES
     src/ExampleViewJSPlugin.cpp
     src/ChartWidget.h
     src/ChartWidget.cpp
-    src/ExampleViewJSPlugin.json
+    PluginInfo.json
 )
 
 set(WEB

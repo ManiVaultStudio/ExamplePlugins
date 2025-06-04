@@ -34,7 +34,7 @@ class ExampleWriterPluginFactory : public WriterPluginFactory
     Q_INTERFACES(mv::plugin::WriterPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleWriterPlugin"
-                      FILE  "ExampleWriterPlugin.json")
+                      FILE  "PluginInfo.json")
     
 public:
     ExampleWriterPluginFactory();

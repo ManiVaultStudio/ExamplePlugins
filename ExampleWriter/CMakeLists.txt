@@ -40,7 +40,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Common ${CMAKE_CURRENT_BINARY_DI
 set(PLUGIN_SOURCES
     src/ExampleWriterPlugin.h
     src/ExampleWriterPlugin.cpp
-    src/ExampleWriterPlugin.json
+    PluginInfo.json
 )
 
 source_group(Plugin FILES ${PLUGIN_SOURCES})

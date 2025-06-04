@@ -42,7 +42,7 @@ set(PLUGIN_SOURCES
     src/ExampleAnalysisPlugin.cpp
     src/SettingsAction.h
     src/SettingsAction.cpp
-    src/ExampleAnalysisPlugin.json
+    PluginInfo.json
 )
 
 source_group(Plugin FILES ${PLUGIN_SOURCES})

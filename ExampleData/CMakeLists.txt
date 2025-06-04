@@ -43,7 +43,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Common ${CMAKE_CURRENT_BINARY_DI
 set(PLUGIN_SOURCES
     src/ExampleDataPlugin.h
     src/ExampleDataPlugin.cpp
-    src/ExampleDataPlugin.json
+    PluginInfo.json
 )
 
 set(PLUGIN_HEADERS

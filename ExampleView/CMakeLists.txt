@@ -40,7 +40,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Common ${CMAKE_CURRENT_BINARY_DI
 set(PLUGIN_SOURCES
     src/ExampleViewPlugin.h
     src/ExampleViewPlugin.cpp
-    src/ExampleViewPlugin.json
+    PluginInfo.json
 )
 
 set(PLUGIN_MOC_HEADERS

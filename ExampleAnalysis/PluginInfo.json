@@ -1,5 +1,9 @@
 {
     "name" : "Example Analysis",
-    "version" : "1.4",
+    "version" :  {
+        "plugin" : "1.4",
+        "core" : ["1.3"]
+    },
+    "type" : "Analysis",
     "dependencies" : ["Points"]
 }

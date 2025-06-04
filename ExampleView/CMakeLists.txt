@@ -100,6 +100,11 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
 )
 
+# Append plugin version to output file
+# 0 disables automatic folder placement (same as plugin type)
+# since we want to place all example plugins in a separate folder
+mv_handle_plugin_config(${PROJECT_NAME} 0) 
+
 # -----------------------------------------------------------------------------
 # Miscellaneous
 # -----------------------------------------------------------------------------

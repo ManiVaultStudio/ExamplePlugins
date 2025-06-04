@@ -151,6 +151,11 @@ set_target_properties(hwy hwy_contrib hwy_list_targets hwy_test
 # Automatically available when using find_package(ManiVault)
 mv_install_dependencies(${PROJECT_NAME} "hwy" "hwy_contrib")
 
+# Append plugin version to output file
+# 0 disables automatic folder placement (same as plugin type)
+# since we want to place all example plugins in a separate folder
+mv_handle_plugin_config(${PROJECT_NAME} 0) 
+
 # -----------------------------------------------------------------------------
 # Miscellaneous
 # -----------------------------------------------------------------------------

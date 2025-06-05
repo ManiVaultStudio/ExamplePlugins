@@ -1,5 +1,0 @@
-{
-    "name" : "Example View OpenGL",
-    "version" : "1.4",
-    "dependencies" : ["Points"]
-}

@@ -90,7 +90,7 @@ class ExampleTransformationPluginFactory : public TransformationPluginFactory
     Q_INTERFACES(mv::plugin::TransformationPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleTransformationPlugin"
-                      FILE  "ExampleTransformationPlugin.json")
+                      FILE  "PluginInfo.json")
 
 public:
 

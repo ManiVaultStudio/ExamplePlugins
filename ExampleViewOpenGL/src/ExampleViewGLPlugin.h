@@ -84,7 +84,7 @@ class ExampleViewGLPluginFactory : public ViewPluginFactory
     Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "studio.manivault.ExampleViewGLPlugin"
-                      FILE  "ExampleViewGLPlugin.json")
+                      FILE  "PluginInfo.json")
 
 public:
 

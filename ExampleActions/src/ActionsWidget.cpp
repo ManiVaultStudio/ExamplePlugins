@@ -163,6 +163,8 @@ void ActionsWidget::requestUpdateWidget()
 
     _detailsGroupAction.addAction(action);
     _detailsGroupAction.addStretch();
+    _detailsGroupAction.setLabelSizingType(GroupAction::LabelSizingType::Fixed);
+    _detailsGroupAction.setLabelWidthFixed(250);
 }
 
 QStandardItem* ActionsWidget::ensureCategory(const QString& category)

@@ -15,13 +15,16 @@
 #include <actions/DecimalPointAction.h>
 #include <actions/DecimalRangeAction.h>
 #include <actions/DecimalRectangleAction.h>
-#include <actions/FilePickerAction.h>
 #include <actions/IntegralAction.h>
 #include <actions/IntegralPointAction.h>
 #include <actions/IntegralRangeAction.h>
 #include <actions/IntegralRectangleAction.h>
 #include <actions/FilePickerAction.h>
 #include <actions/DirectoryPickerAction.h>
+#include <actions/DatasetPickerAction.h>
+#include <actions/HorizontalGroupAction.h>
+#include <actions/VerticalGroupAction.h>
+#include <actions/GroupsAction.h>
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleActionsPlugin")using namespace mv;
 
@@ -52,6 +55,14 @@ void ExampleActionsPlugin::init()
     	{ "Horizontal", 1 },
     	{ "Vertical", 2 },
     }, { "Horizontal" });
+
+    _actionsWidget.addAction("Textual", "String", [this](QWidget* parent) -> WidgetAction* {
+        return new StringAction(this, "Example string action", "Initial string value");
+    }, {
+        { "Label", 1 },
+        { "LineEdit", 2 },
+        { "TextEdit", 4 }
+    }, { "LineEdit" });
 
     _actionsWidget.addAction("Textual", "Strings", [this](QWidget* parent) -> WidgetAction* {
     	return new StringsAction(this, "Example strings action", { "String 1", "String 2", "String 3" });
@@ -146,6 +157,22 @@ void ExampleActionsPlugin::init()
 
     _actionsWidget.addAction("Disk", "Directory picker", [this](QWidget* parent) -> WidgetAction* {
         return new DirectoryPickerAction(this, "Example directory picker action");
+    });
+
+    _actionsWidget.addAction("Dataset", "Dataset picker", [this](QWidget* parent) -> WidgetAction* {
+        return new DatasetPickerAction(this, "Example dataset picker action");
+    });
+
+    _actionsWidget.addAction("Grouping", "Horizontal", [this](QWidget* parent) -> WidgetAction* {
+        return new HorizontalGroupAction(this, "Example horizontal grouping action");
+    });
+
+    _actionsWidget.addAction("Grouping", "Vertical", [this](QWidget* parent) -> WidgetAction* {
+        return new VerticalGroupAction(this, "Example vertical grouping action");
+    });
+
+    _actionsWidget.addAction("Grouping", "Groups", [this](QWidget* parent) -> WidgetAction* {
+        return new GroupsAction(this, "Example groups action");
     });
 }
 

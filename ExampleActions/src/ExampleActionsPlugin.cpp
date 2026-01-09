@@ -1,5 +1,4 @@
 #include "ExampleActionsPlugin.h"
-#include "ActionsWidget.h"
 
 #include "../Common/common.h"
 
@@ -19,9 +18,53 @@ void ExampleActionsPlugin::init()
     auto layout = new QVBoxLayout();
 
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(new ActionsWidget());
+    layout->addWidget(&_actionsWidget);
 
     getWidget().setLayout(layout);
+
+    _actionsWidget.addAction("Textual", "String", [this](QWidget* parent) -> WidgetAction* {
+    	return new StringAction(this, "Example string action", "Initial string value");
+    }, {
+    	{ "Label", 1 },
+    	{ "LineEdit", 2 },
+        { "TextEdit", 4 }
+    }, { "LineEdit" });
+
+    _actionsWidget.addAction("Textual", "Strings", [this](QWidget* parent) -> WidgetAction* {
+    	return new StringsAction(this, "Example strings action", { "String 1", "String 2", "String 3" });
+    }, {
+        { "MayEdit", 1 },
+        { "ListView", 2 }
+    }, { "ListView" });
+
+    _actionsWidget.addAction("Option", "Toggle", [this](QWidget* parent) -> WidgetAction* {
+        return new ToggleAction(this, "Example toggle action", true);
+    }, {
+        { "Icon", 1 },
+        { "Text", 2 },
+        { "CheckBox", 4 },
+        { "PushButton", 8 }
+    }, { "CheckBox" });
+
+    _actionsWidget.addAction("Option", "Option select", [this](QWidget* parent) -> WidgetAction* {
+        return new OptionAction(this, "Example option action", { "A", "B", "C" });
+    }, {
+        { "ComboBox", 1 },
+        { "LineEdit", 2 },
+        { "HorizontalButtons", 4 },
+        { "VerticalButtons", 8 },
+        { "Clearable", 10 }
+    }, { "ComboBox" });
+
+    _actionsWidget.addAction("Option", "Options select", [this](QWidget* parent) -> WidgetAction* {
+        return new OptionsAction(this, "Example options action", { "A", "B", "C" }, { "A", "B" });
+    }, {
+        { "ComboBox", 1 },
+        { "ListView", 2 },
+        { "Selection", 4 },
+        { "File", 8 },
+        { "Tags", 10 }
+    }, { "ComboBox" });
 }
 
 ExampleActionsPluginFactory::ExampleActionsPluginFactory()

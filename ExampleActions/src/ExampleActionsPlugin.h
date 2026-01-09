@@ -2,7 +2,7 @@
 
 #include <ViewPlugin.h>
 
-#include <QWidget>
+#include "ActionsWidget.h"
 
 /** All plugin related classes are in the ManiVault plugin namespace */
 using namespace mv::plugin;
@@ -39,6 +39,7 @@ public:
     void init() override;
 
 private:
+    ActionsWidget   _actionsWidget;    /** Actions widget */
 };
 
 /**

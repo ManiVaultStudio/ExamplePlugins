@@ -40,6 +40,10 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Common ${CMAKE_CURRENT_BINARY_DI
 set(PLUGIN_SOURCES
     src/ExampleActionsPlugin.h
     src/ExampleActionsPlugin.cpp
+	src/ActionsWidget.h
+	src/ActionsWidget.cpp
+	src/ActionsFilterModel.h
+	src/ActionsFilterModel.cpp
     PluginInfo.json
 )
 

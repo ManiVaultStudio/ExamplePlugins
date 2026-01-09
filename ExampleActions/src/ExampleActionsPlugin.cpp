@@ -1,4 +1,5 @@
 #include "ExampleActionsPlugin.h"
+#include "ActionsWidget.h"
 
 #include "../Common/common.h"
 
@@ -15,10 +16,12 @@ ExampleActionsPlugin::ExampleActionsPlugin(const PluginFactory* factory) :
 
 void ExampleActionsPlugin::init()
 {
-    // Create layout
     auto layout = new QVBoxLayout();
 
     layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(new ActionsWidget());
+
+    getWidget().setLayout(layout);
 }
 
 ExampleActionsPluginFactory::ExampleActionsPluginFactory()

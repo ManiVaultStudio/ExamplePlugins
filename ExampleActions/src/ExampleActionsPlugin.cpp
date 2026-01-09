@@ -11,6 +11,17 @@
 #include <actions/OptionsAction.h>
 #include <actions/ColorAction.h>
 #include <actions/ColorMap1DAction.h>
+#include <actions/DecimalAction.h>
+#include <actions/DecimalPointAction.h>
+#include <actions/DecimalRangeAction.h>
+#include <actions/DecimalRectangleAction.h>
+#include <actions/FilePickerAction.h>
+#include <actions/IntegralAction.h>
+#include <actions/IntegralPointAction.h>
+#include <actions/IntegralRangeAction.h>
+#include <actions/IntegralRectangleAction.h>
+#include <actions/FilePickerAction.h>
+#include <actions/DirectoryPickerAction.h>
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleActionsPlugin")using namespace mv;
 
@@ -88,6 +99,54 @@ void ExampleActionsPlugin::init()
         { "Settings", 1 },
         { "EditRange", 2 }
     }, { "Settings" });
+
+    _actionsWidget.addAction("Numerical", "Decimal", [this](QWidget* parent) -> WidgetAction* {
+        return new DecimalAction(this, "Example decimal action", 0.0);
+    }, {
+        { "SpinBox", 1 },
+        { "Slider", 2 },
+        { "LineEdit", 2 }
+    }, { "SpinBox", "Slider" });
+
+    _actionsWidget.addAction("Numerical", "Decimal point", [this](QWidget* parent) -> WidgetAction* {
+        return new DecimalPointAction(this, "Example decimal point action");
+    });
+
+    _actionsWidget.addAction("Numerical", "Decimal range", [this](QWidget* parent) -> WidgetAction* {
+        return new DecimalRangeAction(this, "Example decimal range action", 0.0, 1.0);
+    });
+
+    _actionsWidget.addAction("Numerical", "Decimal rectangle", [this](QWidget* parent) -> WidgetAction* {
+        return new DecimalRectangleAction(this, "Example decimal rectangle action");
+    });
+
+    _actionsWidget.addAction("Numerical", "Integral", [this](QWidget* parent) -> WidgetAction* {
+        return new IntegralAction(this, "Example integral action");
+    }, {
+        { "SpinBox", 1 },
+        { "Slider", 2 },
+        { "LineEdit", 2 }
+    }, { "SpinBox", "Slider" });
+
+    _actionsWidget.addAction("Numerical", "Integral point", [this](QWidget* parent) -> WidgetAction* {
+        return new IntegralAction(this, "Example integral point action");
+    });
+
+    _actionsWidget.addAction("Numerical", "Integral range", [this](QWidget* parent) -> WidgetAction* {
+        return new IntegralRangeAction(this, "Example integral range action", 0.0, 1.0);
+    });
+
+    _actionsWidget.addAction("Numerical", "Integral rectangle", [this](QWidget* parent) -> WidgetAction* {
+        return new IntegralRectangleAction(this, "Example integral rectangle action");
+    });
+
+    _actionsWidget.addAction("Disk", "File picker", [this](QWidget* parent) -> WidgetAction* {
+        return new FilePickerAction(this, "Example file picker action");
+    });
+
+    _actionsWidget.addAction("Disk", "Directory picker", [this](QWidget* parent) -> WidgetAction* {
+        return new DirectoryPickerAction(this, "Example directory picker action");
+    });
 }
 
 ExampleActionsPluginFactory::ExampleActionsPluginFactory()

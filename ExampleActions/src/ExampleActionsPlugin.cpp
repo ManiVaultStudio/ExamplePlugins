@@ -4,9 +4,15 @@
 
 #include <QDebug>
 
-Q_PLUGIN_METADATA(IID "studio.manivault.ExampleActionsPlugin")
+#include <actions/TriggerAction.h>
+#include <actions/TriggersAction.h>
+#include <actions/ToggleAction.h>
+#include <actions/OptionAction.h>
+#include <actions/OptionsAction.h>
+#include <actions/ColorAction.h>
+#include <actions/ColorMap1DAction.h>
 
-using namespace mv;
+Q_PLUGIN_METADATA(IID "studio.manivault.ExampleActionsPlugin")using namespace mv;
 
 ExampleActionsPlugin::ExampleActionsPlugin(const PluginFactory* factory) :
     ViewPlugin(factory)
@@ -22,13 +28,19 @@ void ExampleActionsPlugin::init()
 
     getWidget().setLayout(layout);
 
-    _actionsWidget.addAction("Textual", "String", [this](QWidget* parent) -> WidgetAction* {
-    	return new StringAction(this, "Example string action", "Initial string value");
+    _actionsWidget.addAction("Trigger", "Trigger", [this](QWidget* parent) -> WidgetAction* {
+        return new TriggerAction(this, "Example trigger action");
     }, {
-    	{ "Label", 1 },
-    	{ "LineEdit", 2 },
-        { "TextEdit", 4 }
-    }, { "LineEdit" });
+        { "Icon", 1 },
+        { "Text", 2 },
+    }, { "Icon", "Text" });
+
+    _actionsWidget.addAction("Trigger", "Triggers", [this](QWidget* parent) -> WidgetAction* {
+    	return new TriggersAction(this, "Example Triggers action", { { "Trigger 1", "Action 1" }, { "Trigger 2", "Action 2" } });
+    }, {
+    	{ "Horizontal", 1 },
+    	{ "Vertical", 2 },
+    }, { "Horizontal" });
 
     _actionsWidget.addAction("Textual", "Strings", [this](QWidget* parent) -> WidgetAction* {
     	return new StringsAction(this, "Example strings action", { "String 1", "String 2", "String 3" });
@@ -65,6 +77,17 @@ void ExampleActionsPlugin::init()
         { "File", 8 },
         { "Tags", 10 }
     }, { "ComboBox" });
+
+    _actionsWidget.addAction("Color", "Color", [this](QWidget* parent) -> WidgetAction* {
+        return new ColorAction(this, "Example color action");
+    });
+
+    _actionsWidget.addAction("Color", "1D color map", [this](QWidget* parent) -> WidgetAction* {
+        return new ColorMap1DAction(this, "Example 1D color map action");
+    }, {
+        { "Settings", 1 },
+        { "EditRange", 2 }
+    }, { "Settings" });
 }
 
 ExampleActionsPluginFactory::ExampleActionsPluginFactory()

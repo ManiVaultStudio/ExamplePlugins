@@ -32,18 +32,13 @@ find_package(ManiVault COMPONENTS Core PointData CONFIG QUIET)
 
 CPMAddPackage(
   NAME highway
-  URL https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz
-  URL_HASH SHA256=7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343
-  PATCHES 
-    "cmake/highway-win.patch" # from https://github.com/conan-io/conan-center-index/pull/24197/files, fixes https://github.com/google/highway/issues/2225
-    "cmake/highway-apple-arm.patch" # from https://github.com/Homebrew/homebrew-core/blob/d55553b062fab1ddfc3ea0c8f41725f0b2584f10/Formula/h/highway.rb, fixes https://github.com/google/highway/issues/2317
+  GITHUB_REPOSITORY "google/highway"
+  GIT_TAG 1.3.0
   OPTIONS "HWY_ENABLE_EXAMPLES OFF" "HWY_ENABLE_INSTALL OFF" "HWY_ENABLE_TESTS OFF" "HWY_ENABLE_CONTRIB ON" "BUILD_SHARED_LIBS ON" 
 )
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set_target_properties(hwy_test PROPERTIES EXCLUDE_FROM_ALL True)
-    set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
-endif()
+set_target_properties(hwy_test PROPERTIES EXCLUDE_FROM_ALL True)
+set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
 
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)

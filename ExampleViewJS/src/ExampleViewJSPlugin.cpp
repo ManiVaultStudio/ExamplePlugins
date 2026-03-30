@@ -136,7 +136,7 @@ void ExampleViewJSPlugin::convertDataAndUpdateChart()
             auto dimNames = _currentDataSet->getDimensionNames();
             auto numDims = dimNames.size();
 
-            for (unsigned int pointId = 0; pointId < _currentDataSet->getNumPoints(); pointId++)
+            for (std::uint64_t pointId = 0; pointId < _currentDataSet->getNumPoints(); pointId++)
             {
                 entry.clear();
 

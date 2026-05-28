@@ -100,7 +100,7 @@ class ExamplePluginsConan(ConanFile):
         tc.variables["ManiVault_DIR"] = manivault_dir
 
         # Set some build options
-        tc.variables["MV_UNITY_BUILD"] = "ON"
+        tc.cache_variables["MV_UNITY_BUILD"] = "ON"
 
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):

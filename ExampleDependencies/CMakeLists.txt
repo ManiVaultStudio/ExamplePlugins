@@ -13,7 +13,7 @@ PROJECT("ExampleDependenciesPlugin" LANGUAGES CXX C)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(get_cpm.cmake)
+include(cmake/get_cpm.cmake)
 
 # -----------------------------------------------------------------------------
 # Dependencies

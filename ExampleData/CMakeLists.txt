@@ -12,14 +12,6 @@ PROJECT("ExampleDataPlugin" LANGUAGES CXX)
 # -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /MP /permissive- /Zc:__cplusplus")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MD")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
-endif()
 
 # Include cmake tools
 include(GenerateExportHeader)
@@ -30,6 +22,7 @@ include(GenerateExportHeader)
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets REQUIRED)
 
 find_package(ManiVault COMPONENTS Core PointData CONFIG QUIET)
+mv_project_defaults()
 
 # -----------------------------------------------------------------------------
 # Include Common directory
@@ -81,12 +74,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${ManiVault_INCLUDE_DIR}")
 # Request C++20
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PLUGIN_HEADERS}")
-
-# Enable unity build
-if(MV_UNITY_BUILD)
-    set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
-endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+    AUTOMOC ON
+    UNITY_BUILD ${MV_UNITY_BUILD}
+    PUBLIC_HEADER "${PLUGIN_HEADERS}"
+)
 
 # -----------------------------------------------------------------------------
 # Target library linking

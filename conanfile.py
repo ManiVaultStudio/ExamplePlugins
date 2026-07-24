@@ -126,8 +126,7 @@ class ExamplePluginsConan(ConanFile):
 
             tc.variables["CMAKE_PROJECT_INCLUDE"]   = vcpkg_tc.as_posix()
 
-            tc.cache_variables["CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO"]    = "Release"
-            tc.cache_variables["CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL"]        = "Release"
+            tc.cache_variables["CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL"]        = "RelWithDebInfo"
 
         tc.generate()
 

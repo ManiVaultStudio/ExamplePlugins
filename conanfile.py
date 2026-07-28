@@ -101,6 +101,7 @@ class ExamplePluginsConan(ConanFile):
 
         # Set some build options
         tc.cache_variables["MV_UNITY_BUILD"] = "ON"
+        tc.cache_variables["CMAKE_CONFIGURATION_TYPES"] = "RelWithDebInfo"
 
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):
@@ -125,8 +126,6 @@ class ExamplePluginsConan(ConanFile):
             tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
             tc.variables["CMAKE_PROJECT_INCLUDE"]   = vcpkg_tc.as_posix()
-
-            tc.cache_variables["CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL"]        = "RelWithDebInfo"
 
         tc.generate()
 

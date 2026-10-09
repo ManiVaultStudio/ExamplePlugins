@@ -75,8 +75,6 @@ class ExamplePluginsConan(ConanFile):
             installer.install("libomp")
             proc = subprocess.run("brew --prefix libomp",  shell=True, capture_output=True)
             subprocess.run(f"ln {proc.stdout.decode('UTF-8').strip()}/lib/libomp.dylib /usr/local/lib/libomp.dylib", shell=True)
-        if os_info.is_linux:
-            self.run("sudo apt update && sudo apt install -y libtbb-dev")
 
     def config_options(self):
         if self.settings.os == "Windows":

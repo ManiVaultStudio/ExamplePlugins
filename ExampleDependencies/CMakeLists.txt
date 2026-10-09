@@ -41,11 +41,7 @@ set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
 
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)
-
-    if(NOT APPLE)
-        include(cmake/ci_fixes.cmake)
-        find_package(faiss CONFIG REQUIRED)
-    endif()
+    find_package(faiss CONFIG REQUIRED)
 endif()
 
 # -----------------------------------------------------------------------------
@@ -106,10 +102,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE hwy hwy_contrib)
 
 if(${MV_EXAMPLES_USE_VCPKG})
     target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
-
-    if(NOT APPLE)
     target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
-    endif()
     
     target_compile_definitions (${PROJECT_NAME} PRIVATE __USE_VCPKG__)
 endif()

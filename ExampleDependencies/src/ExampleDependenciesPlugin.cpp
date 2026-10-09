@@ -6,9 +6,9 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <cstdio>
 #include <iostream>
 #include <numeric>
-#include <stdio.h>
 #include <vector>
 
 #include <hwy/contrib/sort/order.h>
@@ -55,12 +55,12 @@ void ExampleDependenciesPlugin::init()
 
 void ExampleDependenciesPlugin::compute()
 {
-    std::cout << "ExampleDependenciesPlugin: Starting..." << std::endl;
+    std::cout << "ExampleDependenciesPlugin: Starting.../n" << std::endl;
 
-    auto printData = [](const std::vector<float>& vec, size_t dims, size_t points) {
-        for (size_t dim = 0; dim < dims; dim++)
+    auto printData = [](const std::vector<float>& vec, const idx_t dims, const idx_t points) {
+        for (idx_t dim = 0; dim < dims; dim++)
         {
-            for (size_t point = 0; point < points; point++)
+            for (idx_t point = 0; point < points; point++)
                 std::cout << vec[point + points * dim] << " ";
             std::cout << std::endl;
         }
@@ -68,8 +68,8 @@ void ExampleDependenciesPlugin::compute()
 
     // Get input data
     const auto inputPoints  = getInputDataset<Points>();
-    const size_t numDims    = inputPoints->getNumDimensions();
-    const size_t numPoints  = inputPoints->getNumPoints();
+    const auto numDims      = static_cast<idx_t>(inputPoints->getNumDimensions());
+    const auto numPoints    = static_cast<idx_t>(inputPoints->getNumPoints());
 
     std::vector<float> data;
     std::vector<unsigned int> dimensionIndices(numDims);
@@ -81,9 +81,9 @@ void ExampleDependenciesPlugin::compute()
     std::cout << "ExampleDependenciesPlugin: Data before sorting" << std::endl;
     printData(data, numDims, numPoints);
 
-    for (size_t dim = 0; dim < numDims; dim++)
+    for (idx_t dim = 0; dim < numDims; dim++)
     {
-        size_t offset = numPoints * dim;
+        idx_t offset = numPoints * dim;
         hwy::VQSort(data.data() + offset, numPoints, hwy::SortAscending{});
     }
 
@@ -117,15 +117,15 @@ void ExampleDependenciesPlugin::compute()
     faiss::IndexFlatL2 index(numDims); // call constructor
     index.add(numPoints, data.data()); // add vectors to the index
 
-    int k = std::max(static_cast<size_t>(5), numPoints);
+    const idx_t k = std::max(static_cast<idx_t>(5), numPoints);
     std::vector<idx_t> I(k * numPoints);
     std::vector<float> D(k * numPoints);
 
     index.search(numPoints, data.data(), k, D.data(), I.data());
 
     printf("knn results\n");
-    for (size_t i = 0; i < numPoints; i++) {
-        for (int j = 0; j < k; j++)
+    for (idx_t i = 0; i < numPoints; i++) {
+        for (idx_t j = 0; j < k; j++)
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }

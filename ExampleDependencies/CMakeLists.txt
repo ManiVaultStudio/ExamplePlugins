@@ -41,7 +41,6 @@ set_target_properties(hwy_list_targets PROPERTIES EXCLUDE_FROM_ALL True)
 
 if(${MV_EXAMPLES_USE_VCPKG})
     find_package(blake3 CONFIG REQUIRED)
-    find_package(OpenMP REQUIRED)
     find_package(faiss CONFIG REQUIRED)
 endif()
 

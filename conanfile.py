@@ -110,6 +110,7 @@ class ExamplePluginsConan(ConanFile):
             proc = subprocess.run("brew --prefix libomp", shell=True, capture_output=True)
             prefix_path = f"{proc.stdout.decode('UTF-8').strip()}"
             tc.variables["OpenMP_ROOT"] = prefix_path
+            os.environ['OpenMP_ROOT'] = prefix_path     # for vcpkg to find omp
 
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):

@@ -1,6 +1,6 @@
 from conans import ConanFile
 from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
-from conans.tools import save, load
+from conans.tools import save, load, os_info, SystemPackageTool
 import os
 import pathlib
 import subprocess
@@ -112,7 +112,7 @@ class ExamplePluginsConan(ConanFile):
             proc = subprocess.run("brew --prefix libomp", shell=True, capture_output=True)
             prefix_path = f"{proc.stdout.decode('UTF-8').strip()}"
             tc.variables["OpenMP_ROOT"] = prefix_path
-            
+
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):
             vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])

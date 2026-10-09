@@ -1,6 +1,6 @@
 from conans import ConanFile
 from conan.tools.cmake import CMakeDeps, CMake, CMakeToolchain
-from conans.tools import save, load
+from conans.tools import save, load, os_info, SystemPackageTool
 import os
 import pathlib
 import subprocess
@@ -70,8 +70,11 @@ class ExamplePluginsConan(ConanFile):
         pass
 
     def system_requirements(self):
-        #  May be needed for macOS or Linux
-        pass
+        if os_info.is_macos:
+            installer = SystemPackageTool()
+            installer.install("libomp")
+            proc = subprocess.run("brew --prefix libomp",  shell=True, capture_output=True)
+            subprocess.run(f"ln {proc.stdout.decode('UTF-8').strip()}/lib/libomp.dylib /usr/local/lib/libomp.dylib", shell=True)
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -103,6 +106,12 @@ class ExamplePluginsConan(ConanFile):
         tc.cache_variables["MV_UNITY_BUILD"] = "ON"
         tc.cache_variables["CMAKE_CONFIGURATION_TYPES"] = "RelWithDebInfo"
 
+        if os_info.is_macos:
+            proc = subprocess.run("brew --prefix libomp", shell=True, capture_output=True)
+            prefix_path = f"{proc.stdout.decode('UTF-8').strip()}"
+            tc.variables["OpenMP_ROOT"] = prefix_path
+            os.environ['OpenMP_ROOT'] = prefix_path     # for vcpkg to find omp
+
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):
             vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])
@@ -111,7 +120,7 @@ class ExamplePluginsConan(ConanFile):
 
             vcpkg_triplet = "x64-windows"
             if self.settings.os == "Macos":
-                vcpkg_triplet = "x64-osx"
+                vcpkg_triplet = "arm64-osx"
             if self.settings.os == "Linux":
                 vcpkg_triplet = "x64-linux"
 
@@ -126,6 +135,8 @@ class ExamplePluginsConan(ConanFile):
             tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()
 
             tc.variables["CMAKE_PROJECT_INCLUDE"]   = vcpkg_tc.as_posix()
+
+            tc.cache_variables["MV_EXAMPLES_USE_VCPKG"] = "ON"
 
         tc.generate()
 

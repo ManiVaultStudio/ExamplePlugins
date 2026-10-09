@@ -136,6 +136,8 @@ class ExamplePluginsConan(ConanFile):
 
             tc.variables["CMAKE_PROJECT_INCLUDE"]   = vcpkg_tc.as_posix()
 
+            tc.cache_variables["MV_EXAMPLES_USE_VCPKG"] = "ON"
+
         tc.generate()
 
     def _configure_cmake(self):

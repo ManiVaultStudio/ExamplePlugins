@@ -17,7 +17,6 @@
 #ifdef __USE_VCPKG__
 #include <blake3.h>
 #include <faiss/IndexFlat.h>
-using idx_t = faiss::idx_t;
 #endif
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleDependenciesPlugin")
@@ -57,10 +56,10 @@ void ExampleDependenciesPlugin::compute()
 {
     std::cout << "ExampleDependenciesPlugin: Starting.../n" << std::endl;
 
-    auto printData = [](const std::vector<float>& vec, const idx_t dims, const idx_t points) {
-        for (idx_t dim = 0; dim < dims; dim++)
+    auto printData = [](const std::vector<float>& vec, const int64_t dims, const int64_t points) {
+        for (int64_t dim = 0; dim < dims; dim++)
         {
-            for (idx_t point = 0; point < points; point++)
+            for (int64_t point = 0; point < points; point++)
                 std::cout << vec[point + points * dim] << " ";
             std::cout << std::endl;
         }
@@ -68,8 +67,8 @@ void ExampleDependenciesPlugin::compute()
 
     // Get input data
     const auto inputPoints  = getInputDataset<Points>();
-    const auto numDims      = static_cast<idx_t>(inputPoints->getNumDimensions());
-    const auto numPoints    = static_cast<idx_t>(inputPoints->getNumPoints());
+    const auto numDims      = static_cast<int64_t>(inputPoints->getNumDimensions());
+    const auto numPoints    = static_cast<int64_t>(inputPoints->getNumPoints());
 
     std::vector<float> data;
     std::vector<unsigned int> dimensionIndices(numDims);
@@ -81,9 +80,9 @@ void ExampleDependenciesPlugin::compute()
     std::cout << "ExampleDependenciesPlugin: Data before sorting" << std::endl;
     printData(data, numDims, numPoints);
 
-    for (idx_t dim = 0; dim < numDims; dim++)
+    for (int64_t dim = 0; dim < numDims; dim++)
     {
-        idx_t offset = numPoints * dim;
+        int64_t offset = numPoints * dim;
         hwy::VQSort(data.data() + offset, numPoints, hwy::SortAscending{});
     }
 
@@ -117,15 +116,15 @@ void ExampleDependenciesPlugin::compute()
     faiss::IndexFlatL2 index(numDims); // call constructor
     index.add(numPoints, data.data()); // add vectors to the index
 
-    const idx_t k = std::max(static_cast<idx_t>(5), numPoints);
-    std::vector<idx_t> I(k * numPoints);
+    const int64_t k = std::max(static_cast<int64_t>(5), numPoints);
+    std::vector<int64_t> I(k * numPoints);
     std::vector<float> D(k * numPoints);
 
     index.search(numPoints, data.data(), k, D.data(), I.data());
 
     printf("knn results\n");
-    for (idx_t i = 0; i < numPoints; i++) {
-        for (idx_t j = 0; j < k; j++)
+    for (int64_t i = 0; i < numPoints; i++) {
+        for (int64_t j = 0; j < k; j++)
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }

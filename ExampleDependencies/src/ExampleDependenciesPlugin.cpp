@@ -14,13 +14,10 @@
 #include <hwy/contrib/sort/order.h>
 #include <hwy/contrib/sort/vqsort.h>
 
-#if defined __USE_VCPKG__
+#ifdef __USE_VCPKG__
 #include <blake3.h>
-
-#if !defined(__APPLE__)
 #include <faiss/IndexFlat.h>
 using idx_t = faiss::idx_t;
-#endif
 #endif
 
 Q_PLUGIN_METADATA(IID "studio.manivault.ExampleDependenciesPlugin")
@@ -98,7 +95,7 @@ void ExampleDependenciesPlugin::compute()
     outputPoints->setData(data.data(), numPoints, numDims);
     events().notifyDatasetDataChanged(outputPoints);
 
-#if defined __USE_VCPKG__
+#ifdef __USE_VCPKG__
     std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
 
     // Create hash
@@ -116,7 +113,6 @@ void ExampleDependenciesPlugin::compute()
     }
     printf("\n");
 
-#if !defined(__APPLE__)
     // find knn
     faiss::IndexFlatL2 index(numDims); // call constructor
     index.add(numPoints, data.data()); // add vectors to the index
@@ -133,7 +129,6 @@ void ExampleDependenciesPlugin::compute()
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }
-#endif // __APPLE__
 #endif // __USE_VCPKG__
 
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;

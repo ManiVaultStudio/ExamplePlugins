@@ -105,7 +105,7 @@ if(${MV_EXAMPLES_USE_VCPKG})
     target_link_libraries(${PROJECT_NAME} PRIVATE BLAKE3::blake3)
     target_link_libraries(${PROJECT_NAME} PRIVATE faiss)
     
-    target_compile_definitions (${PROJECT_NAME} PRIVATE __USE_VCPKG__)
+    target_compile_definitions (${PROJECT_NAME} PRIVATE __MV_EXAMPLES_USE_VCPKG__)
 endif()
 
 # Not used here, but you can use this in your plugin

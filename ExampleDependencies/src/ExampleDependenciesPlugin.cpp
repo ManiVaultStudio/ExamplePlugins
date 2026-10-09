@@ -14,7 +14,7 @@
 #include <hwy/contrib/sort/order.h>
 #include <hwy/contrib/sort/vqsort.h>
 
-#ifdef __USE_VCPKG__
+#ifdef __MV_EXAMPLES_USE_VCPKG__
 #include <blake3.h>
 #include <faiss/IndexFlat.h>
 #endif
@@ -94,7 +94,7 @@ void ExampleDependenciesPlugin::compute()
     outputPoints->setData(data.data(), numPoints, numDims);
     events().notifyDatasetDataChanged(outputPoints);
 
-#ifdef __USE_VCPKG__
+#ifdef __MV_EXAMPLES_USE_VCPKG__
     std::cout << "ExampleDependenciesPlugin: Using blake version: " << blake3_version() << std::endl;
 
     // Create hash
@@ -128,7 +128,7 @@ void ExampleDependenciesPlugin::compute()
             printf("%5zd ", I[i * k + j]);
         printf("\n");
     }
-#endif // __USE_VCPKG__
+#endif // __MV_EXAMPLES_USE_VCPKG__
 
     std::cout << "ExampleDependenciesPlugin: Finished." << std::endl;
 }

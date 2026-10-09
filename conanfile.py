@@ -70,8 +70,13 @@ class ExamplePluginsConan(ConanFile):
         pass
 
     def system_requirements(self):
-        #  May be needed for macOS or Linux
-        pass
+        if os_info.is_macos:
+            installer = SystemPackageTool()
+            installer.install("libomp")
+            proc = subprocess.run("brew --prefix libomp",  shell=True, capture_output=True)
+            subprocess.run(f"ln {proc.stdout.decode('UTF-8').strip()}/lib/libomp.dylib /usr/local/lib/libomp.dylib", shell=True)
+        if os_info.is_linux:
+            self.run("sudo apt update && sudo apt install -y libtbb-dev")
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -103,6 +108,11 @@ class ExamplePluginsConan(ConanFile):
         tc.cache_variables["MV_UNITY_BUILD"] = "ON"
         tc.cache_variables["CMAKE_CONFIGURATION_TYPES"] = "RelWithDebInfo"
 
+        if os_info.is_macos:
+            proc = subprocess.run("brew --prefix libomp", shell=True, capture_output=True)
+            prefix_path = f"{proc.stdout.decode('UTF-8').strip()}"
+            tc.variables["OpenMP_ROOT"] = prefix_path
+            
         # Use vcpkg-installed dependencies if there are any
         if os.environ.get("VCPKG_ROOT", None):
             vcpkg_dir = pathlib.Path(os.environ["VCPKG_ROOT"])

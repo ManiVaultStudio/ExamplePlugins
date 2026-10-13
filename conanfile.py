@@ -129,7 +129,6 @@ class ExamplePluginsConan(ConanFile):
             print("vcpkg_tc: ", vcpkg_tc)
             print("vcpkg_triplet: ", vcpkg_triplet)
 
-            tc.variables["VCPKG_LIBRARY_LINKAGE"]   = "dynamic"
             tc.variables["VCPKG_TARGET_TRIPLET"]    = vcpkg_triplet
             tc.variables["VCPKG_HOST_TRIPLET"]      = vcpkg_triplet
             tc.variables["VCPKG_ROOT"]              = vcpkg_dir.as_posix()

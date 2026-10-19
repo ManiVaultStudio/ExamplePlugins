@@ -16,6 +16,17 @@ set(COMMON_FILES
 	PARENT_SCOPE
 )
 
+if (DEFINED ENV{CI})
+  set(temp_prefix_path ${CMAKE_PREFIX_PATH})
+  message(STATUS "vcpkg search paths: ${CMAKE_PREFIX_PATH}")
+  foreach(pkgpath ${temp_prefix_path})
+    file(GLOB_RECURSE ALL_FILES CONFIGURE_DEPENDS "${pkgpath}/*")
+    list(APPEND CMAKE_PREFIX_PATH "${pkgpath}/cmake/mv")
+        message(STATUS "CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}")
+  endforeach()
+  set(VCPKG_TRACE_FIND_PACKAGE ON)
+endif()
+
 find_package(ManiVault COMPONENTS Core CONFIG QUIET)
 
 # Add the core cmake scripts - need this on the CI with vcpkg

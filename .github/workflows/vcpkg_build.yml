@@ -1,0 +1,131 @@
+name: VcpkgTestWorkflow
+
+# This is a test of building using vcpkg to handle dependencies
+
+# 1. ImageLoaderPlugin declares its dependencies in a vcpkg.json
+# 2. Internal ManiVault Studio dependencies are defined in mv_deps.toml
+# 3. ManiVault Studio dependency repos are added as submodule on the branch
+# 4. An overlays directory is created on the file containing a subdir for each dpendency
+#    Each overlay has a portfile pointing to the submodule and a generic vcpkg.json to 
+#    build the dependency
+# 5. vcpkg install builds alldependencies  
+# 6. cmake -B build followed by cmake --build build build this repo
+#
+# Ultimately the inplace python will be moved to the ManiVaultStudio/github-actions repos
+# along with the portfile.cmake template
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+# Get centrally defined build matrix
+jobs:
+  prepare_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix_setup.outputs.matrix }}
+    steps:
+    - name: Get matrix from file
+      id: matrix_setup
+      uses: ManiVaultStudio/github-actions/matrix_setup@feature/vcpkg_artifactory
+
+  cross-platform-build:
+    name: Cross platform build
+    needs: prepare_matrix
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.prepare_matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout the source
+        if: ${{ github.event_name != 'pull_request'}}
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout the source (pull_request version)
+        if: ${{ github.event_name == 'pull_request'}}
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          submodules: recursive
+          fetch-depth: 0
+      
+      - name: Select Xcode for Mac only
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          sudo xcode-select -switch /Applications/Xcode_${{matrix.build-xcode-version}}.app
+          
+      - name: Start ssh key agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
+
+      - name: Install SSH deploy key for rulessupport
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
+          known_hosts: github.com AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+
+      - name: Windows build
+        if: startsWith(runner.os, 'Windows')
+        uses: ManiVaultStudio/github-actions/conan_windows_build@feature/vcpkg_artifactory
+        with:
+          conan-visual-version: ${{matrix.build-cversion}}
+          conan-visual-runtime: ${{matrix.build-runtime}}
+          conan-build-type: ${{matrix.build-config}}
+          vcpkg-artifactory-url: ${{secrets.VCPKG_ARTIFACTORY_URL}}
+          vcpkg-artifactory-token: ${{secrets.VCPKG_ARTIFACTORY_TOKEN}}
+          sentry-upload: startsWith(github.ref, 'refs/heads/release/')
+          sentry-url: ${{secrets.LKEB_SENTRY_URL }}
+          sentry-org: ${{secrets.LKEB_SENTRY_ORG }}
+          sentry-project: ${{secrets.LKEB_SENTRY_PROJECT }}
+          sentry-auth-token: ${{secrets.LKEB_SENTRY_AUTH_TOKEN }}
+
+      - name: Linux build
+        if: startsWith(matrix.os, 'ubuntu')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@feature/vcpkg_artifactory
+        with:
+          conan-compiler: ${{matrix.build-compiler}}
+          conan-cc: ${{matrix.build-cc}}
+          conan-cxx: ${{matrix.build-cxx}}
+          conan-compiler-version: ${{matrix.build-cversion}}
+          conan-libcxx-version: ${{matrix.build-libcxx}}
+          conan-build-type: ${{matrix.build-config}}
+          conan-build-os: ${{matrix.build-os}}
+          vcpkg-artifactory-url: ${{secrets.VCPKG_ARTIFACTORY_URL}}
+          vcpkg-artifactory-token: ${{secrets.VCPKG_ARTIFACTORY_TOKEN}}          
+          build-arch: ${{matrix.build-arch}}
+
+          
+      - name: Mac build
+        if: startsWith(matrix.os, 'macos')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@feature/vcpkg_artifactory
+        with:
+          conan-compiler: ${{matrix.build-compiler}}
+          conan-cc: ${{matrix.build-cc}}
+          conan-cxx: ${{matrix.build-cxx}}
+          conan-compiler-version: ${{matrix.build-cversion}}
+          conan-libcxx-version: ${{matrix.build-libcxx}}
+          conan-build-type: ${{matrix.build-config}}
+          conan-build-os: ${{matrix.build-os}}
+          build-arch: ${{matrix.build-arch}}
+          vcpkg-artifactory-url: ${{secrets.VCPKG_ARTIFACTORY_URL}}
+          vcpkg-artifactory-token: ${{secrets.VCPKG_ARTIFACTORY_TOKEN}}   

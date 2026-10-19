@@ -1,0 +1,12 @@
+# This TOML document expresses internal ManiVault Studio dependencies
+# These are restricted to the core and core extension repos. 
+# A core extension is a data or metadata plugin.
+# All other external dependencies are placed in the vcpkg.json.
+#
+ 
+
+[mv-core]
+repo = "ManiVaultStudio/core"  # The git repo
+package = "mv-core"
+ref = "master"                 # The branch to use
+match_branch = true            # Or match the branch name to this branch

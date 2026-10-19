@@ -3,7 +3,11 @@
     "version": "0.0.1",
     "dependencies": [
         "blake3",
-        "faiss"
+        "faiss",
+        { 
+          "name": "qt6",
+          "features": [ "target-desktop" ]
+        }
     ],
     "builtin-baseline":"94a541197763a4f449a1b91478df48c0584a6256",
     "overrides": [

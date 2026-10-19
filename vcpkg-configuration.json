@@ -1,0 +1,18 @@
+{
+  "default-registry": {
+    "kind": "git",
+    "repository": "https://github.com/microsoft/vcpkg",
+    "baseline": "56bb2411609227288b70117ead2c47585ba07713"
+  },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/ManiVaultStudio/vcpkg-registry-external",
+      "baseline": "3015b7ee0a816e6d45ef6bcfb1ba7f180bc86488",
+      "packages": ["biovault-bfloat16", "qt6"]
+    }
+  ],
+  "overlay-ports": [
+    "./ports"
+  ]
+}

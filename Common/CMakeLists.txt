@@ -16,6 +16,8 @@ set(COMMON_FILES
 	PARENT_SCOPE
 )
 
+find_package(ManiVault COMPONENTS Core CONFIG QUIET)
+
 # Add the core cmake scripts - need this on the CI with vcpkg
 # Note the core is called mv-core (due tocore being a vcpkg reserved name)
 # TODO find a better mechanism
@@ -26,3 +28,4 @@ if(DEFINED VCPKG_TARGET_TRIPLET)
   include("${ManiVault_DIR}/mv_install_dependencies_utils.cmake")
   include("${ManiVault_DIR}/mv_plugin_meta_data.cmake")
 endif()
+

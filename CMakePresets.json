@@ -29,8 +29,10 @@
       "name": "vcpkg-macos",
       "inherits": "vcpkg-base",
       "cacheVariables": {
-          "VCPKG_TARGET_TRIPLET": "arm64-osx-release",
-          "OpenMP_ROOT": "/opt/homebrew/opt/libomp"
+          "VCPKG_TARGET_TRIPLET": "arm64-osx-release"
+      },
+      "environment": {
+        "OpenMP_ROOT": "/opt/homebrew/opt/libomp"
       }
     }
 	]

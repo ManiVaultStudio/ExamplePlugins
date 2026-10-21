@@ -115,17 +115,17 @@ jobs:
           build-arch: ${{matrix.build-arch}}
 
           
-      # - name: Mac build
-      #   if: startsWith(matrix.os, 'macos')
-      #   uses: ManiVaultStudio/github-actions/conan_linuxmac_build@feature/vcpkg_artifactory
-      #   with:
-      #     conan-compiler: ${{matrix.build-compiler}}
-      #     conan-cc: ${{matrix.build-cc}}
-      #     conan-cxx: ${{matrix.build-cxx}}
-      #     conan-compiler-version: ${{matrix.build-cversion}}
-      #     conan-libcxx-version: ${{matrix.build-libcxx}}
-      #     conan-build-type: ${{matrix.build-config}}
-      #     conan-build-os: ${{matrix.build-os}}
-      #     build-arch: ${{matrix.build-arch}}
-      #     vcpkg-artifactory-url: ${{secrets.VCPKG_ARTIFACTORY_URL}}
-      #     vcpkg-artifactory-token: ${{secrets.VCPKG_ARTIFACTORY_TOKEN}}   
+      - name: Mac build
+        if: startsWith(matrix.os, 'macos')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@feature/vcpkg_artifactory
+        with:
+          conan-compiler: ${{matrix.build-compiler}}
+          conan-cc: ${{matrix.build-cc}}
+          conan-cxx: ${{matrix.build-cxx}}
+          conan-compiler-version: ${{matrix.build-cversion}}
+          conan-libcxx-version: ${{matrix.build-libcxx}}
+          conan-build-type: ${{matrix.build-config}}
+          conan-build-os: ${{matrix.build-os}}
+          build-arch: ${{matrix.build-arch}}
+          vcpkg-artifactory-url: ${{secrets.VCPKG_ARTIFACTORY_URL}}
+          vcpkg-artifactory-token: ${{secrets.VCPKG_ARTIFACTORY_TOKEN}}   
